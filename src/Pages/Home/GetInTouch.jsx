@@ -52,23 +52,23 @@ function GetInTouch() {
   }
 
   return (
-    <div className='bg-[#fff6f4] h-[480px]'>
-    <section className="max-w-7xl mx-auto px-6 py-20 ">
+    <div className='bg-[#fff6f4] py-12 sm:py-20 relative z-10 mb-12'>
+      <section className="max-w-7xl mx-auto px-6 py-0">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-start">
         {/* Left text */}
-        <div>
-          <h2 className="text-3xl md:text-4xl font-serif text-gray-900 leading-tight mb-6">
+        <div className="text-center lg:text-left">
+          <h2 className="text-2xl md:text-3xl lg:text-4xl font-serif text-gray-900 leading-tight mb-6 max-w-xl mx-auto lg:mx-0">
             Would you like a free demonstration of how effectively AI can be used in your school? Kindly share your details and I will be in touch.
           </h2>
           <p className="text-gray-600 mb-8">I look forward to hearing from you.</p>
 
           <div className="space-y-6 text-gray-700">
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-3 justify-center lg:justify-start">
               <span className="text-2xl"><FaPhoneAlt /></span>
               <div className="text-md font-bold">07814559767</div>
             </div>
 
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-3 justify-center lg:justify-start">
               <span className="text-2xl"><CiMail /></span>
               <div className="text-md font-bold">ben@taughtai.co.uk</div>
             </div>
@@ -76,9 +76,9 @@ function GetInTouch() {
         </div>
 
         {/* Right form card */}
-        <div>
-          <div className="bg-white rounded-2xl shadow-xl p-8 md:p-10 ">
-            <h3 className="text-3xl font-serif text-gray-900 mb-6 text-center">Get in touch</h3>
+        <div className="w-full">
+          <div className="bg-white rounded-2xl shadow-xl p-6 sm:p-8 md:p-10">
+            <h3 className="text-3xl font-serif text-gray-900 mb-6 text-center font-bold">Get in touch</h3>
 
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -116,7 +116,7 @@ function GetInTouch() {
           </div>
         </div>
       </div>
-    </section>
+      </section>
     </div>
   )
 }

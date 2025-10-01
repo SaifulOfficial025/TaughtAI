@@ -417,7 +417,7 @@ function Blog() {
 
   return (
     <section className="max-w-7xl mx-auto px-6 py-20">
-      <h2 className="text-center font-serif text-4xl mb-10">Our Blog</h2>
+      <h2 className="text-center font-serif text-4xl mb-10 font-bold">Our Blog</h2>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div className="md:col-span-2">

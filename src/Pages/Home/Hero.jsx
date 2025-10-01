@@ -18,22 +18,22 @@ function Hero() {
       <div className="absolute inset-0 bg-black/10" aria-hidden="true" />
 
       {/* Content */}
-      <div className="relative   px-6 py-28">
-        <div className="max-w-6xl">
-          <h1 className="text-white font-playfair font-bold  text-5xl  leading-tight">
+      <div className="relative px-6 py-20 sm:py-28">
+        <div className="max-w-4xl sm:max-w-6xl">
+          <h1 className="text-white font-playfair font-bold text-3xl sm:text-4xl md:text-5xl leading-tight">
             Taught AI helps schools integrate artifical
             <br /> intelligence effectively, ensuring its use
             <br /> aligns with their policies, ethos and goals.
           </h1>
 
-          <p className="mt-6 text-white/90 text-xl md:text-2xl">
-            Taught AI schools across the UK to integrate AI effectively while maintaining <br />
+          <p className="mt-6 text-white/90 text-base sm:text-lg md:text-xl">
+            Taught AI schools across the UK to integrate AI effectively while maintaining
             educational excellence and regulatory compliance.
           </p>
 
           <a
             href="#"
-            className="inline-block mt-8 bg-[#e8e6e6] text-gray-900 px-6 py-3 rounded-full shadow-sm hover:opacity-95 text-xl font-playfair"
+            className="inline-block mt-8 bg-[#e8e6e6] text-gray-900 px-5 sm:px-6 py-2.5 sm:py-3 rounded-full shadow-sm hover:opacity-95 text-base sm:text-lg font-playfair"
           >
             Get Started
           </a>

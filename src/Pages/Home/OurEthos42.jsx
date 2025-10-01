@@ -15,7 +15,7 @@ function OurEthos42({ imageSrc }) {
       <div className="max-w-6xl mx-auto px-6 py-12">
         <div className="mx-auto bg-white border rounded-2xl p-10 shadow-sm" style={{ borderColor: '#e6e6e6' }}>
           <div className="max-w-4xl mx-auto text-center">
-            <h2 className="font-serif text-3xl md:text-4xl lg:text-5xl text-gray-900 leading-snug">"42% of teachers are already using AI."</h2>
+            <h2 className="font-serif text-2xl md:text-3xl lg:text-4xl text-gray-900 leading-snug">"42% of teachers are already using AI."</h2>
             <p className="mt-4 text-md text-black">Department of Education, November 2023</p>
 
             <div className="mt-8">
@@ -27,9 +27,9 @@ function OurEthos42({ imageSrc }) {
 
       {/* Our Ethos section */}
       <section className="bg-[#f3f3f3]">
-        <div className=" mx-auto px-6 py-16 grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+  <div className="mx-auto px-6 py-12 grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
           <div>
-            <h3 className="text-6xl font-serif text-gray-900 mb-6">Our Ethos</h3>
+            <h3 className="text-4xl md:text-6xl font-serif text-gray-900 mb-6">Our Ethos</h3>
 
             <p className="text-gray-900 mb-4 text-lg">
               We developed Taught AI in 2025 to help schools unlock the potential of AI, while staying grounded in their values, staff, and students.
@@ -43,7 +43,7 @@ function OurEthos42({ imageSrc }) {
           </div>
 
           <div className="flex justify-end">
-            <img src={ethos} alt="Our ethos" className="w-full max-w-md rounded-xl object-cover shadow" />
+            <img src={ethos} alt="Our ethos" className="w-full max-w-sm md:max-w-md rounded-xl object-cover shadow" />
           </div>
         </div>
       </section>
