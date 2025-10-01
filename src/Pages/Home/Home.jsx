@@ -1,12 +1,28 @@
 import Container from "../../Layout/Container/Container"
+import Footer from "../../Shared/Footer"
+import Header from "../../Shared/Header"
+import Approach from "./Approach"
+import Blog from "./Blog"
+import FAQ from "./FAQ"
+import GetInTouch from "./GetInTouch"
+import Hero from "./Hero"
+import OurEthos42 from "./OurEthos42"
+import Transform from "./Transform"
 
 const Home = () => {
   return (
     <div>
-      <h2 className="text-3xl font-bold">landing page contain goes here</h2>
-      <Container>
-          <h2 className="text-3xl font-bold">Container Lorem ipsum dolor sit amet consectetur adipisicing elit. Incidunt animi alias distinctio eligendi doloremque ducimus illum? Sint harum expedita quibusdam voluptate nihil sed porro quam provident! Vitae numquam delectus quasi.</h2>
-      </Container>
+      <Header />
+      <Hero />
+      <OurEthos42 />
+      <Approach />
+      <Transform />
+      <Blog />
+      <FAQ />
+      <GetInTouch />
+      <div className="mt-52">
+      <Footer />
+      </div>
     </div>
   )
 }
