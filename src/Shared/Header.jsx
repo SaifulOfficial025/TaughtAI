@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { Link } from 'react-router-dom'
 import logo from "../../public/logoblack.svg"
 
 function Header() {
@@ -10,17 +11,19 @@ function Header() {
         <div className="flex items-center justify-between py-5">
           {/* Brand */}
           <div className="flex items-center gap-4">
-            <img src={logo} alt="Taught AI" className="h-8" />
+            <Link to="/">
+              <img src={logo} alt="Taught AI" className="h-8" />
+            </Link>
           </div>
 
           {/* Desktop nav */}
           <nav className="hidden md:flex items-center gap-8 text-lg text-gray-800 font-playfair">
-            <a href="#" className="hover:underline">About</a>
-            <a href="#" className="hover:underline">Services</a>
-            <a href="#" className="hover:underline">Try Our Platform</a>
-            <a href="#" className="hover:underline">Blog</a>
-            <a href="#" className="hover:underline">Contact</a>
-            <a href="#" className="inline-block bg-gray-800 text-white px-6 py-2 rounded-full shadow-sm hover:opacity-95 font-playfair">Log In</a>
+            <Link to="/about" className="hover:underline">About</Link>
+            <Link to="/services" className="hover:underline">Services</Link>
+            <Link to="/tryourplatform" className="hover:underline">Try Our Platform</Link>
+            <Link to="/blog" className="hover:underline">Blog</Link>
+            <Link to="/contact" className="hover:underline">Contact</Link>
+            <Link to="/login" className="inline-block bg-gray-800 text-white px-6 py-2 rounded-full shadow-sm hover:opacity-95 font-playfair">Log In</Link>
           </nav>
 
           {/* Mobile menu button */}
@@ -41,12 +44,12 @@ function Header() {
         {open && (
           <div className="md:hidden pb-4">
             <div className="space-y-2 px-2">
-              <a href="#" className="block px-3 py-2 rounded-md hover:bg-gray-50">About</a>
-              <a href="#" className="block px-3 py-2 rounded-md hover:bg-gray-50">Services</a>
-              <a href="#" className="block px-3 py-2 rounded-md hover:bg-gray-50">Try Our Platform</a>
-              <a href="#" className="block px-3 py-2 rounded-md hover:bg-gray-50">Blog</a>
-              <a href="#" className="block px-3 py-2 rounded-md hover:bg-gray-50">Contact</a>
-              <a href="#" className="block px-3 py-2 rounded-md bg-gray-800 text-white text-center">Log In</a>
+              <Link to="/about" className="block px-3 py-2 rounded-md hover:bg-gray-50">About</Link>
+              <Link to="/services" className="block px-3 py-2 rounded-md hover:bg-gray-50">Services</Link>
+              <Link to="/tryourplatform" className="block px-3 py-2 rounded-md hover:bg-gray-50">Try Our Platform</Link>
+              <Link to="/blog" className="block px-3 py-2 rounded-md hover:bg-gray-50">Blog</Link>
+              <Link to="/contact" className="block px-3 py-2 rounded-md hover:bg-gray-50">Contact</Link>
+              <Link to="/login" className="block px-3 py-2 rounded-md bg-gray-800 text-white text-center">Log In</Link>
             </div>
           </div>
         )}

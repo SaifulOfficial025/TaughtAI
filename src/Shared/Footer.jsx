@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 import logo from "../../public/logowhite.svg"
 import { FaPhoneAlt } from "react-icons/fa";
 import { CiMail } from "react-icons/ci";
@@ -8,11 +9,13 @@ function Footer() {
 
   return (
     <footer className="mt-16 bg-gradient-to-b from-slate-900 via-slate-900 to-black text-gray-200">
-      <div className="max-w-7xl mx-auto px-6 py-12">
+      <div className=" mx-auto px-6 py-12">
   <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-start">
           {/* Brand / Left */}
           <div className="text-center md:text-left">
-            <img src={logo} alt="Taught AI" className="h-8 mb-4 mx-auto md:mx-0" />
+            <Link to="/">
+              <img src={logo} alt="Taught AI" className="h-8 mb-4 mx-auto md:mx-0" />
+            </Link>
             <p className="text-gray-300 leading-relaxed mt-2 max-w-xs mx-auto md:mx-0">
               Helping schools unlock the potential of their staff through effective AI CPD and programmes.
             </p>
@@ -22,11 +25,11 @@ function Footer() {
           <div className="md:pl-8 text-center md:text-left">
             <h4 className="text-lg font-medium text-white mb-4">Quick Action</h4>
             <ul className="space-y-3 text-gray-300">
-              <li><a href="#" className="hover:text-white">About</a></li>
-              <li><a href="#" className="hover:text-white">Service</a></li>
-              <li><a href="#" className="hover:text-white">Try Our Platform</a></li>
-              <li><a href="#" className="hover:text-white">Blog</a></li>
-              <li><a href="#" className="hover:text-white">Contact</a></li>
+              <li><Link to="/about" className="hover:text-white">About</Link></li>
+              <li><Link to="/services" className="hover:text-white">Services</Link></li>
+              <li><Link to="/tryourplatform" className="hover:text-white">Try Our Platform</Link></li>
+              <li><Link to="/blog" className="hover:text-white">Blog</Link></li>
+              <li><Link to="/contact" className="hover:text-white">Contact</Link></li>
             </ul>
           </div>
 
@@ -52,8 +55,8 @@ function Footer() {
         <div className="flex flex-col md:flex-row items-center justify-between gap-4 text-gray-200 text-md">
           <div>© {year} TaughtAI. All rights reserved.</div>
           <div className="flex items-center gap-6">
-            <a href="#" className="hover:text-white">Privacy Policy</a>
-            <a href="#" className="hover:text-white">Terms of Service</a>
+            <Link to="/privacy-policy" className="hover:text-white">Privacy Policy</Link>
+            <Link to="/terms" className="hover:text-white">Terms of Service</Link>
           </div>
         </div>
       </div>

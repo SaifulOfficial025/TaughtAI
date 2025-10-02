@@ -52,7 +52,11 @@ function GetInTouch() {
   }
 
   return (
-    <div className='bg-[#fff6f4] py-12 sm:py-20 relative z-10 mb-12'>
+    <div className="relative mb-12">
+      {/* background block covering 75% of the section height */}
+      <div className="absolute inset-x-0 top-0 h-[75%] bg-[#fff6f4]" aria-hidden="true" />
+
+      <div className="relative z-10 py-12 sm:py-20">
       <section className="max-w-7xl mx-auto px-6 py-0">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-start">
         {/* Left text */}
@@ -117,6 +121,7 @@ function GetInTouch() {
         </div>
       </div>
       </section>
+      </div>
     </div>
   )
 }
