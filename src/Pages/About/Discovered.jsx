@@ -41,7 +41,7 @@ function Discovered() {
 
       <div className="relative z-10 mx-auto max-w-6xl px-6 text-center py-28">
         <h2 className="text-4xl md:text-5xl font-playfair font-bold text-white ">What I Discovered</h2>
-        <p className="mt-4 max-w-2xl mx-auto text-gray-300">
+        <p className="mt-4 max-w-2xl mx-auto text-gray-300 font-bitter text-xl">
           I discovered that with the right prompts, AI can transform teaching—delivering better lessons, clearer
           communication, and real workload relief.
         </p>
@@ -56,7 +56,7 @@ function Discovered() {
                 </div>
 
                 <h3 className="text-xl font-playfair text-white text-center mb-3">{it.title}</h3>
-                <p className="text-sm text-gray-300 text-center">"{it.quote}"</p>
+                <p className="text-lg text-gray-300 text-center font-bitter">"{it.quote}"</p>
               </div>
             )
           })}

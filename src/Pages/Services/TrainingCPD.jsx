@@ -3,10 +3,10 @@ import trainingcpdbg from "../../../public/trainingcpd.svg"
 
 function TrainingCPD() {
   return (
-    <section className="py-12">
-      <div className=" mx-auto  px-16 text-justify">
+    <section className="py-12 font-bitter">
+      <div className=" mx-auto px-16 text-justify">
         <div className="mb-8">
-          <h1 className="text-3xl md:text-4xl font-playfair  mb-4">Training and CPD: <br /> Building AI Confidence Across Your School</h1>
+          <h1 className="font-bitter text-3xl md:text-4xl  mb-4">Training and CPD: <br /> Building AI Confidence Across Your School</h1>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
@@ -19,7 +19,7 @@ function TrainingCPD() {
 
           {/* Right: content */}
           <div className="prose max-w-none">
-            <p className="text-2xl text-gray-800 mb-4 font-bold">
+            <p className="text-2xl text-gray-800 mb-4 ">
               I offer tailored training and CPD opportunities to help <br /> your staff build the knowledge, confidence,
               and skills <br /> needed to use AI effectively in their roles.
             </p>
@@ -29,7 +29,7 @@ function TrainingCPD() {
               with your school's policies and the latest national guidance.
             </p>
 
-            <h3 className="text-2xl font-semibold mt-16 mb-4">I can support your school through:</h3>
+            <h3 className="text-2xl  mt-16 mb-4">I can support your school through:</h3>
             <ul className="list-disc list-inside text-xl text-gray-700 mb-4">
               <li>Whole-school INSET sessions</li>
               <li>Departmental or role-specific workshops (e.g. for SEND, English, SLT)</li>

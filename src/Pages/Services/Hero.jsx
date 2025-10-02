@@ -16,7 +16,7 @@ function Hero() {
             AI Solutions Tailored to Your School’s Needs
           </h1>
 
-          <p className="mt-4 text-md sm:text-base md:text-xl text-gray-200 max-w-3xl mx-auto">
+          <p className="mt-4 text-3xl font-bitter sm:text-base md:text-2xl text-gray-200 max-w-3xl mx-auto">
             Taught AI offers customised AI services to help schools streamline operations, enhance learning, and improve communication. From staff CPD to AI-driven lesson planning, our solutions are designed to align with your school’s unique policies and goals.
           </p>
         </div>

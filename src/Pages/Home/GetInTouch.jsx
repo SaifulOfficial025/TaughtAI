@@ -61,20 +61,20 @@ function GetInTouch() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-start">
         {/* Left text */}
         <div className="text-center lg:text-left">
-          <h2 className="text-2xl md:text-3xl lg:text-4xl font-serif text-gray-900 leading-tight mb-6 max-w-xl mx-auto lg:mx-0">
+          <h2 className="font-bitter text-3xl md:text-3xl lg:text-4xl text-gray-900 leading-tight mb-6 max-w-xl mx-auto lg:mx-0">
             Would you like a free demonstration of how effectively AI can be used in your school? Kindly share your details and I will be in touch.
           </h2>
-          <p className="text-gray-600 mb-8">I look forward to hearing from you.</p>
+          <p className="text-gray-600 mb-8 font-bitter text-2xl">I look forward to hearing from you.</p>
 
           <div className="space-y-6 text-gray-700">
             <div className="flex items-center gap-3 justify-center lg:justify-start">
               <span className="text-2xl"><FaPhoneAlt /></span>
-              <div className="text-md font-bold">07814559767</div>
+              <div className="text-xl font-bold font-bitter">07814559767</div>
             </div>
 
             <div className="flex items-center gap-3 justify-center lg:justify-start">
               <span className="text-2xl"><CiMail /></span>
-              <div className="text-md font-bold">ben@taughtai.co.uk</div>
+              <div className="text-xl font-bold font-bitter">ben@taughtai.co.uk</div>
             </div>
           </div>
         </div>

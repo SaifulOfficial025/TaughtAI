@@ -5,7 +5,7 @@ import { IoMan } from "react-icons/io5";
 import { FaGraduationCap } from "react-icons/fa";
 import { FaHandshakeSimple } from "react-icons/fa6";
 
-function Principle({ color = 'bg-blue-50', icon, title, children }) {
+function Principle({ color = 'bg-blue-50', icon, title, children, fonttype = '' }) {
   return (
     <div className="flex items-start gap-4">
       <div className={`flex-shrink-0 w-14 h-14 rounded-full flex items-center justify-center ${color}`}>
@@ -15,8 +15,8 @@ function Principle({ color = 'bg-blue-50', icon, title, children }) {
       </div>
 
       <div>
-        <h4 className="font-serif font-semibold text-gray-900">{title}</h4>
-        <p className="mt-2 text-gray-600 max-w-xl">{children}</p>
+        <h4 className={`font-semibold text-gray-900 text-2xl`}>{title}</h4>
+        <p className={`mt-2 text-gray-600 max-w-xl text-xl ${fonttype || 'font-bitter'}`}>{children}</p>
       </div>
     </div>
   )
@@ -33,6 +33,7 @@ function Approach() {
             color="bg-blue-50 text-blue-600"
             icon={<IoIosPeople />}
             title="Empowering Educators"
+            fonttype="font-bitter"
           >
             Through personalised CPD and school-specific solutions, I help staff gain the confidence to make AI work for them.
           </Principle>

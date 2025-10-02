@@ -14,11 +14,11 @@ function Transform() {
         {/* Right: text content */}
         <div>
           <h2 className="font-playfair text-3xl md:text-4xl lg:text-5xl text-gray-900 mb-6">We're Here<br/>To Transform You!</h2>
-          <p className="text-gray-700 max-w-md mb-8">
+          <p className="text-gray-700 max-w-md mb-8 font-bitter text-xl">
             As learners, people can enjoy great companionship from mentors and educators. We can help you develop and grow at your best.
           </p>
 
-          <a href="#" className="inline-block bg-gray-800 text-white px-6 py-3 rounded-full shadow-sm text-base">Get Started</a>
+          <a href="#" className="inline-block bg-gray-800 text-white px-6 py-3 rounded-full shadow-sm text-xl">Get Started</a>
         </div>
       </div>
     </section>

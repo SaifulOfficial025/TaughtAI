@@ -26,7 +26,7 @@ function Hero() {
             <br /> aligns with their policies, ethos and goals.
           </h1>
 
-          <p className="mt-6 text-white/90 text-base sm:text-lg md:text-xl">
+          <p className="mt-6 text-white/90 font-bitter text-base sm:text-lg md:text-xl">
             Taught AI schools across the UK to integrate AI effectively while maintaining
             educational excellence and regulatory compliance.
           </p>

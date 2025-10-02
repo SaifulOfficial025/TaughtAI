@@ -1,7 +1,7 @@
 import { createBrowserRouter } from "react-router-dom";
 import Home from "../Pages/Home/Home";
 import About from "../Pages/About/RootPage";
-import Rootpage from "../Pages/TryOurPlatform/Rootpage";
+import Rootpage from "../Pages/Services/Rootpage";
 
 export const router = createBrowserRouter([
   {
@@ -13,7 +13,7 @@ export const router = createBrowserRouter([
     element: <About />,
   },
   {
-    path: "/tryourplatform",
+    path: "/services",
     element: <Rootpage />,
   },
 ]);

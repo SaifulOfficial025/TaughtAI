@@ -15,7 +15,7 @@ function Help() {
         <div className="grid grid-cols-1 md:grid-cols-2 items-stretch ">
           <div className="order-2 md:order-1 bg-[#f1f5f9] p-8 h-64 md:h-72 lg:h-80 overflow-y-auto">
             <h3 className="text-3xl font-playfair font-semibold mb-3">Training & CPD</h3>
-            <p className="text-xl text-gray-700 leading-relaxed">
+            <p className="text-2xl font-bitter text-gray-700 leading-relaxed">
               I deliver hands-on training sessions and CPD workshops that show staff how to create Outstanding Prompts
               and apply AI confidently in their daily work. From lesson planning to report writing, teachers learn how to
               get high-quality, policy-aligned results in minutes.
@@ -40,7 +40,7 @@ function Help() {
 
           <div className="bg-[#f1f5f9] p-8 h-64 md:h-72 lg:h-80 overflow-y-auto">
             <h3 className="text-3xl font-playfair font-semibold mb-3">Policy Alignment</h3>
-            <p className="text-xl text-gray-700 leading-relaxed">
+            <p className="text-2xl font-bitter text-gray-700 leading-relaxed">
               AI outputs are only valuable if they reflect the values and standards of the school. I help schools design
               prompt frameworks and usage guidelines that ensure every resource, email, or report is Ofsted-aligned,
               trauma-informed, SEND-friendly, and inclusive.
@@ -52,7 +52,7 @@ function Help() {
         <div className="grid grid-cols-1 md:grid-cols-2 items-stretch ">
           <div className="bg-[#f1f5f9] p-8 h-64 md:h-72 lg:h-80 overflow-y-auto">
             <h3 className="text-3xl font-playfair font-semibold mb-3">Practical Implementation</h3>
-            <p className="text-xl text-gray-700 leading-relaxed">
+            <p className="text-2xl font-bitter text-gray-700 leading-relaxed">
               I provide step-by-step support for integrating AI into school systems. This includes building ready-to-use
               templates, setting up workflows for lesson planning and communication, and ensuring staff feel confident
               using AI tools without extra workload.
