@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, NavLink } from 'react-router-dom'
 import logo from "../../public/logoblack.svg"
 
 function Header() {
@@ -18,12 +18,24 @@ function Header() {
 
           {/* Desktop nav */}
           <nav className="hidden md:flex items-center gap-8 text-lg text-gray-800 font-playfair">
-            <Link to="/about" className="hover:underline">About</Link>
-            <Link to="/services" className="hover:underline">Services</Link>
-            <Link to="/tryourplatform" className="hover:underline">Try Our Platform</Link>
-            <Link to="/blog" className="hover:underline">Blog</Link>
-            <Link to="/contact" className="hover:underline">Contact</Link>
-            <Link to="/login" className="inline-block bg-gray-800 text-white px-6 py-2 rounded-full shadow-sm hover:opacity-95 font-playfair">Log In</Link>
+            <NavLink to="/about" className={({isActive}) => `hover:underline ${isActive ? '  font-semibold' : ''}`}>
+              About
+            </NavLink>
+            <NavLink to="/services" className={({isActive}) => `hover:underline ${isActive ? '  font-semibold' : ''}`}>
+              Services
+            </NavLink>
+            <NavLink to="/tryourplatform" className={({isActive}) => `hover:underline ${isActive ? '  font-semibold' : ''}`}>
+              Try Our Platform
+            </NavLink>
+            <NavLink to="/blog" className={({isActive}) => `hover:underline ${isActive ? '  font-semibold' : ''}`}>
+              Blog
+            </NavLink>
+            <NavLink to="/contact" className={({isActive}) => `hover:underline ${isActive ? '  font-semibold' : ''}`}>
+              Contact
+            </NavLink>
+            <NavLink to="/login" className={({isActive}) => `inline-block px-6 py-2 rounded-full shadow-sm font-playfair ${isActive ? ' text-white' : 'bg-gray-800 text-white hover:opacity-95'}`}>
+              Log In
+            </NavLink>
           </nav>
 
           {/* Mobile menu button */}
@@ -42,14 +54,14 @@ function Header() {
 
         {/* Mobile menu panel */}
         {open && (
-          <div className="md:hidden pb-4">
+          <div className="md:hidden pb-4 font-playfair">
             <div className="space-y-2 px-2">
-              <Link to="/about" className="block px-3 py-2 rounded-md hover:bg-gray-50">About</Link>
-              <Link to="/services" className="block px-3 py-2 rounded-md hover:bg-gray-50">Services</Link>
-              <Link to="/tryourplatform" className="block px-3 py-2 rounded-md hover:bg-gray-50">Try Our Platform</Link>
-              <Link to="/blog" className="block px-3 py-2 rounded-md hover:bg-gray-50">Blog</Link>
-              <Link to="/contact" className="block px-3 py-2 rounded-md hover:bg-gray-50">Contact</Link>
-              <Link to="/login" className="block px-3 py-2 rounded-md bg-gray-800 text-white text-center">Log In</Link>
+              <NavLink to="/about" className={({isActive}) => `block px-3 py-2 rounded-md ${isActive ? 'bg-gray-100 font-semibold' : 'hover:bg-gray-50'}`}>About</NavLink>
+              <NavLink to="/services" className={({isActive}) => `block px-3 py-2 rounded-md ${isActive ? 'bg-gray-100 font-semibold' : 'hover:bg-gray-50'}`}>Services</NavLink>
+              <NavLink to="/tryourplatform" className={({isActive}) => `block px-3 py-2 rounded-md ${isActive ? 'bg-gray-100 font-semibold' : 'hover:bg-gray-50'}`}>Try Our Platform</NavLink>
+              <NavLink to="/blog" className={({isActive}) => `block px-3 py-2 rounded-md ${isActive ? 'bg-gray-100 font-semibold' : 'hover:bg-gray-50'}`}>Blog</NavLink>
+              <NavLink to="/contact" className={({isActive}) => `block px-3 py-2 rounded-md ${isActive ? 'bg-gray-100 font-semibold' : 'hover:bg-gray-50'}`}>Contact</NavLink>
+              <NavLink to="/login" className={({isActive}) => `block px-3 py-2 rounded-md text-center ${isActive ? ' text-white font-semibold' : 'bg-gray-800 text-white'}`}>Log In</NavLink>
             </div>
           </div>
         )}
