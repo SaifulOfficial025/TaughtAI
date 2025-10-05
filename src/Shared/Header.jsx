@@ -27,7 +27,7 @@ function Header() {
             <NavLink to="/tryourplatform" className={({isActive}) => `hover:underline ${isActive ? '  font-semibold' : ''}`}>
               Try Our Platform
             </NavLink>
-            <NavLink to="/blog" className={({isActive}) => `hover:underline ${isActive ? '  font-semibold' : ''}`}>
+            <NavLink to="/blogs" className={({isActive}) => `hover:underline ${isActive ? '  font-semibold' : ''}`}>
               Blog
             </NavLink>
             <NavLink to="/contact" className={({isActive}) => `hover:underline ${isActive ? '  font-semibold' : ''}`}>

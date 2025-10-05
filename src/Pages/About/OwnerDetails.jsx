@@ -3,27 +3,27 @@ import ownerpic from "../../../public/owner.svg"
 
 function OwnerDetails() {
   return (
-    <section className="py-8 md:py-12">
-      <div className="max-w-7xl mx-auto px-6 font-bitter ">
-        <p className="text-2xl text-gray-700 mb-6"><span className='font-bold'>Taught AI</span> is me, Ben. I am a Deputy Head of School, Maths Teacher, <br /> and Head of PSHE at an inner-city pupil referral unit.</p>
+    <section className="py-6 md:py-12">
+      <div className="max-w-7xl mx-auto px-4 md:px-6 font-bitter">
+        <p className="text-xl md:text-2xl text-gray-700 mb-4 md:mb-6"><span className='font-bold'>Taught AI</span> is me, Ben. I am a Deputy Head of School, Maths Teacher, <br className="hidden md:block"/> and Head of PSHE at an inner-city pupil referral unit.</p>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 items-start">
           {/* Left: image */}
           <div>
             <div className="rounded-xl overflow-hidden ">
-              <img src={ownerpic} alt="Owner" className="w-full h-auto block rounded-xl" />
+              <img src={ownerpic} alt="Owner" className="w-full h-64 md:h-auto object-cover block rounded-xl" />
             </div>
           </div>
 
           {/* Right: long content */}
-          <div className="text-xl text-gray-800 leading-relaxed text-justify">
+          <div className="text-base md:text-xl text-gray-800 leading-relaxed text-justify">
             <p className="mb-2">As a maths teacher by trade, I’ve always been intrigued by AI.</p>
 
             <p className="mb-2">Initially, I was underwhelmed—simple requests like “Improve this email,” “Refine my reports,” or “Plan a PSHE lesson on county lines” often yielded generic responses.</p>
 
             <p className="mb-2">However, after training in how to truly harness the power of AI through what I call Outstanding Prompts, my perspective shifted entirely.</p>
 
-            <p className="mb-2">I witnessed how AI could generate a fully Ofsted-aligned, pedagogically sound, Gatsby-benchmarked lesson—complete with key terms, multiple-choice questions, GCSE-style worksheets, and homework—all structured into slides with just a few well-crafted prompts. Ten words into a 25-minute lesson.</p>
+            <p className="mb-2">I witnessed how AI could generate a fully Ofsted-aligned, pedagogically sound, Gatsby-benchmarked lesson—complete with key terms, multiple-choice questions, GCSE-style worksheets, and homework—all structured into slides with just a few well-crafted prompts.</p>
 
             <p className="mb-2">Beyond lesson planning, AI transformed how my team communicated with parents, ensuring emails were fully aligned with school policies, trauma-informed, and used appropriate SEND and inclusive language. The impact on workload reduction and standardisation was undeniable.</p>
 
