@@ -16,6 +16,7 @@ import NewPassword from "../Pages/Authentication/NewPassword";
 
 import AcademyChat from "../Pages/Chats/AcademyChat";
 import PrimaryChat from "../Pages/Chats/PrimaryChat";
+import Profile from "../Pages/Profile/Profile";
 
 
 export const router = createBrowserRouter([
@@ -74,6 +75,10 @@ export const router = createBrowserRouter([
   {
     path: "/taught_ai_primary",
     element: <PrimaryChat />,
+  },
+  {
+    path: "/profile",
+    element: <Profile />,
   }
 
 ]);
