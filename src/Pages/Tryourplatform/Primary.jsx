@@ -1,5 +1,6 @@
 import React from 'react'
 import primaryImg from '../../../public/primary.svg'
+import { Link } from 'react-router-dom'
 
 function Primary() {
   return (
@@ -23,7 +24,9 @@ function Primary() {
               <p className="text-xl font-bitter text-gray-700 mb-4">Drawing on trusted guidance from organisations like the EEF, The Bell Foundation, and national SEND frameworks, each tool is built to give staff a boost—helping you work smarter, teach more effectively, and support every child to thrive.</p>
 
               <div className="mt-6">
-                <a href="/try" className="inline-block bg-gray-900 text-white px-6 py-3 rounded-full shadow-sm hover:opacity-95 text-xl">Try me out</a>
+                 <Link to="/taught_ai_primary">
+                              <button className="inline-block bg-gray-900 text-white px-6 py-3 rounded-full shadow-sm hover:opacity-95 text-xl">Try me out</button>
+                              </Link>
               </div>
             </div>
           </div>

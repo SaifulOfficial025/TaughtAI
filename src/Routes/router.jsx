@@ -4,6 +4,18 @@ import About from "../Pages/About/RootPage";
 import Service from "../Pages/Services/Rootpage";
 import Tryourplatform from "../Pages/Tryourplatform/Rootpage";
 import Blog from "../Pages/Blogs/RootPage";
+import BlogDetails from "../Pages/Blogs/BlogDetails";
+import Contact from "../Pages/Contact/RootPage";
+
+
+import SignIn from "../Pages/Authentication/SignIn";
+import SignUp from "../Pages/Authentication/SignUp";
+import ForgetPasswordEmail from "../Pages/Authentication/ForgetPasswordEmail";
+import ForgetPasswordVerifyEmail from "../Pages/Authentication/ForgetPasswordVerifyEmail";
+import NewPassword from "../Pages/Authentication/NewPassword";
+
+import AcademyChat from "../Pages/Chats/AcademyChat";
+import PrimaryChat from "../Pages/Chats/PrimaryChat";
 
 
 export const router = createBrowserRouter([
@@ -27,4 +39,41 @@ export const router = createBrowserRouter([
     path: "/blogs",
     element: <Blog />,
   },
+  {
+    path: "/blogs/:id",
+    element: <BlogDetails />,
+  },
+  {
+    path: "/contact",
+    element: <Contact />,
+  },
+  {
+    path: "/signin",
+    element: <SignIn />,
+  },
+  {
+    path: "/signup",
+    element: <SignUp />,
+  },
+  {
+    path: "/forgot_password_email",
+    element: <ForgetPasswordEmail />,
+  },
+  {
+    path: "/forgot_password_verify_email",
+    element: <ForgetPasswordVerifyEmail />,
+  },
+  {
+    path: "/new_password",
+    element: <NewPassword />,
+  },
+  {
+    path: "/taught_ai_academy",
+    element: <AcademyChat />,
+  },
+  {
+    path: "/taught_ai_primary",
+    element: <PrimaryChat />,
+  }
+
 ]);

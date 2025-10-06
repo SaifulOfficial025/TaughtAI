@@ -33,7 +33,7 @@ function Header() {
             <NavLink to="/contact" className={({isActive}) => `hover:underline ${isActive ? '  font-semibold' : ''}`}>
               Contact
             </NavLink>
-            <NavLink to="/login" className={({isActive}) => `inline-block px-6 py-2 rounded-full shadow-sm font-playfair ${isActive ? ' text-white' : 'bg-gray-800 text-white hover:opacity-95'}`}>
+            <NavLink to="/signin" className={({isActive}) => `inline-block px-6 py-2 rounded-full shadow-sm font-playfair ${isActive ? ' text-white' : 'bg-gray-800 text-white hover:opacity-95'}`}>
               Log In
             </NavLink>
           </nav>

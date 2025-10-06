@@ -1,5 +1,6 @@
 import React from 'react'
 import academyImg from '../../../public/academy.svg'
+import { Link } from 'react-router-dom'
 
 function Academy() {
   return (
@@ -26,7 +27,9 @@ function Academy() {
             </p>
 
             <div>
-              <a href="/try" className="inline-block bg-gray-900 text-white px-6 py-3 rounded-full shadow-sm hover:opacity-95 text-xl">Try me out</a>
+              <Link to="/taught_ai_academy">
+              <button className="inline-block bg-gray-900 text-white px-6 py-3 rounded-full shadow-sm hover:opacity-95 text-xl">Try me out</button>
+              </Link>
             </div>
           </div>
 
