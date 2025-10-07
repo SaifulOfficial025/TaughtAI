@@ -15,6 +15,7 @@ import ForgetPasswordVerifyEmail from "../Pages/Authentication/ForgetPasswordVer
 import NewPassword from "../Pages/Authentication/NewPassword";
 
 import AcademyChat from "../Pages/Chats/AcademyChat";
+import ChatDetail from "../Pages/Chats/ChatDetail";
 import PrimaryChat from "../Pages/Chats/PrimaryChat";
 import Profile from "../Pages/Profile/Profile";
 
@@ -37,7 +38,7 @@ export const router = createBrowserRouter([
     element: <Tryourplatform />,
   },
   {
-    path: "/blogs",
+    path: "/blog",
     element: <Blog />,
   },
   {
@@ -71,6 +72,14 @@ export const router = createBrowserRouter([
   {
     path: "/taught_ai_academy",
     element: <AcademyChat />,
+  },
+  {
+    path: "/chats",
+    element: <AcademyChat />,
+  },
+  {
+    path: "/chats/:chatId",
+    element: <ChatDetail />,
   },
   {
     path: "/taught_ai_primary",

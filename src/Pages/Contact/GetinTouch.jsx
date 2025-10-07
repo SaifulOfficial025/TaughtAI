@@ -28,10 +28,10 @@ function GetinTouch() {
 
   return (
     <section className="min-h-screen flex flex-col font-playfair">
-      <div className="max-w-7xl mx-auto px-6 md:px-12 lg:px-20">
+  <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-12 lg:px-20">
         <div className="grid grid-cols-1 lg:grid-cols-2 items-start">
           <div className="flex items-start">
-            <div className="p-12">
+            <div className="p-6 sm:p-8 md:p-12">
               <p className="text-lg md:text-md leading-relaxed mb-6">
                 Would you like a free demonstration of how effectively AI can be
                 used in your school?
@@ -46,7 +46,7 @@ function GetinTouch() {
           </div>
 
           <div className="flex items-start justify-end">
-            <div className="p-12 text-right">
+            <div className="p-6 sm:p-8 md:p-12 text-right">
               <div className="flex flex-col items-end space-y-3 pt-8">
                 <div className="flex items-center gap-3">
                   <svg
@@ -103,11 +103,11 @@ function GetinTouch() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
 
             <div className="relative lg:col-span-2 flex justify-center">
-              <div className="bg-white rounded-2xl shadow-2xl p-8 md:p-10 w-full lg:w-[900px] relative -mt-60 border-2 border-gray-200">
-                <h2 className="text-3xl md:text-4xl font-serif text-center mb-8 font-bold">Get in touch</h2>
+              <div className="bg-white rounded-2xl shadow-2xl p-6 sm:p-8 md:p-10 w-full lg:w-[900px] relative -mt-40 sm:-mt-60 border-2 border-gray-200">
+                <h2 className="text-2xl sm:text-3xl md:text-4xl font-serif text-center mb-6 sm:mb-8 font-bold">Get in touch</h2>
 
                 <form onSubmit={handleSubmit} className="space-y-6">
-                  <div className="grid grid-cols-2 gap-6">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                     <div>
                       <label className="block text-xs text-gray-600 mb-2">First Name</label>
                       <input
@@ -129,7 +129,7 @@ function GetinTouch() {
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-2 gap-6">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                     <div>
                       <label className="block text-xs text-gray-600 mb-2">Email</label>
                       <input
@@ -178,7 +178,7 @@ function GetinTouch() {
                 <button
                   type="button"
                   onClick={(e) => { e.preventDefault(); document.querySelector('form').requestSubmit(); }}
-                  className="absolute left-8 bottom-8 bg-gray-800 text-white px-6 py-2 rounded-full text-sm font-medium shadow-md"
+                  className="absolute left-4 sm:left-8 bottom-6 sm:bottom-8 bg-gray-800 text-white px-5 sm:px-6 py-2 rounded-full text-sm font-medium shadow-md"
                 >
                   Submit
                 </button>
