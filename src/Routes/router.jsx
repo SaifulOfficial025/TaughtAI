@@ -19,6 +19,13 @@ import ChatDetail from "../Pages/Chats/ChatDetail";
 import PrimaryChat from "../Pages/Chats/PrimaryChat";
 import Profile from "../Pages/Profile/Profile";
 
+import StaffPlatform from "../Pages/Academy/StaffPlatform";
+import Faq from "../Pages/Academy/Faq";
+import Policies from "../Pages/Academy/Policies";
+import AcademyHome from "../Pages/Academy/Home";
+
+
+
 
 export const router = createBrowserRouter([
   {
@@ -88,6 +95,22 @@ export const router = createBrowserRouter([
   {
     path: "/profile",
     element: <Profile />,
+  },
+  {
+    path: "/academy/home",
+    element: <AcademyHome />,
+  },
+  {
+    path: "/academy/staff",
+    element: <StaffPlatform />,
+  },
+  {
+    path: "/academy/faq",
+    element: <Faq />,
+  },
+  {
+    path: "/academy/policies",
+    element: <Policies />,
   }
 
 ]);
