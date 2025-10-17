@@ -27,7 +27,7 @@ function Academy() {
             </p>
 
             <div>
-              <Link to="/taught_ai_academy">
+              <Link to="/academy/home">
               <button className="inline-block bg-gray-900 text-white px-6 py-3 rounded-full shadow-sm hover:opacity-95 text-xl">Try me out</button>
               </Link>
             </div>

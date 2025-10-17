@@ -109,7 +109,7 @@ export const router = createBrowserRouter([
     element: <Faq />,
   },
   {
-    path: "/academy/policies",
+    path: "/academy/policy",
     element: <Policies />,
   }
 
