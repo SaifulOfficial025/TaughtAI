@@ -62,7 +62,7 @@ function GetInTouch() {
         {/* Left text */}
         <div className="text-center lg:text-left">
           <h2 className="font-bitter text-3xl md:text-3xl lg:text-4xl text-gray-900 leading-tight mb-6 max-w-xl mx-auto lg:mx-0">
-            Would you like a free demonstration of how effectively AI can be used in your school? Kindly share your details and I will be in touch.
+            If you would like a free demonstration of how AI can be used safely and effectively in your school, kindly share your details below and I will be in touch.
           </h2>
           <p className="text-gray-600 mb-8 font-bitter text-2xl">I look forward to hearing from you.</p>
 

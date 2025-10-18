@@ -15,7 +15,7 @@ function OurEthos42({ imageSrc }) {
       <div className="max-w-6xl mx-auto px-6 py-12">
         <div className="mx-auto bg-white border rounded-2xl p-10 shadow-sm" style={{ borderColor: '#e6e6e6' }}>
           <div className="max-w-4xl mx-auto text-center">
-            <h2 className="font-serif text-2xl md:text-3xl lg:text-4xl text-gray-900 leading-snug">"42% of teachers are already using AI."</h2>
+            <h2 className="font-serif text-2xl md:text-3xl lg:text-4xl text-gray-900 leading-snug">60% of teachers are already using AI<br /></h2>
             <p className="mt-4 text-xl text-black font-bitter">Department of Education, November 2023</p>
 
             <div className="mt-8">

@@ -24,6 +24,11 @@ import Faq from "../Pages/Academy/Faq";
 import Policies from "../Pages/Academy/Policies";
 import AcademyHome from "../Pages/Academy/Home";
 
+import PrimaryHome from "../Pages/Primary/Home";
+import PrimaryStaffPlatform from "../Pages/Primary/StaffPlatform";
+import PrimaryFaq from "../Pages/Primary/Faq";
+import PrimaryPolicies from "../Pages/Primary/Policies";
+
 
 
 
@@ -111,6 +116,22 @@ export const router = createBrowserRouter([
   {
     path: "/academy/policy",
     element: <Policies />,
+  },
+  {
+    path: "/primary/home",
+    element: <PrimaryHome />,
+  },
+  {
+    path: "/primary/staff",
+    element: <PrimaryStaffPlatform />,
+  },
+  {
+    path: "/primary/faq",
+    element: <PrimaryFaq />,
+  },
+  {
+    path: "/primary/policy",
+    element: <PrimaryPolicies />,
   }
 
 ]);

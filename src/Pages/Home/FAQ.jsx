@@ -2,29 +2,29 @@ import React, { useState } from 'react'
 
 const FAQ_ITEMS = [
   {
-    question: 'Is TaughtAI compliant with UK education policies?',
+    question: 'How are Taught AI tools different from just using Gemini or ChatGPT?',
     answer:
-      'Yes — TaughtAI is designed to align with UK guidance on the safe and effective use of AI in education. We provide support and documentation to help schools remain compliant with data protection and safeguarding requirements.',
+      'Unlike public AI platforms, Taught AI tools are built specifically for schools. Each one is policy-aligned, safeguarding-compliant, and tailored to your setting. I upload your school’s policies, templates, and curriculum frameworks — so staff receive accurate, context-aware support that’s safe, consistent, and ready to use.',
   },
   {
-    question: 'How does TaughtAI support SEN students?',
+    question: 'Is Taught AI compliant with UK education policies?',
     answer:
-      'TaughtAI includes features to personalise learning, provide alternative formats, and offer targeted scaffolding for students with Special Educational Needs. We work with schools to tailor solutions to individual pupil needs.',
+      'Yes. Every tool I build is designed around UK safeguarding, GDPR, and ethical AI guidance. Staff are supported to use AI responsibly, with built-in reminders and compliance checks that protect pupils, staff, and your school’s integrity.',
   },
   {
-    question: 'What training is provided for teachers?',
+    question: 'What training is provided for teachers and staff?',
     answer:
-      'We deliver practical professional development sessions, hands-on workshops and on-demand resources so teachers can confidently integrate AI tools into their lesson planning and assessment workflows.',
+      'I deliver practical CPD sessions, hands-on workshops, and follow-up coaching to help staff use AI confidently and effectively. Training focuses on safe, policy-aligned practice — showing how AI can genuinely save time, improve consistency, and enhance classroom impact.',
   },
   {
-    question: 'Can TaughtAI integrate with our existing school systems?',
+    question: 'How does Taught AI support SEND and inclusion?',
     answer:
-      'Yes, TaughtAI integrates with most popular school management systems, learning platforms, and assessment tools commonly used in UK schools. Our technical team will help set up integrations during onboarding.',
+      'My tools are built with inclusivity in mind. They generate trauma-informed, SEND-aware, and EAL-friendly content — offering adaptive scaffolds, differentiated tasks, and personalised feedback that meet the needs of all learners.',
   },
   {
-    question: 'How much time can teachers save using TaughtAI?',
+    question: 'How much time can teachers save using Taught AI?',
     answer:
-      'Teachers typically save time on marking and administrative tasks through automated feedback and summarisation features — freeing up time for planning and student support.',
+      'Schools using Taught AI typically see major time savings on planning, marking, and admin tasks. By automating routine work and simplifying communication, staff can focus more on relationships, progress, and wellbeing.',
   },
 ]
 

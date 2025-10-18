@@ -24,7 +24,7 @@ function Primary() {
               <p className="text-xl font-bitter text-gray-700 mb-4">Drawing on trusted guidance from organisations like the EEF, The Bell Foundation, and national SEND frameworks, each tool is built to give staff a boost—helping you work smarter, teach more effectively, and support every child to thrive.</p>
 
               <div className="mt-6">
-                 <Link to="/taught_ai_primary">
+                 <Link to="/primary/home">
                               <button className="inline-block bg-gray-900 text-white px-6 py-3 rounded-full shadow-sm hover:opacity-95 text-xl">Try me out</button>
                               </Link>
               </div>
