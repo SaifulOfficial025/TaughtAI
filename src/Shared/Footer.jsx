@@ -34,15 +34,15 @@ function Footer() {
           </div>
 
           {/* Contact / Right */}
-          <div className="md:text-right">
+          <div className="text-right">
             <h4 className="text-lg font-medium text-white mb-4">Contact</h4>
-            <div className="flex flex-col items-start md:items-end gap-3 text-gray-300">
-              <div className="flex items-center gap-3">
+            <div className="flex flex-col items-end gap-3 text-gray-300">
+              <div className="flex items-center gap-3 justify-end">
                 <FaPhoneAlt className="w-4 h-4 text-gray-300" />
                 <span>07814559767</span>
               </div>
 
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-3 justify-end">
                 <CiMail className="w-4 h-4 text-gray-300" />
                 <a href="mailto:ben@taughtai.co.uk" className="hover:text-white">ben@taughtai.co.uk</a>
               </div>

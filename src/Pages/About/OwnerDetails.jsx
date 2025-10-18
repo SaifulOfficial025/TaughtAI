@@ -16,7 +16,7 @@ function OwnerDetails() {
           </div>
 
           {/* Right: long content */}
-          <div className="text-base md:text-xl text-gray-800 leading-relaxed text-justify">
+          <div className="text-3xl md:text-2xl text-gray-800 leading-relaxed text-justify mt-3">
             <p className="mb-2">As a maths teacher by trade, I’ve always been intrigued by AI.</p>
 
             <p className="mb-2">Initially, I was underwhelmed—simple requests like “Improve this email,” “Refine my reports,” or “Plan a PSHE lesson on county lines” often yielded generic responses.</p>
