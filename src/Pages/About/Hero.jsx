@@ -1,5 +1,5 @@
-import React from 'react'
-import herobg from "../../../public/aboutherobg.svg"
+import React from "react";
+import herobg from "../../../public/aboutherobg.svg";
 
 function Hero() {
   return (
@@ -16,15 +16,17 @@ function Hero() {
             What is Taught AI
           </h1>
 
-          <p className="mt-4 font-bitter text-sm sm:text-base md:text-lg text-gray-200 max-w-3xl mx-auto px-2 sm:px-0">
-            Taught AI is led by Ben — a Deputy Head of School, Maths Teacher, and Head of PSHE.
-            With the power of Outstanding Prompts, I help schools harness AI to reduce workload, improve
-            consistency, and make teaching more effective, inclusive, and aligned with school policies.
+          <p className="mt-4 font-bitter text-sm sm:text-base md:text-2xl text-gray-200 max-w-3xl mx-auto px-2 sm:px-0">
+            Taught AI is led by Ben — a Deputy Head of School, Maths Teacher,
+            and Head of PSHE. With the power of Outstanding Prompts, I help
+            schools harness AI to reduce workload, improve consistency, and make
+            teaching more effective, inclusive, and aligned with school
+            policies.
           </p>
         </div>
       </div>
     </section>
-  )
+  );
 }
 
-export default Hero
+export default Hero;
