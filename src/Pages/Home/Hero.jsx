@@ -1,5 +1,5 @@
-import React from 'react'
-import backgroundImage from '../../../public/herobg.svg'
+import React from "react";
+import backgroundImage from "../../../public/herobg.svg";
 /**
  * Hero component
  * - Accepts an optional `backgroundImage` prop (string URL). If not provided, background is empty and user can add later.
@@ -20,15 +20,15 @@ function Hero() {
       {/* Content */}
       <div className="relative px-6 py-20 sm:py-28">
         <div className="max-w-4xl sm:max-w-6xl">
-          <h1 className="text-white font-playfair font-bold text-3xl sm:text-4xl md:text-5xl leading-tight">
+          <h1 className="text-white font-playfair font-bold text-3xl sm:text-4xl md:text-5xl leading-relaxed md:leading-relaxed">
             Taught AI helps schools integrate artifical
             <br /> intelligence effectively, ensuring its use
             <br /> aligns with their policies, ethos and goals.
           </h1>
 
-          <p className="mt-6 text-white/90 font-bitter text-base sm:text-lg md:text-xl">
-            Taught AI schools across the UK to integrate AI effectively while maintaining
-            educational excellence and regulatory compliance.
+          <p className="mt-6 text-white/90 font-bitter text-base sm:text-lg md:text-2xl">
+            Taught AI schools across the UK to integrate AI effectively while
+            maintaining educational excellence and regulatory compliance.
           </p>
 
           <a
@@ -40,7 +40,7 @@ function Hero() {
         </div>
       </div>
     </section>
-  )
+  );
 }
 
-export default Hero
+export default Hero;

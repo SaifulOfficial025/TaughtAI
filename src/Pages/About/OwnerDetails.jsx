@@ -5,11 +5,11 @@ function OwnerDetails() {
   return (
     <section className="py-6 md:py-12">
       <div className="max-w-7xl mx-auto px-4 md:px-6 font-bitter">
-        <p className="text-xl md:text-2xl text-gray-700 mb-4 md:mb-6">
+        {/* <p className="text-xl md:text-2xl text-gray-700 mb-4 md:mb-6">
           <span className="font-bold">Taught AI</span> is me, Ben. I am a Deputy
           Head of School, Maths Teacher, <br className="hidden md:block" /> and
           Head of PSHE at an inner-city pupil referral unit.
-        </p>
+        </p> */}
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 items-start">
           {/* Left: image */}
