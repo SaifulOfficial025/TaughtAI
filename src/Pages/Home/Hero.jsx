@@ -6,7 +6,7 @@ import backgroundImage from "../../../public/herobg.svg";
  */
 function Hero() {
   return (
-    <section className="relative">
+    <section className="relative flex items-center justify-center min-h-[400px] md:min-h-[500px] lg:min-h-[600px]">
       {/* Background image layer (user can provide image via prop or CSS later) */}
       <div
         className="absolute inset-0 bg-cover bg-center"
@@ -18,8 +18,8 @@ function Hero() {
       <div className="absolute inset-0 bg-black/10" aria-hidden="true" />
 
       {/* Content */}
-      <div className="relative px-6 py-20 sm:py-28">
-        <div className="max-w-4xl sm:max-w-6xl">
+      <div className="relative px-6 py-20 sm:py-28 flex justify-center w-full">
+        <div className="max-w-4xl sm:max-w-6xl mx-auto text-center">
           <h1 className="text-white font-playfair font-bold text-3xl sm:text-4xl md:text-5xl leading-relaxed md:leading-relaxed">
             Taught AI helps schools integrate artifical
             <br /> intelligence effectively, ensuring its use
