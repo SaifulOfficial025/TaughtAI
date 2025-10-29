@@ -17,11 +17,11 @@ function Hero() {
           </h1>
 
           <p className="mt-4 font-bitter text-sm sm:text-base md:text-2xl text-gray-200 max-w-3xl mx-auto px-2 sm:px-0">
-            Taught AI is led by Ben — a Deputy Head of School, Maths Teacher,
-            and Head of PSHE. With the power of Outstanding Prompts, I help
-            schools harness AI to reduce workload, improve consistency, and make
-            teaching more effective, inclusive, and aligned with school
-            policies.
+            Taught AI is me. Ben. ​ I am a Deputy Head of School, Maths Teacher,
+            and Head of PSHE at an inner-city pupil referral unit. With the
+            power of outstanding prompts, I help schools harness AI to reduce
+            workload, improve consistency, and make teaching more effective,
+            inclusive, and aligned with school policies.
           </p>
         </div>
       </div>

@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Owner from "../../../public/chatlogo.svg";
 import { FaEdit } from "react-icons/fa";
 import { CgProfile } from "react-icons/cg";
@@ -8,13 +8,13 @@ import { FaMicrophoneLines } from "react-icons/fa6";
 function AcademyChat() {
   const navigate = useNavigate();
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  
+
   const chats = [
     { id: 1, title: "Create lesson plan for Year 7 Science" },
     { id: 2, title: "Help with assessment criteria" },
     { id: 3, title: "Scheme of work for Mathematics" },
     { id: 4, title: "Homework ideas for English" },
-    { id: 5, title: "Behavior management strategies" }
+    { id: 5, title: "Behavior management strategies" },
   ];
 
   const handleChatClick = (chatId) => {
@@ -28,8 +28,12 @@ function AcademyChat() {
         <div>
           <div className="px-4 sm:px-6 py-6 sm:py-8 mt-8">
             <div className="bg-gradient-to-r from-gray-800 to-black rounded-xl p-4 mb-6 shadow-lg border border-gray-600">
-              <h3 className="text-white font-bold text-lg mb-1">🎓 Taught AI</h3>
-              <p className="text-gray-300 text-sm">Your AI Teaching Assistant</p>
+              <h3 className="text-white font-bold text-lg mb-1">
+                🎓 Taught AI
+              </h3>
+              <p className="text-gray-300 text-sm">
+                Your AI Teaching Assistant
+              </p>
             </div>
             <button className="flex items-center gap-3 w-full text-white font-semibold bg-gradient-to-r from-gray-700 to-gray-800 hover:from-gray-600 hover:to-gray-700 rounded-xl px-4 py-3 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105 border border-gray-600">
               <FaEdit className="w-5 h-5" />
@@ -43,14 +47,16 @@ function AcademyChat() {
             </h4>
             <ul className="space-y-3">
               {chats.map((c) => (
-                <li 
-                  key={c.id} 
+                <li
+                  key={c.id}
                   onClick={() => handleChatClick(c.id)}
                   className="group bg-white/10 backdrop-blur-sm text-white hover:bg-white/20 rounded-lg px-4 py-3 cursor-pointer transition-all duration-200 border border-gray-600/30 hover:border-gray-500/50 hover:shadow-lg transform hover:scale-102"
                 >
                   <div className="flex items-start gap-3">
                     <div className="w-2 h-2 rounded-full bg-white mt-2 group-hover:bg-gray-300 transition-colors"></div>
-                    <span className="text-sm font-medium leading-relaxed">{c.title}</span>
+                    <span className="text-sm font-medium leading-relaxed">
+                      {c.title}
+                    </span>
                   </div>
                 </li>
               ))}
@@ -77,14 +83,22 @@ function AcademyChat() {
       {/* Mobile sidebar (slide-over) */}
       {sidebarOpen && (
         <div className="md:hidden fixed inset-0 z-40 flex">
-          <div className="fixed inset-0 bg-black/50 backdrop-blur-sm" onClick={() => setSidebarOpen(false)} />
+          <div
+            className="fixed inset-0 bg-black/50 backdrop-blur-sm"
+            onClick={() => setSidebarOpen(false)}
+          />
           <div className="relative w-72 bg-gradient-to-b from-gray-900 via-black to-gray-800 flex flex-col justify-between shadow-2xl backdrop-blur-lg">
             <div>
               <div className="px-4 py-6 flex items-center justify-between border-b border-gray-600/30">
                 <div className="bg-gradient-to-r from-gray-800 to-black rounded-lg p-3 border border-gray-600">
-                  <h3 className="text-white font-bold text-sm">🎓 EduChat Pro</h3>
+                  <h3 className="text-white font-bold text-sm">
+                    🎓 EduChat Pro
+                  </h3>
                 </div>
-                <button onClick={() => setSidebarOpen(false)} className="text-white hover:text-gray-300 p-2 transition-colors">
+                <button
+                  onClick={() => setSidebarOpen(false)}
+                  className="text-white hover:text-gray-300 p-2 transition-colors"
+                >
                   ✕
                 </button>
               </div>
@@ -94,10 +108,19 @@ function AcademyChat() {
                   <FaEdit className="w-4 h-4" />
                   New Lesson Plan
                 </button>
-                <h4 className="text-gray-300 font-semibold mb-3">📚 Conversations</h4>
+                <h4 className="text-gray-300 font-semibold mb-3">
+                  📚 Conversations
+                </h4>
                 <ul className="space-y-2">
                   {chats.map((c) => (
-                    <li key={c.id} onClick={() => { setSidebarOpen(false); handleChatClick(c.id); }} className="bg-white/10 text-white hover:bg-white/20 rounded-lg px-3 py-2 cursor-pointer transition-all text-sm border border-gray-600/30">
+                    <li
+                      key={c.id}
+                      onClick={() => {
+                        setSidebarOpen(false);
+                        handleChatClick(c.id);
+                      }}
+                      className="bg-white/10 text-white hover:bg-white/20 rounded-lg px-3 py-2 cursor-pointer transition-all text-sm border border-gray-600/30"
+                    >
                       {c.title}
                     </li>
                   ))}
@@ -111,7 +134,9 @@ function AcademyChat() {
                   B
                 </div>
                 <div>
-                  <div className="text-white font-semibold text-sm">Ben Duggan</div>
+                  <div className="text-white font-semibold text-sm">
+                    Ben Duggan
+                  </div>
                   <div className="text-gray-300 text-xs">Educator Pro</div>
                 </div>
               </div>
@@ -132,13 +157,28 @@ function AcademyChat() {
         <div className="w-full max-w-6xl mt-6 relative z-10">
           <div className="flex items-center justify-between px-4 sm:px-6">
             <div className="flex items-center gap-4">
-              <button onClick={() => setSidebarOpen(true)} className="md:hidden p-3 rounded-xl bg-white/70 backdrop-blur-sm border border-gray-200 hover:bg-white/90 transition-all shadow-lg">
-                <svg className="w-5 h-5 text-gray-700" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16"/>
+              <button
+                onClick={() => setSidebarOpen(true)}
+                className="md:hidden p-3 rounded-xl bg-white/70 backdrop-blur-sm border border-gray-200 hover:bg-white/90 transition-all shadow-lg"
+              >
+                <svg
+                  className="w-5 h-5 text-gray-700"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M4 6h16M4 12h16M4 18h16"
+                  />
                 </svg>
               </button>
-              <div className="bg-white/70 backdrop-blur-sm rounded-xl px-4 py-2 border border-gray-200 shadow-lg -ml-24">
-                <span className="text-gray-800 font-semibold">Taught AI Primary SOW GPT 5</span>
+              <div className="bg-white/70 backdrop-blur-sm rounded-xl px-4 py-2 border border-gray-200 shadow-lg ">
+                <span className="text-gray-800 font-semibold">
+                  Taught AI Primary SOW GPT 5
+                </span>
                 {/* <span className="text-gray-600 ml-2">v5.0</span> */}
               </div>
             </div>
@@ -147,9 +187,13 @@ function AcademyChat() {
           <div className="flex flex-col items-center mt-12 sm:mt-16 px-4 sm:px-6">
             <div className="relative">
               <div className="absolute inset-0 bg-gradient-to-r from-gray-400 to-black rounded-full blur-lg opacity-30"></div>
-              <img src={Owner} alt="badge" className="relative w-28 h-28 sm:w-32 sm:h-32 rounded-full shadow-2xl border-4 border-white/70" />
+              <img
+                src={Owner}
+                alt="badge"
+                className="relative w-28 h-28 sm:w-32 sm:h-32 rounded-full shadow-2xl border-4 border-white/70"
+              />
             </div>
-            
+
             <div className="text-center mt-8">
               <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold bg-gradient-to-r from-gray-700 via-black to-gray-600 bg-clip-text text-transparent mb-4 leading-tight">
                 🎓 Taught AI Primary SOW GPT
@@ -157,7 +201,9 @@ function AcademyChat() {
               <div className="flex items-center justify-center gap-2 text-gray-700 mb-3">
                 <CgProfile className="w-5 h-5" />
                 <span className="font-semibold">By Ben Duggan</span>
-                <span className="px-2 py-1 bg-gray-100 text-gray-700 rounded-full text-sm font-medium border border-gray-200">Verified Educator</span>
+                <span className="px-2 py-1 bg-gray-100 text-gray-700 rounded-full text-sm font-medium border border-gray-200">
+                  Verified Educator
+                </span>
               </div>
               <p className="text-lg sm:text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
                 Develop Schemes of work for your subject or topic
@@ -189,8 +235,8 @@ function AcademyChat() {
               <div className="absolute inset-0 bg-gradient-to-r from-gray-400/20 to-black/20 rounded-2xl blur-xl"></div>
               <div className="relative bg-white/90 backdrop-blur-lg rounded-2xl p-2 shadow-2xl border border-gray-200">
                 <div className="flex items-center gap-3">
-                  <input 
-                    placeholder="Ask me about lesson planning, curriculum design, or educational strategies..." 
+                  <input
+                    placeholder="Ask me about lesson planning, curriculum design, or educational strategies..."
                     className="flex-1 h-12 sm:h-14 bg-transparent px-6 text-gray-700 placeholder-gray-500 outline-none font-medium text-base"
                   />
                   <button className="p-3 sm:p-4 rounded-xl bg-gradient-to-r from-gray-600 to-gray-800 hover:from-gray-500 hover:to-gray-700 text-white shadow-lg hover:shadow-xl transition-all transform hover:scale-105">
@@ -202,7 +248,7 @@ function AcademyChat() {
                 </div>
               </div>
             </div>
-            
+
             {/* Quick action buttons
             <div className="flex flex-wrap justify-center gap-3 mt-6">
               <button className="px-4 py-2 bg-white/70 backdrop-blur-sm rounded-full text-sm font-medium text-gray-700 hover:bg-white/90 transition-all border border-gray-200 shadow-lg">
@@ -219,7 +265,7 @@ function AcademyChat() {
         </div>
       </main>
     </div>
-  )
+  );
 }
 
-export default AcademyChat
+export default AcademyChat;

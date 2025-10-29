@@ -48,7 +48,7 @@ function Academy() {
             <button
               className="inline-block bg-gray-900 text-white px-6 py-3 rounded-full shadow-sm hover:opacity-95 text-xl mt-10"
               onClick={() =>
-                window.open("https://www.taughtaiacademy.co", "_blank")
+                window.open("https://www.taughtaiacademy.co.uk", "_blank")
               }
             >
               School Microsite

@@ -54,7 +54,7 @@ function Primary() {
               <button
                 className="inline-block bg-gray-900 text-white px-6 py-3 rounded-full shadow-sm hover:opacity-95 text-xl mt-10"
                 onClick={() =>
-                  window.open("https://www.taughtaiprimary.co", "_blank")
+                  window.open("https://www.taughtaiprimary.co.uk", "_blank")
                 }
               >
                 School Microsite

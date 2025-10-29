@@ -20,16 +20,16 @@ function Hero() {
       {/* Content */}
       <div className="relative px-6 py-20 sm:py-28 flex justify-center w-full">
         <div className="max-w-4xl sm:max-w-6xl mx-auto text-center">
-          <h1 className="text-white font-playfair font-bold text-3xl sm:text-4xl md:text-5xl leading-relaxed md:leading-relaxed">
+          <h1 className="text-white font-playfair font-medium text-3xl sm:text-4xl md:text-6xl leading-relaxed md:leading-relaxed">
             Taught AI helps schools integrate artifical
             <br /> intelligence effectively, ensuring its use
             <br /> aligns with their policies, ethos and goals.
           </h1>
 
-          <p className="mt-6 text-white/90 font-bitter text-base sm:text-lg md:text-2xl">
+          {/* <p className="mt-6 text-white/90 font-bitter text-base sm:text-lg md:text-2xl">
             Taught AI schools across the UK to integrate AI effectively while
             maintaining educational excellence and regulatory compliance.
-          </p>
+          </p> */}
 
           <a
             href="#"

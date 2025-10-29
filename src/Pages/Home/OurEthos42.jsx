@@ -19,7 +19,7 @@ function OurEthos42({ imageSrc }) {
         >
           <div className="max-w-4xl mx-auto text-center">
             <h2 className="font-serif text-2xl md:text-3xl lg:text-4xl text-gray-900 leading-snug">
-              60% of teachers are already using AI
+              "60% of teachers are already using AI"
               <br />
             </h2>
             <p className="mt-4 text-xl text-black font-bitter">Forbes.com</p>
@@ -57,17 +57,17 @@ function OurEthos42({ imageSrc }) {
         <div className="mx-auto px-6 py-12 grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
           <div>
             <h3 className="text-4xl md:text-6xl font-serif text-gray-900 mb-6">
-              Our Ethos
+              My Ethos
             </h3>
 
             <p className="text-gray-900 mb-4 text-2xl font-bitter">
-              We developed Taught AI in 2025 to help schools unlock the
-              potential of AI, while staying grounded in their values, staff,
-              and students.
+              I developed Taught AI in 2025 to help schools unlock the potential
+              of AI, while staying grounded in their values, staff, and
+              students.
             </p>
 
             <p className="text-gray-900 mb-6 text-2xl font-bitter">
-              We believe technology should enhance education—improving outcomes,
+              I believe technology should enhance education—improving outcomes,
               reducing workload, and creating greater consistency across school
               life.
             </p>

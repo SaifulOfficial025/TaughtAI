@@ -1,5 +1,5 @@
-import React from 'react'
-import herobg from "../../../public/tryourplatformbg.svg"
+import React from "react";
+import herobg from "../../../public/tryourplatformbg.svg";
 
 function Hero() {
   return (
@@ -17,12 +17,15 @@ function Hero() {
           </h1>
 
           <p className="mt-4 text-base sm:text-lg md:text-2xl font-bitter text-gray-200 max-w-3xl mx-auto">
-            Taught AI offers customised AI services to help schools streamline operations, enhance learning, and improve communication. From staff CPD to AI-driven lesson planning, our solutions are designed to align with your school’s unique policies and goals.
+            Taught AI offers a bespoke programme for every school, recognising
+            the unique values and challenges each faces. From staff CPD to click
+            and use AI tools, everything is designed to align with your school’s
+            policies and goals.
           </p>
         </div>
       </div>
     </section>
-  )
+  );
 }
 
-export default Hero
+export default Hero;
