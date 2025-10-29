@@ -6,7 +6,7 @@ function Primary() {
   return (
     <section className="py-12">
       <div className="mx-auto  px-6">
-        <h1 className="text-center text-4xl md:text-5xl font-playfair font-bold mb-6">
+        <h1 className="text-center text-4xl md:text-5xl font-playfair font-bold  bg-[#eef6ff] py-6">
           Taught AI Primary
         </h1>
 

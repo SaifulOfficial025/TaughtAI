@@ -5,7 +5,7 @@ function Bespoke() {
   return (
     <section className="py-12 font-bitter ">
       <div className="mx-auto  ">
-        <h1 className="text-center text-4xl font-playfair font-bold mb-8">
+        <h1 className="text-center text-4xl font-playfair font-bold  bg-[#f1f5f9] py-6">
           Bespoke Platforms
         </h1>
 
@@ -23,9 +23,9 @@ function Bespoke() {
           <div className="prose max-w-none">
             <p className="text-3xl text-gray-800 mb-8">
               Taught AI can train your staff to create custom tools like the{" "}
-              <br /> examples below, or partner with you to build a bespoke
-              <br /> platform that enables every member of staff to harness AI
-              in <br /> a fully policy-aligned way.
+              examples below, or partner with you to build a bespoke platform
+              that enables every member of staff to harness AI in a fully
+              policy-aligned way.
             </p>
 
             <h3 className="text-xl font-semibold mt-4 mb-2">

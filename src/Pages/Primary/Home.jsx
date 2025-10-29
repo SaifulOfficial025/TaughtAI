@@ -12,7 +12,7 @@ function Home() {
       {/* HERO */}
       <section className="mx-auto px-10 sm:px-10 lg:px-10 py-10 md:py-16 grid md:grid-cols-2 gap-2 items-center">
         <div className="">
-          <h1 className="text-3xl md:text-4xl lg:text-5xl font-serif font-bold text-gray-900 leading-tight mb-4">Welcome to the official AI hub <br /> for staff at Taught AI Primary.</h1>
+          <h1 className="text-3xl md:text-4xl lg:text-5xl font-serif font-bold text-gray-900 leading-tight mb-4">Welcome to the official AI hub for staff at Taught AI Primary.</h1>
           <h1 className='text-3xl mt-10'>A quick but vital reminder: </h1>
           <p className="text-sm md:text-base text-gray-700 max-w-xl mt-5">Never enter any personal data about pupils or staff into any AI chat. If in doubt, speak to the DSL or a member of SLT before proceeding.</p>
 
