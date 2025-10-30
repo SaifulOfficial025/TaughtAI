@@ -3,7 +3,7 @@ import { useParams, Link, useNavigate } from "react-router-dom";
 import { RiShareForwardLine } from "react-icons/ri";
 import { CiHeart } from "react-icons/ci";
 import { POSTS } from "../../data/posts";
-import Header from "../../Shared/Header";
+import Header from "./Header";
 import Footer from "../../Shared/Footer";
 import { useState, useContext } from "react";
 import { AuthContext } from "../../Context/AuthContext";
@@ -115,7 +115,20 @@ function SmallCard({ post, onOpen, onToggleLike, liked }) {
 function BlogDetails() {
   const { id } = useParams();
   const postId = Number(id);
-  const post = POSTS.find((p) => p.id === postId) || POSTS[0];
+  // prefer a post saved in localStorage (admin-created) but fall back to sample POSTS
+  let post = POSTS.find((p) => p.id === postId) || POSTS[0];
+  try {
+    const raw = localStorage.getItem("taughtai_blogs");
+    if (raw) {
+      const arr = JSON.parse(raw);
+      const found = arr.find(
+        (b) => Number(b.id) === postId || String(b.id) === String(postId)
+      );
+      if (found) post = found;
+    }
+  } catch (err) {
+    // ignore parse errors
+  }
   const [liked, setLiked] = useState({});
   const [comment, setComment] = useState("");
   const navigate = useNavigate();
@@ -151,6 +164,13 @@ function BlogDetails() {
 
   const auth = useContext(AuthContext) || {};
   const { user } = auth;
+  // admin detection: prefer an explicit role, otherwise accept names that include 'ben' (case-insensitive)
+  const isAdmin = !!(
+    user &&
+    (user.role === "admin" ||
+      (user.full_name && user.full_name.toLowerCase().includes("ben")) ||
+      (user.username && user.username.toLowerCase().includes("ben")))
+  );
 
   function handleCommentSubmit(e) {
     e.preventDefault();
@@ -309,19 +329,26 @@ function BlogDetails() {
           <div className="p-6">
             <div className="flex items-start justify-between">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-green-900 text-white flex items-center justify-center font-semibold">
+                {/* <div className="w-10 h-10 rounded-full bg-green-900 text-white flex items-center justify-center font-semibold">
                   {post.author.charAt(0)}
-                </div>
+                </div> */}
                 <div>
-                  <div className="text-md font-bold">{post.author}</div>
+                  {/* <div className="text-md font-bold">{post.author}</div> */}
                   <div className="text-xs text-gray-400">
-                    Jul 1 · {post.minutes} min read
+                    {post.datetime
+                      ? post.datetime
+                      : `Jul 1 · ${post.minutes} min read`}
                   </div>
                 </div>
               </div>
 
-              <div className="flex items-center gap-3 text-gray-400">
-                <RiShareForwardLine className="h-5 w-5" />
+              <div className="flex items-center gap-3">
+                <button
+                  onClick={() => navigate(`/admin/editblog/${post.id}`)}
+                  className="text-sm px-3 py-1 rounded-md bg-blue-600 text-white hover:bg-blue-700"
+                >
+                  Edit post
+                </button>
               </div>
             </div>
 
@@ -336,6 +363,7 @@ function BlogDetails() {
                 </div>
               )}
             </div>
+
             <header className="mt-6">
               <h1 className="text-3xl md:text-4xl  leading-tight">
                 {post.title}
@@ -478,33 +506,38 @@ function BlogDetails() {
                         <p className="mt-2 text-gray-700">{c.text}</p>
 
                         <div className="mt-3 flex items-center gap-3">
-                          <button
-                            onClick={() => handleReplyToggle(c.id)}
-                            className="text-sm text-gray-600"
-                          >
-                            Reply
-                          </button>
+                          {/* Only admin (Ben) may reply from this admin view */}
+                          {isAdmin && (
+                            <button
+                              onClick={() => handleReplyToggle(c.id)}
+                              className="text-sm text-gray-600"
+                            >
+                              Reply
+                            </button>
+                          )}
                           <button
                             onClick={() => handleToggleLike(c.id)}
                             className="text-sm text-gray-600"
                           >
                             Like
                           </button>
-                          {canModify(c.author) && (
-                            <>
-                              <button
-                                onClick={() => handleEditToggle(c.id, c.text)}
-                                className="text-sm text-blue-600"
-                              >
-                                Edit
-                              </button>
-                              <button
-                                onClick={() => handleDeleteComment(c.id)}
-                                className="text-sm text-red-600"
-                              >
-                                Delete
-                              </button>
-                            </>
+                          {/* Admin may delete any comment */}
+                          {isAdmin && (
+                            <button
+                              onClick={() => handleDeleteComment(c.id)}
+                              className="text-sm text-red-600"
+                            >
+                              Delete
+                            </button>
+                          )}
+                          {/* Admin can edit only admin's (Ben's) own comments */}
+                          {isAdmin && c.author === "Ben" && (
+                            <button
+                              onClick={() => handleEditToggle(c.id, c.text)}
+                              className="text-sm text-blue-600"
+                            >
+                              Edit
+                            </button>
                           )}
                         </div>
 
@@ -596,33 +629,38 @@ function BlogDetails() {
                                 <p className="mt-2 text-gray-700">{r.text}</p>
 
                                 <div className="mt-2 flex items-center gap-3">
-                                  <button
-                                    onClick={() =>
-                                      handleReplyToggle(`${c.id}_${r.id}`)
-                                    }
-                                    className="text-sm text-gray-600"
-                                  >
-                                    Reply
-                                  </button>
-                                  {canModify(r.author) && (
-                                    <>
-                                      <button
-                                        onClick={() =>
-                                          handleEditToggle(c.id, r.text)
-                                        }
-                                        className="text-sm text-blue-600"
-                                      >
-                                        Edit
-                                      </button>
-                                      <button
-                                        onClick={() =>
-                                          handleDeleteReply(c.id, r.id)
-                                        }
-                                        className="text-sm text-red-600"
-                                      >
-                                        Delete
-                                      </button>
-                                    </>
+                                  {/* Only admin can reply to replies here */}
+                                  {isAdmin && (
+                                    <button
+                                      onClick={() =>
+                                        handleReplyToggle(`${c.id}_${r.id}`)
+                                      }
+                                      className="text-sm text-gray-600"
+                                    >
+                                      Reply
+                                    </button>
+                                  )}
+                                  {/* Admin may delete any reply */}
+                                  {isAdmin && (
+                                    <button
+                                      onClick={() =>
+                                        handleDeleteReply(c.id, r.id)
+                                      }
+                                      className="text-sm text-red-600"
+                                    >
+                                      Delete
+                                    </button>
+                                  )}
+                                  {/* Admin can edit only admin's own replies */}
+                                  {isAdmin && r.author === "Ben" && (
+                                    <button
+                                      onClick={() =>
+                                        handleEditToggle(c.id, r.text)
+                                      }
+                                      className="text-sm text-blue-600"
+                                    >
+                                      Edit
+                                    </button>
                                   )}
                                 </div>
 
@@ -724,38 +762,8 @@ function BlogDetails() {
               </div>
             </div>
           </div>
-
-          <div className="p-6">
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="text-xl ">Recent Post</h2>
-              <Link to="/blogs" className="text-md text-gray-900">
-                View All
-              </Link>
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {RECENT.map((r) => (
-                <SmallCard
-                  key={r.id}
-                  post={{
-                    id: r.id,
-                    title: r.title,
-                    excerpt: r.title,
-                    author: r.author,
-                    thumbnail: r.image,
-                    date: "Jul 1",
-                    readTime: `${r.minutes} min`,
-                  }}
-                  onOpen={handleOpen}
-                  onToggleLike={handleToggleLike}
-                  liked={!!liked[r.id]}
-                />
-              ))}
-            </div>
-          </div>
         </div>
       </div>
-      <Footer />
     </section>
   );
 }

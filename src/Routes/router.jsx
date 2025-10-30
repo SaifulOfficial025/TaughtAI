@@ -7,7 +7,6 @@ import Blog from "../Pages/Blogs/RootPage";
 import BlogDetails from "../Pages/Blogs/BlogDetails";
 import Contact from "../Pages/Contact/RootPage";
 
-
 import SignIn from "../Pages/Authentication/SignIn";
 import SignUp from "../Pages/Authentication/SignUp";
 import ForgetPasswordEmail from "../Pages/Authentication/ForgetPasswordEmail";
@@ -29,8 +28,12 @@ import PrimaryStaffPlatform from "../Pages/Primary/StaffPlatform";
 import PrimaryFaq from "../Pages/Primary/Faq";
 import PrimaryPolicies from "../Pages/Primary/Policies";
 
-
-
+import BlogList from "../Pages/Admin/BlogList";
+import AddNewBlog from "../Pages/Admin/AddNewBlog";
+import AdminBlogDetails from "../Pages/Admin/BlogDetails";
+import EditBlog from "../Pages/Admin/EditBlog";
+import AdminLogin from "../Pages/Admin/SignIn";
+import AdminChangePassword from "../Pages/Admin/ChangePassword";
 
 export const router = createBrowserRouter([
   {
@@ -132,6 +135,29 @@ export const router = createBrowserRouter([
   {
     path: "/primary/policy",
     element: <PrimaryPolicies />,
-  }
-
+  },
+  {
+    path: "/admin/bloglist",
+    element: <BlogList />,
+  },
+  {
+    path: "/admin/blogdetails/:id",
+    element: <AdminBlogDetails />,
+  },
+  {
+    path: "/admin/addnewblog",
+    element: <AddNewBlog />,
+  },
+  {
+    path: "/admin/editblog/:id",
+    element: <EditBlog />,
+  },
+  {
+    path: "/admin/login",
+    element: <AdminLogin />,
+  },
+  {
+    path: "/admin/changepassword",
+    element: <AdminChangePassword />,
+  },
 ]);
