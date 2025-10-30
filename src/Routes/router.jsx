@@ -137,6 +137,10 @@ export const router = createBrowserRouter([
     element: <PrimaryPolicies />,
   },
   {
+    path: "/admin",
+    element: <AdminLogin />,
+  },
+  {
     path: "/admin/bloglist",
     element: <BlogList />,
   },
