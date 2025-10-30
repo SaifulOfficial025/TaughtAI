@@ -231,11 +231,6 @@ function BlogList() {
               <option value="newest">Newest first</option>
               <option value="oldest">Oldest first</option>
             </select>
-            <Link to="/admin/addnewblog">
-              <button className="bg-blue-600 text-white px-4 py-2 rounded-md">
-                New post
-              </button>
-            </Link>
           </div>
         </div>
 

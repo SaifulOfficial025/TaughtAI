@@ -19,6 +19,14 @@ function Header() {
           {/* Desktop nav */}
           <nav className="hidden md:flex items-center gap-8 text-lg text-gray-800 font-playfair">
             <NavLink
+              to="/admin/addnewblog"
+              className={({ isActive }) =>
+                `hover:underline ${isActive ? "  font-semibold" : ""}`
+              }
+            >
+              Add Blog
+            </NavLink>
+            <NavLink
               to="/admin/changepassword"
               className={({ isActive }) =>
                 `hover:underline ${isActive ? "  font-semibold" : ""}`
