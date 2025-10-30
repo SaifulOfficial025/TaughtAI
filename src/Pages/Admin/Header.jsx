@@ -19,6 +19,14 @@ function Header() {
           {/* Desktop nav */}
           <nav className="hidden md:flex items-center gap-8 text-lg text-gray-800 font-playfair">
             <NavLink
+              to="/admin/bloglist"
+              className={({ isActive }) =>
+                `hover:underline ${isActive ? "  font-semibold" : ""}`
+              }
+            >
+              Blogs
+            </NavLink>
+            <NavLink
               to="/admin/addnewblog"
               className={({ isActive }) =>
                 `hover:underline ${isActive ? "  font-semibold" : ""}`
@@ -77,66 +85,46 @@ function Header() {
           <div className="md:hidden pb-4 font-playfair">
             <div className="space-y-2 px-2">
               <NavLink
-                to="/about"
+                to="/admin/bloglist"
                 className={({ isActive }) =>
                   `block px-3 py-2 rounded-md ${
                     isActive ? "bg-gray-100 font-semibold" : "hover:bg-gray-50"
                   }`
                 }
               >
-                About
+                Blogs
               </NavLink>
               <NavLink
-                to="/services"
+                to="/admin/addnewblog"
                 className={({ isActive }) =>
                   `block px-3 py-2 rounded-md ${
                     isActive ? "bg-gray-100 font-semibold" : "hover:bg-gray-50"
                   }`
                 }
               >
-                Services
+                Add Blog
               </NavLink>
               <NavLink
-                to="/tryourplatform"
+                to="/admin/changepassword"
                 className={({ isActive }) =>
                   `block px-3 py-2 rounded-md ${
                     isActive ? "bg-gray-100 font-semibold" : "hover:bg-gray-50"
                   }`
                 }
               >
-                Try Our Platform
+                Change Password
               </NavLink>
               <NavLink
-                to="/blog"
-                className={({ isActive }) =>
-                  `block px-3 py-2 rounded-md ${
-                    isActive ? "bg-gray-100 font-semibold" : "hover:bg-gray-50"
-                  }`
-                }
-              >
-                Blog
-              </NavLink>
-              <NavLink
-                to="/contact"
-                className={({ isActive }) =>
-                  `block px-3 py-2 rounded-md ${
-                    isActive ? "bg-gray-100 font-semibold" : "hover:bg-gray-50"
-                  }`
-                }
-              >
-                Contact
-              </NavLink>
-              <NavLink
-                to="/login"
+                to="/admin/login"
                 className={({ isActive }) =>
                   `block px-3 py-2 rounded-md text-center ${
                     isActive
                       ? " text-white font-semibold"
-                      : "bg-gray-800 text-white"
+                      : "bg-red-800 text-white"
                   }`
                 }
               >
-                Log In
+                Log Out
               </NavLink>
             </div>
           </div>
