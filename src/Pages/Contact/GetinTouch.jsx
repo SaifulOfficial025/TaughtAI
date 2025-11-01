@@ -1,7 +1,9 @@
 import React, { useState } from "react";
+import { useDispatch } from "react-redux";
 import Header from "../../Shared/Header";
 import Footer from "../../Shared/Footer";
 import GetinTouchbg from "../../../public/getintouchbg.png";
+import { submitGetInTouch } from "../../Redux/GetinTouch";
 
 function GetinTouch() {
   const [form, setForm] = useState({
@@ -17,18 +19,54 @@ function GetinTouch() {
     setForm((s) => ({ ...s, [name]: value }));
   }
 
-  function handleSubmit(e) {
+  const dispatch = useDispatch();
+
+  async function handleSubmit(e) {
     e.preventDefault();
-    // TODO: wire to API - currently just log
-    console.log("Contact submit", form);
-    // show a tiny UX feedback
-    alert("Thanks — your message has been submitted (demo).");
-    setForm({ firstName: "", lastName: "", email: "", phone: "", message: "" });
+
+    // simple validation
+    if (!form.firstName || !form.email) {
+      alert("Please provide your name and email.");
+      return;
+    }
+
+    try {
+      const payload = {
+        first_name: form.firstName,
+        last_name: form.lastName,
+        phone_number: form.phone,
+        email: form.email,
+        message: form.message,
+      };
+
+      const resultAction = await dispatch(submitGetInTouch(payload));
+      if (resultAction?.meta?.requestStatus === "fulfilled") {
+        alert(
+          resultAction.payload?.message ||
+            "Thanks — I will be in touch shortly."
+        );
+        setForm({
+          firstName: "",
+          lastName: "",
+          email: "",
+          phone: "",
+          message: "",
+        });
+      } else {
+        const errMsg =
+          resultAction?.payload?.message ||
+          resultAction?.error?.message ||
+          "Submission failed";
+        alert(errMsg);
+      }
+    } catch (err) {
+      alert(err.message || "Submission failed");
+    }
   }
 
   return (
     <section className="min-h-screen flex flex-col font-playfair">
-  <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-12 lg:px-20">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-12 lg:px-20">
         <div className="grid grid-cols-1 lg:grid-cols-2 items-start">
           <div className="flex items-start">
             <div className="p-6 sm:p-8 md:p-12">
@@ -90,26 +128,26 @@ function GetinTouch() {
         className="relative flex-1 bg-cover py-16 mt-20 mb-40"
         style={{
           backgroundImage: `url(${GetinTouchbg})`,
-          backgroundPosition: 'center 70%',
-          backgroundRepeat: 'no-repeat',
-          backgroundSize: 'cover',
-          marginTop: '300px',
+          backgroundPosition: "center 70%",
+          backgroundRepeat: "no-repeat",
+          backgroundSize: "cover",
+          marginTop: "300px",
         }}
       >
-      
-
-
         <div className="relative max-w-7xl mx-auto px-6 md:px-12 lg:px-20">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
-
             <div className="relative lg:col-span-2 flex justify-center">
               <div className="bg-white rounded-2xl shadow-2xl p-6 sm:p-8 md:p-10 w-full lg:w-[900px] relative -mt-40 sm:-mt-60 border-2 border-gray-200">
-                <h2 className="text-2xl sm:text-3xl md:text-4xl font-serif text-center mb-6 sm:mb-8 font-bold">Get in touch</h2>
+                <h2 className="text-2xl sm:text-3xl md:text-4xl font-serif text-center mb-6 sm:mb-8 font-bold">
+                  Get in touch
+                </h2>
 
                 <form onSubmit={handleSubmit} className="space-y-6">
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                     <div>
-                      <label className="block text-xs text-gray-600 mb-2">First Name</label>
+                      <label className="block text-xs text-gray-600 mb-2">
+                        First Name
+                      </label>
                       <input
                         name="firstName"
                         value={form.firstName}
@@ -119,7 +157,9 @@ function GetinTouch() {
                     </div>
 
                     <div>
-                      <label className="block text-xs text-gray-600 mb-2">Last Name</label>
+                      <label className="block text-xs text-gray-600 mb-2">
+                        Last Name
+                      </label>
                       <input
                         name="lastName"
                         value={form.lastName}
@@ -131,7 +171,9 @@ function GetinTouch() {
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                     <div>
-                      <label className="block text-xs text-gray-600 mb-2">Email</label>
+                      <label className="block text-xs text-gray-600 mb-2">
+                        Email
+                      </label>
                       <input
                         name="email"
                         value={form.email}
@@ -142,7 +184,9 @@ function GetinTouch() {
                     </div>
 
                     <div>
-                      <label className="block text-xs text-gray-600 mb-2">Phone</label>
+                      <label className="block text-xs text-gray-600 mb-2">
+                        Phone
+                      </label>
                       <div className="flex items-center gap-2">
                         <select className="text-sm bg-white border border-gray-200 rounded-full px-3 py-2 focus:outline-none">
                           <option value="+44">🇬🇧 +44</option>
@@ -160,7 +204,9 @@ function GetinTouch() {
                   </div>
 
                   <div>
-                    <label className="block text-xs text-gray-600 mb-2">Write Your Message</label>
+                    <label className="block text-xs text-gray-600 mb-2">
+                      Write Your Message
+                    </label>
                     <textarea
                       id="message"
                       name="message"
@@ -177,7 +223,10 @@ function GetinTouch() {
 
                 <button
                   type="button"
-                  onClick={(e) => { e.preventDefault(); document.querySelector('form').requestSubmit(); }}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    document.querySelector("form").requestSubmit();
+                  }}
                   className="absolute left-4 sm:left-8 bottom-6 sm:bottom-8 bg-gray-800 text-white px-5 sm:px-6 py-2 rounded-full text-sm font-medium shadow-md"
                 >
                   Submit
@@ -187,8 +236,6 @@ function GetinTouch() {
           </div>
         </div>
       </div>
-
-
     </section>
   );
 }

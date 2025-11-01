@@ -1,5 +1,5 @@
 import React from "react";
-import laptop from "../../../public/customaiside.svg";
+import laptop from "../../../public/customaiside.png";
 
 function Bespoke() {
   return (

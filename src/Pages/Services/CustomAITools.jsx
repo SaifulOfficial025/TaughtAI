@@ -1,5 +1,5 @@
 import React from "react";
-import customaiside from "../../../public/customaiside.svg";
+import customaiside from "../../../public/customaiside.png";
 
 function CustomAITools() {
   return (

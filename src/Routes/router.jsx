@@ -10,7 +10,7 @@ import Contact from "../Pages/Contact/RootPage";
 import SignIn from "../Pages/Authentication/SignIn";
 import SignUp from "../Pages/Authentication/SignUp";
 import ForgetPasswordEmail from "../Pages/Authentication/ForgetPasswordEmail";
-import ForgetPasswordVerifyEmail from "../Pages/Authentication/ForgetPasswordVerifyEmail";
+import VerifyEmail from "../Pages/Authentication/VerifyEmail";
 import NewPassword from "../Pages/Authentication/NewPassword";
 
 import AcademyChat from "../Pages/Chats/AcademyChat";
@@ -77,8 +77,8 @@ export const router = createBrowserRouter([
     element: <ForgetPasswordEmail />,
   },
   {
-    path: "/forgot_password_verify_email",
-    element: <ForgetPasswordVerifyEmail />,
+    path: "/verify_email",
+    element: <VerifyEmail />,
   },
   {
     path: "/new_password",

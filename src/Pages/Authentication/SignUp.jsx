@@ -3,10 +3,28 @@ import { Eye, EyeOff } from "lucide-react";
 import SignupBackground from "../../../public/authenticationbg.svg";
 import Logo from "../../../public/logowhite.svg";
 
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  signup,
+  clearError,
+  clearSuccess,
+  setCurrentEmail,
+} from "../../Redux/Authentication";
+
 function SignUp() {
-    const [showPwd, setShowPwd] = useState(false);
+  const [showPwd, setShowPwd] = useState(false);
   const [showPwd2, setShowPwd2] = useState(false);
+  const [fullName, setFullName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [localError, setLocalError] = useState(null);
+
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { loading, error, successMessage } = useSelector((s) => s.auth || {});
 
   return (
     <div className="min-h-screen w-full bg-white">
@@ -17,13 +35,17 @@ function SignUp() {
             className="absolute inset-0 bg-cover bg-center rounded-xl h-48 sm:h-72 md:h-96 lg:h-full"
             style={{
               backgroundImage: `url(${SignupBackground})`,
-              backgroundSize: 'cover',
+              backgroundSize: "cover",
             }}
           />
           {/* Small text logo like the design */}
           <Link to="/">
             <div className="absolute top-4 left-6 z-20">
-              <img src={Logo} alt="Listlly Logo" className="w-16 sm:w-32 h-auto" />
+              <img
+                src={Logo}
+                alt="Listlly Logo"
+                className="w-16 sm:w-32 h-auto"
+              />
             </div>
           </Link>
           {/* subtle overlay for contrast */}
@@ -32,7 +54,7 @@ function SignUp() {
 
         {/* RIGHT: Sign-in Form */}
         <div className="flex items-center justify-center px-4 md:px-10 py-8 md:py-10">
-            <div className="w-full max-w-md mx-auto">
+          <div className="w-full max-w-md mx-auto">
             <h1
               className="text-2xl sm:text-3xl md:text-4xl font-bold text-center"
               style={{ color: "#1C1C1C" }}
@@ -40,12 +62,11 @@ function SignUp() {
               Create Your Account
             </h1>
             <p className="text-[16px] mt-1 text-center text-[#606A76]">
-             Sign up now to access personalized AI-driven insights and features tailored to your needs.
+              Sign up now to access personalized AI-driven insights and features
+              tailored to your needs.
             </p>
 
-        
             <div className="mt-6 space-y-4">
-
               {/* Full Name */}
               <div>
                 <label className="block text-[16px] mb-1 text-[#4B5563]">
@@ -53,6 +74,8 @@ function SignUp() {
                 </label>
                 <input
                   type="text"
+                  value={fullName}
+                  onChange={(e) => setFullName(e.target.value)}
                   className="w-full h-11 rounded-md px-3 text-sm sm:text-sm md:text-base outline-none bg-white dark:bg-white text-black dark:text-black border border-gray-300"
                 />
               </div>
@@ -64,6 +87,27 @@ function SignUp() {
                 </label>
                 <input
                   type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="w-full h-11 rounded-md px-3 text-sm sm:text-sm md:text-base outline-none"
+                  style={{
+                    border: "1px solid #E5E7EB",
+                    background: "#FFFFFF",
+                    color: "#1C1C1C",
+                  }}
+                  placeholder=""
+                />
+              </div>
+
+              {/* Phone */}
+              <div>
+                <label className="block text-[16px] mb-1 text-[#4B5563]">
+                  Phone Number
+                </label>
+                <input
+                  type="tel"
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
                   className="w-full h-11 rounded-md px-3 text-sm sm:text-sm md:text-base outline-none"
                   style={{
                     border: "1px solid #E5E7EB",
@@ -82,6 +126,8 @@ function SignUp() {
                 <div className="relative">
                   <input
                     type={showPwd ? "text" : "password"}
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
                     className="w-full h-11 rounded-md px-3 pr-10 text-sm sm:text-sm md:text-base outline-none"
                     style={{
                       border: "1px solid #E5E7EB",
@@ -103,11 +149,9 @@ function SignUp() {
                     )}
                   </button>
                 </div>
-              
               </div>
 
-
-               {/* Confirm Password */}
+              {/* Confirm Password */}
               <div>
                 <label className="block text-[16px] mb-1 text-[#4B5563]">
                   Confirm Password
@@ -115,6 +159,8 @@ function SignUp() {
                 <div className="relative">
                   <input
                     type={showPwd2 ? "text" : "password"}
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
                     className="w-full h-11 rounded-md px-3 pr-10 text-sm sm:text-sm md:text-base outline-none bg-white dark:bg-white text-black dark:text-black border border-gray-300"
                   />
                   <button
@@ -132,23 +178,69 @@ function SignUp() {
                 </div>
               </div>
 
-
-
-
               {/* Login button */}
+              {localError || error ? (
+                <p className="text-sm text-red-600">{localError || error}</p>
+              ) : null}
+
               <button
-                className="w-full h-11 text-white font-semibold text-sm md:text-base bg-black rounded-full"
-              
+                onClick={async () => {
+                  setLocalError(null);
+                  // basic validation
+                  if (!fullName || !email || !password || !confirmPassword) {
+                    setLocalError("Please fill in all fields.");
+                    return;
+                  }
+                  if (password !== confirmPassword) {
+                    setLocalError("Passwords do not match.");
+                    return;
+                  }
+
+                  try {
+                    const payload = {
+                      email: email,
+                      password: password,
+                      full_name: fullName,
+                      phone_number: phone || "+8801756018512",
+                    };
+
+                    const resultAction = await dispatch(signup(payload));
+                    if (resultAction?.meta?.requestStatus === "fulfilled") {
+                      // Store email for OTP verification
+                      dispatch(setCurrentEmail(email));
+                      // Navigate to OTP verification page
+                      navigate("/verify_email");
+                      // Clear success in store
+                      dispatch(clearSuccess());
+                    } else {
+                      const errMsg =
+                        resultAction?.payload?.message ||
+                        resultAction?.error?.message ||
+                        "Signup failed";
+                      setLocalError(errMsg);
+                    }
+                  } catch (err) {
+                    setLocalError(err.message || "Signup failed");
+                  }
+                }}
+                disabled={loading}
+                className={`w-full h-11 text-white font-semibold text-sm md:text-base ${
+                  loading ? "bg-gray-400" : "bg-black"
+                } rounded-full`}
               >
-                Register
+                {loading ? "Registering..." : "Register"}
               </button>
 
               {/* Terms and Privacy */}
               <p className="text-[15px] text-center text-[#222] mt-2 mb-1">
-                By signing up, you agree to our{' '}
-                <Link to="/terms" className="text-blue-700 underline">Terms of Service</Link>
-                {' '}and{' '}
-                <Link to="/privacy" className="text-blue-700 underline">Privacy Policy.</Link>
+                By signing up, you agree to our{" "}
+                <Link to="/terms" className="text-blue-700 underline">
+                  Terms of Service
+                </Link>{" "}
+                and{" "}
+                <Link to="/privacy" className="text-blue-700 underline">
+                  Privacy Policy.
+                </Link>
               </p>
 
               {/* Divider */}

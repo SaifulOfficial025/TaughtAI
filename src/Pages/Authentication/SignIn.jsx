@@ -2,31 +2,74 @@ import React, { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
 import SignupBackground from "../../../public/authenticationbg.svg";
 import Logo from "../../../public/logowhite.svg";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { login, clearError, clearSuccess } from "../../Redux/Authentication";
 function SignIn() {
   const [showPwd, setShowPwd] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [localError, setLocalError] = useState(null);
+
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { loading, error, successMessage } = useSelector((s) => s.auth || {});
+
+  const handleLogin = async () => {
+    setLocalError(null);
+
+    // Basic validation
+    if (!email || !password) {
+      setLocalError("Please fill in all fields.");
+      return;
+    }
+
+    try {
+      const payload = {
+        email: email,
+        password: password,
+      };
+
+      const resultAction = await dispatch(login(payload));
+      if (resultAction?.meta?.requestStatus === "fulfilled") {
+        // Navigate to dashboard or home page after successful login
+        navigate("/");
+        dispatch(clearSuccess());
+      } else {
+        const errMsg =
+          resultAction?.payload?.message ||
+          resultAction?.error?.message ||
+          "Login failed";
+        setLocalError(errMsg);
+      }
+    } catch (err) {
+      setLocalError(err.message || "Login failed");
+    }
+  };
 
   return (
     <div className="min-h-screen w-full">
       <div className="grid grid-cols-1 lg:grid-cols-2 h-full p-4 sm:p-6 lg:p-8 gap-6 items-stretch">
-      
         <div className="relative w-full rounded-xl overflow-hidden">
-            <div
-              className=" inset-0 bg-center rounded-xl h-56 sm:h-72 md:h-96 lg:h-screen"
-              style={{
-                backgroundImage: `url(${SignupBackground})`,
-                backgroundSize: 'cover',
-              }}
-            />
+          <div
+            className=" inset-0 bg-center rounded-xl h-56 sm:h-72 md:h-96 lg:h-screen"
+            style={{
+              backgroundImage: `url(${SignupBackground})`,
+              backgroundSize: "cover",
+            }}
+          />
           {/* Small text logo */}
           <Link to="/">
             <div className="absolute top-6 left-6 z-20">
-              <img src={Logo} alt="Listlly Logo" className="w-16 sm:w-32 h-auto" />
+              <img
+                src={Logo}
+                alt="Listlly Logo"
+                className="w-16 sm:w-32 h-auto"
+              />
             </div>
           </Link>
           {/* subtle overlay for contrast */}
           <div className="absolute inset-0 bg-black/30 rounded-xl pointer-events-none" />
-     
         </div>
 
         {/* RIGHT: Sign-in Form */}
@@ -39,7 +82,8 @@ function SignIn() {
               Log In to Continue
             </h1>
             <p className="text-[16px] mt-1 text-center text-[#606A76]">
-              Log in to continue where you left off and unlock more personalized insights. 
+              Log in to continue where you left off and unlock more personalized
+              insights.
             </p>
 
             <div className="mt-6 space-y-4">
@@ -50,6 +94,8 @@ function SignIn() {
                 </label>
                 <input
                   type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                   className="w-full h-11 rounded-md px-3 text-sm sm:text-sm md:text-base outline-none"
                   style={{
                     border: "1px solid #E5E7EB",
@@ -68,6 +114,8 @@ function SignIn() {
                 <div className="relative">
                   <input
                     type={showPwd ? "text" : "password"}
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
                     className="w-full h-11 rounded-md px-3 pr-10 text-sm sm:text-sm md:text-base outline-none"
                     style={{
                       border: "1px solid #E5E7EB",
@@ -90,21 +138,33 @@ function SignIn() {
                   </button>
                 </div>
                 <div className="mt-5 text-right">
-                <span className="text-gray-500 mt-2 text-sm">Forget Password?{" "}</span>
-                <Link to="/forgot_password_email">
-                  <span className="text-blue-600 font-semibold hover:underline text-sm">
-                    Reset it here
+                  <span className="text-gray-500 mt-2 text-sm">
+                    Forget Password?{" "}
                   </span>
-                </Link>
+                  <Link to="/forgot_password_email">
+                    <span className="text-blue-600 font-semibold hover:underline text-sm">
+                      Reset it here
+                    </span>
+                  </Link>
                 </div>
               </div>
 
+              {/* Error Display */}
+              {(localError || error) && (
+                <p className="text-sm text-red-600 text-center">
+                  {localError || error}
+                </p>
+              )}
+
               {/* Login button */}
               <button
-                className="w-full h-11 rounded-full text-white font-semibold text-sm sm:text-sm md:text-base bg-black"
-                
+                onClick={handleLogin}
+                disabled={loading}
+                className={`w-full h-11 rounded-full text-white font-semibold text-sm sm:text-sm md:text-base ${
+                  loading ? "bg-gray-400" : "bg-black"
+                }`}
               >
-                Log In
+                {loading ? "Logging in..." : "Log In"}
               </button>
 
               {/* Divider */}
