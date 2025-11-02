@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { CiHeart } from "react-icons/ci";
 
 const dummyPosts = [
@@ -534,7 +535,7 @@ function Blog() {
   const featured = dummyPosts.find((p) => p.featured) || dummyPosts[0];
   const others = dummyPosts.filter((p) => p.id !== featured.id);
 
-  const [modalPost, setModalPost] = useState(null);
+  const navigate = useNavigate();
 
   // reactions and comments state per post id
   const [postState, setPostState] = useState(() => {
@@ -576,10 +577,8 @@ function Blog() {
   });
 
   function openModal(post) {
-    setModalPost(post);
-  }
-  function closeModal() {
-    setModalPost(null);
+    // navigate to blog details page instead of opening modal
+    navigate(`/blogs/${post.id}`);
   }
 
   function toggleLike(postId) {
@@ -699,19 +698,7 @@ function Blog() {
         </div>
       </div>
 
-      {modalPost && (
-        <BlogModal
-          post={modalPost}
-          onClose={closeModal}
-          comments={postState[modalPost.id].comments}
-          reactions={{
-            likes: postState[modalPost.id].likes,
-            likedByUser: postState[modalPost.id].likedByUser,
-          }}
-          onToggleLike={(id) => toggleLike(id)}
-          onAddComment={addComment}
-        />
-      )}
+      {/* modal removed: clicking a card now navigates to /blogs/:id */}
     </section>
   );
 }

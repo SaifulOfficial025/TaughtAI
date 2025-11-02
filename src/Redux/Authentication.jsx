@@ -160,7 +160,7 @@ export const login = createAsyncThunk(
       localStorage.setItem("access_token", data.access_token);
       // also store camelCase keys for backward compatibility
       //   localStorage.setItem("accessToken", data.access_token);
-      localStorage.setItem("refreshToken", data.refresh_token);
+      //   localStorage.setItem("refreshToken", data.refresh_token);
       localStorage.setItem("profile_data", JSON.stringify(data.profile_data));
 
       return data; // full response with tokens and profile_data

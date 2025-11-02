@@ -5,7 +5,7 @@ import { CiHeart } from "react-icons/ci";
 import { POSTS } from "../../data/posts";
 import Header from "../../Shared/Header";
 import Footer from "../../Shared/Footer";
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { AuthContext } from "../../Context/AuthContext";
 import { FaHeart } from "react-icons/fa";
 import { IoSend } from "react-icons/io5";
@@ -119,6 +119,16 @@ function BlogDetails() {
   const [liked, setLiked] = useState({});
   const [comment, setComment] = useState("");
   const navigate = useNavigate();
+
+  // Ensure the page is scrolled to top when visiting a blog details route
+  useEffect(() => {
+    try {
+      window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+    } catch (e) {
+      // fallback
+      window.scrollTo(0, 0);
+    }
+  }, [id]);
 
   // dummy comments for display (and client-side add/reply)
   const [commentsList, setCommentsList] = useState([
