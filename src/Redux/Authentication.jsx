@@ -1,10 +1,5 @@
 import React from "react";
-import { Provider } from "react-redux";
-import {
-  configureStore,
-  createSlice,
-  createAsyncThunk,
-} from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 // import centralized base url from config
 import { BASE_URL } from "./config";
@@ -475,19 +470,5 @@ const authSlice = createSlice({
 export const { clearError, clearSuccess, setCurrentEmail, logout } =
   authSlice.actions;
 
-// thunks exported where declared: signup, verifyOTP, resendOTP, login, updateProfile, getProfileData, forgotPassword, resetPassword
-
-// Create a store dedicated for authentication. All redux work for auth lives here.
-const store = configureStore({
-  reducer: {
-    auth: authSlice.reducer,
-  },
-});
-
-// A small provider wrapper so we don't need to edit many files - wrap the app in this.
-export function AuthProvider({ children }) {
-  return <Provider store={store}>{children}</Provider>;
-}
-
-// default export is the provider for convenience
-export default AuthProvider;
+// export the reducer so it can be combined into a root store
+export const authReducer = authSlice.reducer;

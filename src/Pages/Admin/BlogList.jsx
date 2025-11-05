@@ -1,6 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Header from "./Header";
 import { Link, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchBlogsPage } from "../../Redux/Blogs";
 
 const SAMPLE_BLOGS = [
   {
@@ -10,7 +12,6 @@ const SAMPLE_BLOGS = [
     cover:
       "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?q=80&w=1400&auto=format&fit=crop",
     title: "Gemini in the Classroom",
-    subtitle: "AI Tools Mean Nothing If Staff Aren't Trained to Use Them.",
   },
   {
     id: 2,
@@ -19,7 +20,6 @@ const SAMPLE_BLOGS = [
     cover:
       "https://images.unsplash.com/photo-1559526324-593bc073d938?q=80&w=1400&auto=format&fit=crop",
     title: "Policy-Proof AI",
-    subtitle: "How Taught AI is Setting the Standard in AI for Schools.",
   },
   {
     id: 3,
@@ -28,7 +28,6 @@ const SAMPLE_BLOGS = [
     cover:
       "https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=1400&auto=format&fit=crop",
     title: "AI in Primary",
-    subtitle: "Practical classroom uses for younger learners.",
   },
   {
     id: 4,
@@ -37,7 +36,6 @@ const SAMPLE_BLOGS = [
     cover:
       "https://images.unsplash.com/photo-1504198458649-3128b932f49b?q=80&w=1400&auto=format&fit=crop",
     title: "Leadership & AI",
-    subtitle: "How SLT can lead successful AI adoption.",
   },
   {
     id: 5,
@@ -46,7 +44,6 @@ const SAMPLE_BLOGS = [
     cover:
       "https://images.unsplash.com/photo-1542744173-8e7e53415bb0?q=80&w=1400&auto=format&fit=crop",
     title: "Assistive Tools",
-    subtitle: "Simple steps to reduce teacher workload.",
   },
   {
     id: 6,
@@ -55,7 +52,6 @@ const SAMPLE_BLOGS = [
     cover:
       "https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?q=80&w=1400&auto=format&fit=crop",
     title: "SEND and AI",
-    subtitle: "Designing inclusive prompts for SEND pupils.",
   },
   {
     id: 7,
@@ -64,7 +60,6 @@ const SAMPLE_BLOGS = [
     cover:
       "https://images.unsplash.com/photo-1496307042754-b4aa456c4a2d?q=80&w=1400&auto=format&fit=crop",
     title: "Curriculum Mapping",
-    subtitle: "Aligning AI outputs with national standards.",
   },
   {
     id: 8,
@@ -73,7 +68,6 @@ const SAMPLE_BLOGS = [
     cover:
       "https://images.unsplash.com/photo-1499951360447-b19be8fe80f5?q=80&w=1400&auto=format&fit=crop",
     title: "Assessment with AI",
-    subtitle: "Using automated feedback effectively.",
   },
   {
     id: 9,
@@ -82,7 +76,6 @@ const SAMPLE_BLOGS = [
     cover:
       "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?q=80&w=1400&auto=format&fit=crop",
     title: "Governance & AI",
-    subtitle: "Preparing governors for AI oversight.",
   },
   {
     id: 10,
@@ -91,7 +84,6 @@ const SAMPLE_BLOGS = [
     cover:
       "https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?q=80&w=1400&auto=format&fit=crop",
     title: "Scaffolded Tasks",
-    subtitle: "Creating tiered tasks with AI.",
   },
   {
     id: 11,
@@ -100,7 +92,6 @@ const SAMPLE_BLOGS = [
     cover:
       "https://images.unsplash.com/photo-1504198458649-3128b932f49b?q=80&w=1400&auto=format&fit=crop",
     title: "Ofsted Readiness",
-    subtitle: "Using AI to prepare inspection evidence.",
   },
   {
     id: 12,
@@ -109,7 +100,6 @@ const SAMPLE_BLOGS = [
     cover:
       "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?q=80&w=1400&auto=format&fit=crop",
     title: "Practical Prompts",
-    subtitle: "Examples teachers can reuse tomorrow.",
   },
 ];
 
@@ -129,6 +119,24 @@ function BlogList() {
   const [pageSize, setPageSize] = useState(6);
   const [sortOrder, setSortOrder] = useState("newest");
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const blogsState = useSelector((s) => s.blogs || {});
+
+  // Helper to render user-friendly date/time
+  function formatDateTime(value) {
+    if (!value) return "";
+    const d = typeof value === "string" ? new Date(value) : value;
+    if (Number.isNaN(d.getTime())) return String(value);
+    // e.g. "Thu, Oct 30, 2025 — 05:37 PM"
+    return d.toLocaleString(undefined, {
+      weekday: "short",
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+  }
 
   function handleDetails(b) {
     // navigate to the admin details page for this blog
@@ -170,10 +178,30 @@ function BlogList() {
   }
 
   // derive filtered/sorted/paged lists so the same data is used across the table and pagination
+  // If server data is available, prefer it.
+  useEffect(() => {
+    // load page 1 by default
+    dispatch(fetchBlogsPage(1));
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (blogsState.items && blogsState.items.length) {
+      // map server items to the local shape used by the table
+      const mapped = blogsState.items.map((it) => ({
+        id: it.id,
+        author: it.author_name || it.author || "",
+        datetime: it.timestamp || it.datetime || "",
+        cover: it.banner || it.cover || "",
+        title: it.title || "",
+      }));
+      setBlogs(mapped);
+    }
+  }, [blogsState.items]);
+
   const filtered = blogs.filter((b) => {
     const matchQuery =
       query.trim() === "" ||
-      (b.title + " " + b.subtitle).toLowerCase().includes(query.toLowerCase());
+      (b.title + " ").toLowerCase().includes(query.toLowerCase());
     const matchDate = passesDateFilter(b);
     return matchQuery && matchDate;
   });
@@ -197,15 +225,6 @@ function BlogList() {
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-6 gap-4">
           <h2 className="text-2xl font-semibold">Blog posts</h2>
           <div className="flex items-center gap-3 w-full md:w-auto">
-            <input
-              value={query}
-              onChange={(e) => {
-                setQuery(e.target.value);
-                setPage(1);
-              }}
-              placeholder="Search title or subtitle..."
-              className="w-full md:w-64 border border-gray-200 rounded-md px-3 py-2"
-            />
             <select
               value={dateFilter}
               onChange={(e) => {
@@ -250,9 +269,7 @@ function BlogList() {
                 <th className="px-4 py-3 text-left text-sm font-medium text-gray-600">
                   Title
                 </th>
-                <th className="px-4 py-3 text-left text-sm font-medium text-gray-600">
-                  Subtitle
-                </th>
+
                 <th className="px-4 py-3 text-right text-sm font-medium text-gray-600">
                   Actions
                 </th>
@@ -262,7 +279,7 @@ function BlogList() {
               {paged.map((b) => (
                 <tr key={b.id} className="hover:bg-gray-50">
                   <td className="px-4 py-4 text-sm text-gray-600">
-                    {b.datetime}
+                    {formatDateTime(b.datetime)}
                   </td>
                   <td className="px-4 py-4">
                     <img
@@ -274,9 +291,7 @@ function BlogList() {
                   <td className="px-4 py-4 text-sm font-semibold text-gray-900">
                     {b.title}
                   </td>
-                  <td className="px-4 py-4 text-sm text-gray-700">
-                    {b.subtitle}
-                  </td>
+
                   <td className="px-4 py-4 text-sm text-right">
                     <div className="inline-flex items-center gap-2">
                       <button

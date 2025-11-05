@@ -1,6 +1,8 @@
 import React, { useState, useRef, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { CiHeart } from "react-icons/ci";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchAllBlogs } from "../../Redux/Blogs";
 
 const dummyPosts = [
   {
@@ -532,49 +534,69 @@ function BlogModal({
 }
 
 function Blog() {
-  const featured = dummyPosts.find((p) => p.featured) || dummyPosts[0];
-  const others = dummyPosts.filter((p) => p.id !== featured.id);
+  const dispatch = useDispatch();
+  const { items: apiItems, loading: blogsLoading } = useSelector(
+    (s) => s.blogs || { items: [], loading: false }
+  );
+
+  useEffect(() => {
+    // fetch all blogs once on mount so other components can reuse the data from redux
+    dispatch(fetchAllBlogs());
+  }, [dispatch]);
+
+  // Map API posts to the UI shape used in this component
+  const mapApiPost = (api) => ({
+    id: api.id,
+    title: api.title || "",
+    author: api.author_name || "AI Team",
+    date: api.timestamp ? new Date(api.timestamp).toLocaleDateString() : "",
+    readTime: "2 min read",
+    excerpt: api.excerpt || api.title || "",
+    thumbnail: api.banner || api.thumbnail || "",
+    views: api.views || 0,
+    comments: api.comment_count || 0,
+    featured: false,
+  });
+
+  const postsFromApi = (apiItems || []).map(mapApiPost);
+  const posts = postsFromApi.length ? postsFromApi : dummyPosts;
+
+  const featured = posts.find((p) => p.featured) || posts[0];
+  const others = posts.filter((p) => p.id !== featured.id);
 
   const navigate = useNavigate();
 
   // reactions and comments state per post id
   const [postState, setPostState] = useState(() => {
     const map = {};
-    dummyPosts.forEach((p) => {
+    const source = posts || dummyPosts;
+    source.forEach((p) => {
       map[p.id] = {
-        likes: Math.floor(Math.random() * 25) + 8,
+        likes: Math.max((p.views || 0) + Math.floor(Math.random() * 5), 1),
         likedByUser: false,
-        comments: [
-          {
-            author: "Sarah Johnson",
-            time: "2h",
-            text: "This is exactly what we needed to hear! Our school district has been struggling with AI implementation. The point about teacher training is spot on.",
-          },
-          {
-            author: "Mike Chen",
-            time: "4h",
-            text: "Great insights! We've seen similar challenges in our classrooms. The key is definitely starting slow and building confidence.",
-          },
-          {
-            author: "Emma Rodriguez",
-            time: "6h",
-            text: "💯 This! The technology is only as good as the people using it. Professional development should be the top priority.",
-          },
-          {
-            author: "Dr. James Wilson",
-            time: "8h",
-            text: "As an education researcher, I can confirm these findings align with our latest studies. Teacher preparedness is the biggest predictor of successful AI adoption.",
-          },
-          {
-            author: "Lisa Park",
-            time: "1d",
-            text: "Thank you for this thoughtful analysis. It's refreshing to see such a balanced perspective on AI in education. 🙌",
-          },
-        ],
+        comments: [],
       };
     });
     return map;
   });
+
+  // If posts change (for example API loaded), add any new posts into postState
+  useEffect(() => {
+    if (!posts || posts.length === 0) return;
+    setPostState((prev) => {
+      const next = { ...prev };
+      posts.forEach((p) => {
+        if (!next[p.id]) {
+          next[p.id] = {
+            likes: Math.max((p.views || 0) + Math.floor(Math.random() * 5), 1),
+            likedByUser: false,
+            comments: [],
+          };
+        }
+      });
+      return next;
+    });
+  }, [posts.length]);
 
   function openModal(post) {
     // navigate to blog details page instead of opening modal
@@ -607,10 +629,15 @@ function Blog() {
     });
   }
 
+  const location = useLocation();
+  // show "Other Blogs" when on a blog detail route like /blogs/:id
+  const isBlogDetailRoute = /^\/blogs\/[0-9]+(?:\/)?$/.test(location.pathname);
+  const heading = isBlogDetailRoute ? "Other Blogs" : "Our Blog";
+
   return (
     <section className="max-w-7xl mx-auto px-6 py-20">
       <h2 className="text-center font-serif text-4xl mb-10 font-bold">
-        Our Blog
+        {heading}
       </h2>
 
       {/* Carousel: horizontal scroll with arrows and dots */}
@@ -623,7 +650,7 @@ function Blog() {
             className="carousel-track flex gap-6 px-6 py-4 overflow-x-auto scroll-smooth snap-x snap-mandatory hide-scrollbar"
             style={{ WebkitOverflowScrolling: "touch" }}
           >
-            {dummyPosts.map((p) => (
+            {posts.map((p) => (
               <div
                 key={p.id}
                 className="snap-center flex-shrink-0 w-[min(90%,28rem)] sm:w-[22rem] md:w-[26rem] lg:w-[30rem]"
@@ -633,7 +660,7 @@ function Blog() {
                   post={p}
                   onOpen={openModal}
                   onToggleLike={toggleLike}
-                  liked={postState[p.id].likedByUser}
+                  liked={postState[p.id]?.likedByUser}
                 />
               </div>
             ))}
