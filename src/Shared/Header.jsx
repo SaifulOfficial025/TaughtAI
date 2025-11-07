@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Link, NavLink, useNavigate } from "react-router-dom";
+import { Link, NavLink, useNavigate, useLocation } from "react-router-dom";
 import logo from "../../public/logoblack.svg";
 import { useSelector, useDispatch } from "react-redux";
 import { logout } from "../Redux/Authentication";
@@ -12,6 +12,7 @@ function Header() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { user } = useSelector((s) => s.auth || {});
+  const location = useLocation();
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -78,7 +79,13 @@ function Header() {
             <NavLink
               to="/blog"
               className={({ isActive }) =>
-                `hover:underline ${isActive ? "  font-semibold" : ""}`
+                `hover:underline ${
+                  isActive ||
+                  location.pathname.startsWith("/blogs") ||
+                  location.pathname.startsWith("/blog/")
+                    ? "  font-semibold"
+                    : ""
+                }`
               }
             >
               Blog

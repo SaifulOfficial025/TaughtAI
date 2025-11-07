@@ -1,10 +1,20 @@
 import React, { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
+import { useDispatch } from "react-redux";
+import { login } from "../../Redux/Authentication";
+import { useNavigate } from "react-router-dom";
 import SignupBackground from "../../../public/authenticationbg.svg";
 import Logo from "../../../public/logowhite.svg";
 import { Link } from "react-router-dom";
 function SignIn() {
   const [showPwd, setShowPwd] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const ALLOWED_EMAIL = "afridi.cse5.bu@gmail.com";
 
   return (
     <div className="min-h-screen w-full">
@@ -53,6 +63,8 @@ function SignIn() {
                 </label>
                 <input
                   type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                   className="w-full h-11 rounded-md px-3 text-sm sm:text-sm md:text-base outline-none"
                   style={{
                     border: "1px solid #E5E7EB",
@@ -71,6 +83,8 @@ function SignIn() {
                 <div className="relative">
                   <input
                     type={showPwd ? "text" : "password"}
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
                     className="w-full h-11 rounded-md px-3 pr-10 text-sm sm:text-sm md:text-base outline-none"
                     style={{
                       border: "1px solid #E5E7EB",
@@ -105,11 +119,54 @@ function SignIn() {
               </div>
 
               {/* Login button */}
-              <Link to="/admin/bloglist">
-                <button className="w-full h-11 rounded-full text-white font-semibold text-sm sm:text-sm md:text-base bg-black">
-                  Log In
+              <div>
+                <button
+                  onClick={async () => {
+                    // strict email restriction for this page
+                    if (email.trim().toLowerCase() !== ALLOWED_EMAIL) return;
+                    if (!password) {
+                      alert("Please enter your password.");
+                      return;
+                    }
+                    try {
+                      setLoading(true);
+                      const payload = { email: email.trim(), password };
+                      // dispatch login thunk and unwrap result so failures throw
+                      const result = await dispatch(login(payload)).unwrap();
+                      console.log("login result:", result);
+
+                      // success - save role immediately
+                      localStorage.setItem("role", "admin");
+                      console.log("Role set to admin");
+
+                      // Force full page navigation to ensure route guard sees tokens
+                      console.log(
+                        "Forcing full page navigation to /admin/bloglist"
+                      );
+                      window.location.href = "/admin/bloglist";
+                    } catch (err) {
+                      // err may be a rejected action or thrown error
+                      const msg =
+                        err?.message ||
+                        (err?.payload && err.payload.message) ||
+                        "Login failed";
+                      alert(msg);
+                    } finally {
+                      setLoading(false);
+                    }
+                  }}
+                  disabled={
+                    loading || email.trim().toLowerCase() !== ALLOWED_EMAIL
+                  }
+                  className={`w-full h-11 rounded-full text-white font-semibold text-sm sm:text-sm md:text-base ${
+                    loading || email.trim().toLowerCase() !== ALLOWED_EMAIL
+                      ? "bg-gray-400"
+                      : "bg-black"
+                  }`}
+                >
+                  {loading ? "Logging in..." : "Log In"}
                 </button>
-              </Link>
+              </div>
             </div>
           </div>
         </div>

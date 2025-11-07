@@ -3,6 +3,7 @@ import Header from "./Header";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchBlogsPage } from "../../Redux/Blogs";
+import { BASE_URL } from "../../Redux/config";
 
 const SAMPLE_BLOGS = [
   {
@@ -121,6 +122,7 @@ function BlogList() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const blogsState = useSelector((s) => s.blogs || {});
+  const [deletingId, setDeletingId] = useState(null);
 
   // Helper to render user-friendly date/time
   function formatDateTime(value) {
@@ -148,9 +150,45 @@ function BlogList() {
     navigate(`/admin/editblog/${b.id}`);
   }
 
-  function handleDelete(b) {
+  async function handleDelete(b) {
     if (!confirm(`Delete blog "${b.title}"? This cannot be undone.`)) return;
-    setBlogs((prev) => prev.filter((p) => p.id !== b.id));
+    try {
+      setDeletingId(b.id);
+      // Inform the user
+      alert(`Deleting "${b.title}"...`);
+
+      const token =
+        localStorage.getItem("access_token") ||
+        localStorage.getItem("accessToken");
+      const headers = {
+        "Content-Type": "application/json",
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      };
+
+      const res = await fetch(
+        `${BASE_URL}/admin_dashboard/delete_blog_admin/`,
+        {
+          method: "DELETE",
+          headers,
+          body: JSON.stringify({ blog_id: String(b.id) }),
+        }
+      );
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        alert(`Delete failed: ${data?.message || JSON.stringify(data)}`);
+        setDeletingId(null);
+        return;
+      }
+
+      // Success: remove from local list and refresh server page
+      setBlogs((prev) => prev.filter((p) => Number(p.id) !== Number(b.id)));
+      dispatch(fetchBlogsPage(1));
+      alert(`Blog "${b.title}" deleted successfully.`);
+    } catch (err) {
+      alert(`Network error while deleting: ${err.message}`);
+    } finally {
+      setDeletingId(null);
+    }
   }
 
   function passesDateFilter(b) {
@@ -309,8 +347,13 @@ function BlogList() {
                       <button
                         onClick={() => handleDelete(b)}
                         className="px-3 py-1.5 bg-red-100 rounded-md text-sm text-red-700"
+                        disabled={deletingId === b.id}
+                        style={{
+                          backgroundColor:
+                            deletingId === b.id ? "#fee2e2" : undefined,
+                        }}
                       >
-                        Delete
+                        {deletingId === b.id ? "Deleting..." : "Delete"}
                       </button>
                     </div>
                   </td>

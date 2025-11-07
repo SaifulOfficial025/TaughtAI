@@ -1,4 +1,4 @@
-import { createBrowserRouter } from "react-router-dom";
+import { createBrowserRouter, Navigate } from "react-router-dom";
 import Home from "../Pages/Home/Home";
 import About from "../Pages/About/RootPage";
 import Service from "../Pages/Services/Rootpage";
@@ -34,6 +34,32 @@ import AdminBlogDetails from "../Pages/Admin/BlogDetails";
 import EditBlog from "../Pages/Admin/EditBlog";
 import AdminLogin from "../Pages/Admin/SignIn";
 import AdminChangePassword from "../Pages/Admin/ChangePassword";
+
+// simple guard: ensure access_token and role=admin exist in localStorage
+function requireAdmin(element) {
+  try {
+    const token =
+      localStorage.getItem("access_token") ||
+      localStorage.getItem("accessToken");
+    const role = localStorage.getItem("role");
+    // Debugging: log guard checks so we can see when a route check occurs
+    // (remove or silence this in production)
+    try {
+      // eslint-disable-next-line no-console
+      console.debug("requireAdmin check -> token:", token, "role:", role);
+    } catch (e) {}
+    if (!token || role !== "admin") {
+      try {
+        // eslint-disable-next-line no-console
+        console.debug("requireAdmin -> redirecting to /admin/login");
+      } catch (e) {}
+      return <Navigate to="/admin/login" replace />;
+    }
+    return element;
+  } catch (e) {
+    return <Navigate to="/admin/login" replace />;
+  }
+}
 
 export const router = createBrowserRouter([
   {
@@ -142,19 +168,19 @@ export const router = createBrowserRouter([
   },
   {
     path: "/admin/bloglist",
-    element: <BlogList />,
+    element: requireAdmin(<BlogList />),
   },
   {
     path: "/admin/blogdetails/:id",
-    element: <AdminBlogDetails />,
+    element: requireAdmin(<AdminBlogDetails />),
   },
   {
     path: "/admin/addnewblog",
-    element: <AddNewBlog />,
+    element: requireAdmin(<AddNewBlog />),
   },
   {
     path: "/admin/editblog/:id",
-    element: <EditBlog />,
+    element: requireAdmin(<EditBlog />),
   },
   {
     path: "/admin/login",
@@ -162,6 +188,6 @@ export const router = createBrowserRouter([
   },
   {
     path: "/admin/changepassword",
-    element: <AdminChangePassword />,
+    element: requireAdmin(<AdminChangePassword />),
   },
 ]);

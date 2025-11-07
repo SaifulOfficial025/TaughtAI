@@ -24,6 +24,8 @@
     "react-redux": "^9.2.0",
     "react-router-dom": "^6.27.0",
     "recharts": "^2.15.1",
+    "slate": "^0.118.1",
+    "slate-react": "^0.118.2",
     "sort-by": "^0.0.2"
   },
   "devDependencies": {

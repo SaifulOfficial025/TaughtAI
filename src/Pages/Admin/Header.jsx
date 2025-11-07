@@ -1,9 +1,21 @@
 import React, { useState } from "react";
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import logo from "../../../public/logoblack.svg";
 
 function Header() {
   const [open, setOpen] = useState(false);
+  const navigate = useNavigate();
+
+  function handleLogout() {
+    // Clear all local storage as requested
+    try {
+      localStorage.clear();
+    } catch (e) {
+      // ignore
+    }
+    // Redirect to admin login
+    navigate("/admin/login");
+  }
 
   return (
     <header className="bg-white shadow-md">
@@ -11,7 +23,7 @@ function Header() {
         <div className="flex items-center justify-between py-5">
           {/* Brand */}
           <div className="flex items-center gap-4">
-            <Link to="/">
+            <Link to="/admin/bloglist">
               <img src={logo} alt="Taught AI" className="h-8" />
             </Link>
           </div>
@@ -35,25 +47,19 @@ function Header() {
               Add Blog
             </NavLink>
             <NavLink
-              to="/admin/changepassword"
+              to="/forgot_password_email"
               className={({ isActive }) =>
                 `hover:underline ${isActive ? "  font-semibold" : ""}`
               }
             >
               Change Password
             </NavLink>
-            <NavLink
-              to="/admin/login"
-              className={({ isActive }) =>
-                `inline-block px-6 py-2 rounded-full shadow-sm font-playfair ${
-                  isActive
-                    ? " text-white"
-                    : "bg-red-800 text-white hover:opacity-95"
-                }`
-              }
+            <button
+              onClick={handleLogout}
+              className={`inline-block px-6 py-2 rounded-full shadow-sm font-playfair bg-red-800 text-white hover:opacity-95`}
             >
               Log Out
-            </NavLink>
+            </button>
           </nav>
 
           {/* Mobile menu button */}
@@ -105,7 +111,7 @@ function Header() {
                 Add Blog
               </NavLink>
               <NavLink
-                to="/admin/changepassword"
+                to="/forgot_password_email"
                 className={({ isActive }) =>
                   `block px-3 py-2 rounded-md ${
                     isActive ? "bg-gray-100 font-semibold" : "hover:bg-gray-50"
@@ -114,18 +120,17 @@ function Header() {
               >
                 Change Password
               </NavLink>
-              <NavLink
-                to="/admin/login"
-                className={({ isActive }) =>
-                  `block px-3 py-2 rounded-md text-center ${
-                    isActive
-                      ? " text-white font-semibold"
-                      : "bg-red-800 text-white"
-                  }`
-                }
+              <button
+                onClick={() => {
+                  try {
+                    localStorage.clear();
+                  } catch (e) {}
+                  navigate("/admin/login");
+                }}
+                className={`block px-3 py-2 rounded-md text-center bg-red-800 text-white`}
               >
                 Log Out
-              </NavLink>
+              </button>
             </div>
           </div>
         )}

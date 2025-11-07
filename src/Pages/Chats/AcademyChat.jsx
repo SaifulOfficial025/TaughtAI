@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import Owner from "../../../public/chatlogo.svg";
 import { FaEdit } from "react-icons/fa";
 import { CgProfile } from "react-icons/cg";
@@ -7,7 +7,12 @@ import { FaMicrophoneLines } from "react-icons/fa6";
 
 function AcademyChat() {
   const navigate = useNavigate();
+  const location = useLocation();
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  // Policy confirmation state: user must type "yes" to enable the main chat input
+  const [policyInput, setPolicyInput] = useState("");
+  const [policyAccepted, setPolicyAccepted] = useState(false);
+  const [policyMessage, setPolicyMessage] = useState("");
 
   const chats = [
     { id: 1, title: "Create lesson plan for Year 7 Science" },
@@ -29,15 +34,15 @@ function AcademyChat() {
           <div className="px-4 sm:px-6 py-6 sm:py-8 mt-8">
             <div className="bg-gradient-to-r from-gray-800 to-black rounded-xl p-4 mb-6 shadow-lg border border-gray-600">
               <h3 className="text-white font-bold text-lg mb-1">
-                🎓 Taught AI
+                🎓 Academy Chat
               </h3>
               <p className="text-gray-300 text-sm">
                 Your AI Teaching Assistant
               </p>
             </div>
             <button className="flex items-center gap-3 w-full text-white font-semibold bg-gradient-to-r from-gray-700 to-gray-800 hover:from-gray-600 hover:to-gray-700 rounded-xl px-4 py-3 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105 border border-gray-600">
-              <FaEdit className="w-5 h-5" />
-              Start New Lesson Plan
+              <FaEdit className="w-6 h-6" />
+              New Chat
             </button>
           </div>
 
@@ -54,7 +59,7 @@ function AcademyChat() {
                 >
                   <div className="flex items-start gap-3">
                     <div className="w-2 h-2 rounded-full bg-white mt-2 group-hover:bg-gray-300 transition-colors"></div>
-                    <span className="text-sm font-medium leading-relaxed">
+                    <span className="text-sm font-medium leading-relaxed truncate">
                       {c.title}
                     </span>
                   </div>
@@ -92,7 +97,7 @@ function AcademyChat() {
               <div className="px-4 py-6 flex items-center justify-between border-b border-gray-600/30">
                 <div className="bg-gradient-to-r from-gray-800 to-black rounded-lg p-3 border border-gray-600">
                   <h3 className="text-white font-bold text-sm">
-                    🎓 EduChat Pro
+                    🎓 Academy Chat
                   </h3>
                 </div>
                 <button
@@ -105,8 +110,8 @@ function AcademyChat() {
 
               <div className="px-4 py-4">
                 <button className="flex items-center gap-3 w-full text-white font-semibold bg-gradient-to-r from-gray-700 to-gray-800 rounded-lg px-3 py-2 mb-4 border border-gray-600">
-                  <FaEdit className="w-4 h-4" />
-                  New Lesson Plan
+                  <FaEdit className="w-6 h-6" />
+                  New Chat
                 </button>
                 <h4 className="text-gray-300 font-semibold mb-3">
                   📚 Conversations
@@ -119,7 +124,7 @@ function AcademyChat() {
                         setSidebarOpen(false);
                         handleChatClick(c.id);
                       }}
-                      className="bg-white/10 text-white hover:bg-white/20 rounded-lg px-3 py-2 cursor-pointer transition-all text-sm border border-gray-600/30"
+                      className="bg-white/10 text-white hover:bg-white/20 rounded-lg px-3 py-2 cursor-pointer transition-all text-sm border border-gray-600/30 truncate"
                     >
                       {c.title}
                     </li>
@@ -156,7 +161,7 @@ function AcademyChat() {
 
         <div className="w-full max-w-6xl mt-6 relative z-10">
           <div className="flex items-center justify-between px-4 sm:px-6">
-            <div className="flex items-center gap-4">
+            {/* <div className="flex items-center gap-4">
               <button
                 onClick={() => setSidebarOpen(true)}
                 className="md:hidden p-3 rounded-xl bg-white/70 backdrop-blur-sm border border-gray-200 hover:bg-white/90 transition-all shadow-lg"
@@ -170,18 +175,18 @@ function AcademyChat() {
                   <path
                     strokeLinecap="round"
                     strokeLinejoin="round"
-                    strokeWidth={2}
+                    strokeWidth={1.5}
                     d="M4 6h16M4 12h16M4 18h16"
                   />
                 </svg>
               </button>
-              <div className="bg-white/70 backdrop-blur-sm rounded-xl px-4 py-2 border border-gray-200 shadow-lg ">
-                <span className="text-gray-800 font-semibold">
-                  Taught AI Primary SOW GPT 5
-                </span>
-                {/* <span className="text-gray-600 ml-2">v5.0</span> */}
+              <div className="bg-white/70 backdrop-blur-sm rounded-xl px-4 py-2 border border-gray-200 shadow-lg">
+                {/* <span className="text-gray-800 font-semibold">
+                  📖 Taught AI Academy SOW GPT 5
+                </span> */}
+            {/* <span className="text-gray-600 ml-2">▾</span>
               </div>
-            </div>
+            </div> */}{" "}
           </div>
 
           <div className="flex flex-col items-center mt-12 sm:mt-16 px-4 sm:px-6">
@@ -195,35 +200,104 @@ function AcademyChat() {
             </div>
 
             <div className="text-center mt-8">
+              {
+                // Use title passed via navigation state, fallback to default
+              }
               <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold bg-gradient-to-r from-gray-700 via-black to-gray-600 bg-clip-text text-transparent mb-4 leading-tight">
-                🎓 Taught AI Primary SOW GPT
+                🎓 Taught AI Academy {location.state?.title}
               </h1>
               <div className="flex items-center justify-center gap-2 text-gray-700 mb-3">
-                <CgProfile className="w-5 h-5" />
                 <span className="font-semibold">By Ben Duggan</span>
+                <CgProfile className="w-5 h-5" />
                 <span className="px-2 py-1 bg-gray-100 text-gray-700 rounded-full text-sm font-medium border border-gray-200">
                   Verified Educator
                 </span>
               </div>
               <p className="text-lg sm:text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
-                Develop Schemes of work for your subject or topic
+                Develop comprehensive schemes of work for your subject or topic
               </p>
 
               {/* <div className="mt-10 flex flex-wrap gap-4 justify-center">
                 <div className="bg-white/80 backdrop-blur-sm rounded-xl px-6 py-3 border border-gray-200 shadow-lg">
-                  <span className="text-sm font-semibold text-gray-700">📚 Curriculum Planning</span>
+                  <span className="text-sm font-semibold text-gray-700">
+                    📚 Curriculum Planning
+                  </span>
                 </div>
                 <div className="bg-white/80 backdrop-blur-sm rounded-xl px-6 py-3 border border-gray-200 shadow-lg">
-                  <span className="text-sm font-semibold text-gray-800">🎯 Assessment Design</span>
+                  <span className="text-sm font-semibold text-gray-800">
+                    🎯 Assessment Design
+                  </span>
                 </div>
                 <div className="bg-white/80 backdrop-blur-sm rounded-xl px-6 py-3 border border-gray-200 shadow-lg">
-                  <span className="text-sm font-semibold text-gray-700">♿ SEND Support</span>
+                  <span className="text-sm font-semibold text-gray-700">
+                    ♿ SEND Support
+                  </span>
                 </div>
               </div> */}
-
+              {/* 
               <button className="mt-8 px-8 py-4 bg-gradient-to-r from-gray-800 to-black hover:from-gray-700 hover:to-gray-800 text-white font-bold rounded-full shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-200">
-                🚀 Agree & Continue
-              </button>
+                Agree & Continue
+              </button> */}
+
+              <div className="mt-8 w-full max-w-xl mx-auto text-left border border-gray-300/50 p-6 rounded-2xl bg-white/90 backdrop-blur-sm shadow-lg">
+                <p className="text-lg text-gray-600 mb-3">
+                  Please confirm you have read the Taught AI Academy Acceptable
+                  AI Use Policy and that you will not include any personal names
+                  or identifying data about students, families, or staff. Type{" "}
+                  <span className="font-semibold">yes</span> below and press
+                  Send to acknowledge and continue.
+                </p>
+
+                <div className="flex items-center gap-2">
+                  <input
+                    value={policyInput}
+                    onChange={(e) => setPolicyInput(e.target.value)}
+                    placeholder='Type "yes" to accept'
+                    className="flex-1 h-10 px-3 border border-gray-300 rounded-lg outline-none text-gray-700"
+                    disabled={policyAccepted}
+                  />
+                  <button
+                    onClick={() => {
+                      const v = (policyInput || "").trim().toLowerCase();
+                      if (v === "yes") {
+                        setPolicyAccepted(true);
+                        setPolicyMessage(
+                          policyInput ? (
+                            <p className="text-green-500">
+                              "Policy accepted. You may now use the chat."
+                            </p>
+                          ) : (
+                            <p className="text-red-500">
+                              "Policy not accepted."
+                            </p>
+                          )
+                        );
+                        // clear input to indicate success
+                        setPolicyInput("");
+                      } else {
+                        setPolicyAccepted(false);
+                        setPolicyMessage(
+                          'Please type "yes" (without quotes) to accept the policy.'
+                        );
+                      }
+                    }}
+                    className={`px-4 py-2 rounded-lg font-semibold text-white ${
+                      policyAccepted
+                        ? "bg-black cursor-default"
+                        : "bg-black hover:bg-blue-500"
+                    }`}
+                    aria-pressed={policyAccepted}
+                  >
+                    Accept
+                  </button>
+                </div>
+
+                {policyMessage && (
+                  <div className="mt-2 text-sm text-gray-700">
+                    {policyMessage}
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         </div>
@@ -237,19 +311,29 @@ function AcademyChat() {
                 <div className="flex items-center gap-3">
                   <input
                     placeholder="Ask me about lesson planning, curriculum design, or educational strategies..."
-                    className="flex-1 h-12 sm:h-14 bg-transparent px-6 text-gray-700 placeholder-gray-500 outline-none font-medium text-base"
+                    className={`flex-1 h-12 sm:h-14 bg-transparent px-6 text-gray-700 placeholder-gray-500 outline-none font-medium text-base ${
+                      !policyAccepted ? "opacity-60 cursor-not-allowed" : ""
+                    }`}
+                    disabled={!policyAccepted}
                   />
                   <button className="p-3 sm:p-4 rounded-xl bg-gradient-to-r from-gray-600 to-gray-800 hover:from-gray-500 hover:to-gray-700 text-white shadow-lg hover:shadow-xl transition-all transform hover:scale-105">
                     <FaMicrophoneLines className="w-5 h-5" />
                   </button>
-                  <button className="px-6 py-3 sm:py-4 bg-gradient-to-r from-gray-800 to-black hover:from-gray-700 hover:to-gray-800 text-white font-bold rounded-xl shadow-lg hover:shadow-xl transition-all transform hover:scale-105">
+                  <button
+                    disabled={!policyAccepted}
+                    className={`px-6 py-3 sm:py-4 text-white font-bold rounded-xl shadow-lg transition-all transform ${
+                      policyAccepted
+                        ? "bg-gradient-to-r from-gray-800 to-black hover:from-gray-700 hover:to-gray-800 hover:shadow-xl hover:scale-105"
+                        : "bg-gray-300 cursor-not-allowed opacity-70"
+                    }`}
+                  >
                     Send
                   </button>
                 </div>
               </div>
             </div>
 
-            {/* Quick action buttons
+            {/* Quick action buttons */}
             <div className="flex flex-wrap justify-center gap-3 mt-6">
               <button className="px-4 py-2 bg-white/70 backdrop-blur-sm rounded-full text-sm font-medium text-gray-700 hover:bg-white/90 transition-all border border-gray-200 shadow-lg">
                 📝 Create Lesson Plan
@@ -260,7 +344,7 @@ function AcademyChat() {
               <button className="px-4 py-2 bg-white/70 backdrop-blur-sm rounded-full text-sm font-medium text-gray-700 hover:bg-white/90 transition-all border border-gray-200 shadow-lg">
                 🎯 Differentiation Help
               </button>
-            </div> */}
+            </div>
           </div>
         </div>
       </main>
