@@ -1,5 +1,5 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import AcademyImg from "../../../public/aiprimary.svg";
 import Header from "./Header";
 import Footer from "../../Shared/Footer";
@@ -7,6 +7,7 @@ import Footer from "../../Shared/Footer";
 const tools = [
   {
     title: "Scheme of work GPT",
+    model_name: "Primary_Scheme_of_work",
     short:
       "Designs inclusive, Ofsted-aligned schemes of work—structured by week, with clear objectives, assessment points, and delivery strategies.",
     bullets: [
@@ -16,7 +17,8 @@ const tools = [
     ],
   },
   {
-    title: "Lesson Planner GPT",
+    title: "Lesson Generator",
+    model_name: "Lesson_Generator",
     short:
       "Generates fully structured, Ofsted-aligned lesson plans tailored to your subject, pupil needs, and curriculum goals.",
     bullets: [
@@ -26,7 +28,8 @@ const tools = [
     ],
   },
   {
-    title: "Resource Generator GPT",
+    title: "Resource Generator",
+    model_name: "Primary_Resource_Generator",
     short:
       "Creates engaging, curriculum-linked worksheets, activities, and tasks tailored to your class’s needs, interests, and learning levels.",
     bullets: [
@@ -36,7 +39,8 @@ const tools = [
     ],
   },
   {
-    title: "Communication Improver GPT",
+    title: "Behaviour and Classroom Strategies",
+    model_name: "Primary_Behaviour_and_Classroom_Strategies",
     short:
       "Helps staff draft professional, trauma-informed emails and structure supportive conversations with parents and external professionals—aligned with safeguarding, SEND, and inclusion policies.",
     bullets: [
@@ -47,7 +51,8 @@ const tools = [
     ],
   },
   {
-    title: "Behaviour and classroom strategies",
+    title: "Strategic Leadership Assistant",
+    model_name: "Strategic_Leadership_Assistant",
     short:
       "Provides instant access to researched strategies for behaviour, learning needs, and classroom challenges—tailored to your school context.",
     bullets: [
@@ -58,6 +63,7 @@ const tools = [
   },
   {
     title: "Heads and SLT Assistant",
+    model_name: "Primary_Heads_and_SLT_Assistant",
     short:
       "Supports senior leaders by generating evidence-informed summaries, policies, improvement actions, and inspection prep—aligned with school values, Ofsted expectations, and national guidance.",
     bullets: [
@@ -71,6 +77,7 @@ const tools = [
 
 function StaffPlatform() {
   const navigate = useNavigate();
+  const location = useLocation();
   return (
     <section>
       <Header />
@@ -131,7 +138,11 @@ function StaffPlatform() {
                         <button
                           onClick={() =>
                             navigate("/taught_ai_primary", {
-                              state: { title: tool.title },
+                              state: {
+                                title: tool.title,
+                                model_name: tool.model_name,
+                                from: location.pathname,
+                              },
                             })
                           }
                           className="bg-white text-gray-900 px-6 py-2.5 text-sm font-semibold rounded-full  hover:bg-gray-100 transition"
@@ -192,7 +203,11 @@ function StaffPlatform() {
                         <button
                           onClick={() =>
                             navigate("/taught_ai_primary", {
-                              state: { title: tool.title },
+                              state: {
+                                title: tool.title,
+                                model_name: tool.model_name,
+                                from: location.pathname,
+                              },
                             })
                           }
                           className="bg-white text-gray-900 px-6 py-2.5 text-sm font-semibold rounded-full  hover:bg-gray-100 transition"

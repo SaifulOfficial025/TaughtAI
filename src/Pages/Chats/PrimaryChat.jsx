@@ -1,5 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { getAllChats, createChat } from "../../Redux/Chatbot";
 import Owner from "../../../public/chatlogo.svg";
 import { FaEdit } from "react-icons/fa";
 import { CgProfile } from "react-icons/cg";
@@ -8,22 +10,77 @@ import { FaMicrophoneLines } from "react-icons/fa6";
 function PrimaryChat() {
   const navigate = useNavigate();
   const location = useLocation();
+  const dispatch = useDispatch();
+
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [message, setMessage] = useState("");
+
   // Policy confirmation state: user must type "yes" to enable the main chat input
   const [policyInput, setPolicyInput] = useState("");
   const [policyAccepted, setPolicyAccepted] = useState(false);
   const [policyMessage, setPolicyMessage] = useState("");
 
-  const chats = [
-    { id: 1, title: "Create lesson plan for Year 7 Science" },
-    { id: 2, title: "Help with assessment criteria" },
-    { id: 3, title: "Scheme of work for Mathematics" },
-    { id: 4, title: "Homework ideas for English" },
-    { id: 5, title: "Behavior management strategies" },
-  ];
+  // Get model name from navigation state
+  const modelName = location.state?.model_name || "Primary_Default";
+
+  // Redux state
+  const chatState = useSelector((state) => state.chatbot);
+  const chats = chatState.chatLists[modelName] || [];
+  const isLoading = chatState.chatListsLoading[modelName] || false;
+  const createLoading = chatState.createChatLoading || false;
+  const error = chatState.chatListsError[modelName] || null;
+
+  useEffect(() => {
+    // Load chats for this model when component mounts
+    if (modelName) {
+      dispatch(getAllChats({ model_name: modelName }));
+    }
+  }, [dispatch, modelName]);
 
   const handleChatClick = (chatId) => {
-    navigate(`/chats/${chatId}`);
+    navigate(`/chats/${chatId}`, {
+      state: {
+        from: location.pathname,
+        model_name: modelName,
+        title: location.state?.title,
+      },
+    });
+  };
+
+  const handleSendMessage = async () => {
+    if (!message.trim() || !policyAccepted) return;
+
+    try {
+      const resultAction = await dispatch(
+        createChat({
+          first_message: message.trim(),
+          model_name: modelName,
+        })
+      );
+
+      if (createChat.fulfilled.match(resultAction)) {
+        const { chat_id } = resultAction.payload;
+        // Clear the message input
+        setMessage("");
+        // Navigate to the new chat
+        navigate(`/chats/${chat_id}`, {
+          state: {
+            from: location.pathname,
+            model_name: modelName,
+            title: location.state?.title,
+          },
+        });
+      }
+    } catch (error) {
+      console.error("Error creating chat:", error);
+    }
+  };
+
+  const handleKeyPress = (e) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      handleSendMessage();
+    }
   };
 
   return (
@@ -40,32 +97,42 @@ function PrimaryChat() {
                 Your AI Teaching Assistant
               </p>
             </div>
-            <button className="flex items-center gap-3 w-full text-white font-semibold bg-gradient-to-r from-gray-700 to-gray-800 hover:from-gray-600 hover:to-gray-700 rounded-xl px-4 py-3 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105 border border-gray-600">
+            {/* <button className="flex items-center gap-3 w-full text-white font-semibold bg-gradient-to-r from-gray-700 to-gray-800 hover:from-gray-600 hover:to-gray-700 rounded-xl px-4 py-3 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105 border border-gray-600">
               <FaEdit className="w-6 h-6" />
               New Chat
-            </button>
+            </button> */}
           </div>
 
           <div className="px-4 sm:px-6 pb-6">
             <h4 className="text-gray-300 font-semibold mb-4 flex items-center gap-2">
               📚 Recent Conversations
             </h4>
-            <ul className="space-y-3">
-              {chats.map((c) => (
-                <li
-                  key={c.id}
-                  onClick={() => handleChatClick(c.id)}
-                  className="group bg-white/10 backdrop-blur-sm text-white hover:bg-white/20 rounded-lg px-4 py-3 cursor-pointer transition-all duration-200 border border-gray-600/30 hover:border-gray-500/50 hover:shadow-lg transform hover:scale-102"
-                >
-                  <div className="flex items-start gap-3">
-                    <div className="w-2 h-2 rounded-full bg-white mt-2 group-hover:bg-gray-300 transition-colors"></div>
-                    <span className="text-sm font-medium leading-relaxed truncate">
-                      {c.title}
-                    </span>
-                  </div>
-                </li>
-              ))}
-            </ul>
+            {isLoading ? (
+              <div className="text-gray-400 text-sm">Loading chats...</div>
+            ) : error ? (
+              <div className="text-red-400 text-sm">
+                Error loading chats: {error}
+              </div>
+            ) : chats.length > 0 ? (
+              <ul className="space-y-3">
+                {chats.map((c) => (
+                  <li
+                    key={c.chat_id}
+                    onClick={() => handleChatClick(c.chat_id)}
+                    className="group bg-white/10 backdrop-blur-sm text-white hover:bg-white/20 rounded-lg px-4 py-3 cursor-pointer transition-all duration-200 border border-gray-600/30 hover:border-gray-500/50 hover:shadow-lg transform hover:scale-102"
+                  >
+                    <div className="flex items-start gap-3">
+                      <div className="w-2 h-2 rounded-full bg-white mt-2 group-hover:bg-gray-300 transition-colors"></div>
+                      <span className="text-sm font-medium leading-relaxed truncate">
+                        {c.title || "Untitled Chat"}
+                      </span>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <div className="text-gray-400 text-sm">No conversations yet</div>
+            )}
           </div>
         </div>
 
@@ -116,20 +183,30 @@ function PrimaryChat() {
                 <h4 className="text-gray-300 font-semibold mb-3">
                   📚 Conversations
                 </h4>
-                <ul className="space-y-2">
-                  {chats.map((c) => (
-                    <li
-                      key={c.id}
-                      onClick={() => {
-                        setSidebarOpen(false);
-                        handleChatClick(c.id);
-                      }}
-                      className="bg-white/10 text-white hover:bg-white/20 rounded-lg px-3 py-2 cursor-pointer transition-all text-sm border border-gray-600/30 truncate"
-                    >
-                      {c.title}
-                    </li>
-                  ))}
-                </ul>
+                {isLoading ? (
+                  <div className="text-gray-400 text-sm">Loading...</div>
+                ) : error ? (
+                  <div className="text-red-400 text-sm">Error: {error}</div>
+                ) : chats.length > 0 ? (
+                  <ul className="space-y-2">
+                    {chats.map((c) => (
+                      <li
+                        key={c.chat_id}
+                        onClick={() => {
+                          setSidebarOpen(false);
+                          handleChatClick(c.chat_id);
+                        }}
+                        className="bg-white/10 text-white hover:bg-white/20 rounded-lg px-3 py-2 cursor-pointer transition-all text-sm border border-gray-600/30 truncate"
+                      >
+                        {c.title || "Untitled Chat"}
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  <div className="text-gray-400 text-sm">
+                    No conversations yet
+                  </div>
+                )}
               </div>
             </div>
 
@@ -307,6 +384,9 @@ function PrimaryChat() {
               <div className="relative bg-white/90 backdrop-blur-lg rounded-2xl p-2 shadow-2xl border border-gray-200">
                 <div className="flex items-center gap-3">
                   <input
+                    value={message}
+                    onChange={(e) => setMessage(e.target.value)}
+                    onKeyPress={handleKeyPress}
                     placeholder="Ask me about lesson planning, curriculum design, or educational strategies..."
                     className={`flex-1 h-12 sm:h-14 bg-transparent px-6 text-gray-700 placeholder-gray-500 outline-none font-medium text-base ${
                       !policyAccepted ? "opacity-60 cursor-not-allowed" : ""
@@ -317,14 +397,17 @@ function PrimaryChat() {
                     <FaMicrophoneLines className="w-5 h-5" />
                   </button>
                   <button
-                    disabled={!policyAccepted}
+                    onClick={handleSendMessage}
+                    disabled={
+                      !policyAccepted || !message.trim() || createLoading
+                    }
                     className={`px-6 py-3 sm:py-4 text-white font-bold rounded-xl shadow-lg transition-all transform ${
-                      policyAccepted
+                      policyAccepted && message.trim() && !createLoading
                         ? "bg-gradient-to-r from-gray-800 to-black hover:from-gray-700 hover:to-gray-800 hover:shadow-xl hover:scale-105"
                         : "bg-gray-300 cursor-not-allowed opacity-70"
                     }`}
                   >
-                    Send
+                    {createLoading ? "Sending..." : "Send"}
                   </button>
                 </div>
               </div>

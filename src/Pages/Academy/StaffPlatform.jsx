@@ -6,7 +6,8 @@ import Footer from "../../Shared/Footer";
 
 const tools = [
   {
-    title: "Scheme of work GPT",
+    title: "Scheme of work",
+    model_name: "Academy_Scheme_of_work",
     short:
       "Designs inclusive, Ofsted-aligned schemes of work—structured by week, with clear objectives, assessment points, and delivery strategies.",
     bullets: [
@@ -16,7 +17,8 @@ const tools = [
     ],
   },
   {
-    title: "Lesson Planner GPT",
+    title: "Lesson Planner",
+    model_name: "Lesson_Planner",
     short:
       "Generates fully structured, Ofsted-aligned lesson plans tailored to your subject, pupil needs, and curriculum goals.",
     bullets: [
@@ -26,7 +28,8 @@ const tools = [
     ],
   },
   {
-    title: "Resource Generator GPT",
+    title: "Resource Generator",
+    model_name: "Academy_Resource_Generator",
     short:
       "Creates engaging, curriculum-linked worksheets, activities, and tasks tailored to your class's needs, interests, and learning levels.",
     bullets: [
@@ -36,7 +39,8 @@ const tools = [
     ],
   },
   {
-    title: "Communication Improver GPT",
+    title: "Communication Improver",
+    model_name: "Communication_Improver",
     short:
       "Helps staff draft professional, trauma-informed emails and structure supportive conversations with parents and external professionals—aligned with safeguarding, SEND, and inclusion policies.",
     bullets: [
@@ -47,6 +51,7 @@ const tools = [
   },
   {
     title: "Behaviour and classroom strategies",
+    model_name: "Academy_Behaviour_and_classroom_strategies",
     short:
       "Provides instant access to researched strategies for behaviour, learning needs, and classroom challenges—tailored to your school context.",
     bullets: [
@@ -57,6 +62,7 @@ const tools = [
   },
   {
     title: "Heads and SLT Assistant",
+    model_name: "Academy_Heads_and_SLT_Assistant",
     short:
       "Supports senior leaders by generating evidence-informed summaries, policies, improvement actions, and inspection prep—aligned with school values, Ofsted expectations, and national guidance.",
     bullets: [
@@ -129,7 +135,10 @@ function StaffPlatform() {
                         <button
                           onClick={() =>
                             navigate("/taught_ai_academy", {
-                              state: { title: tool.title },
+                              state: {
+                                title: tool.title,
+                                model_name: tool.model_name,
+                              },
                             })
                           }
                           className="bg-white text-gray-900 px-6 py-2.5 text-sm font-semibold rounded-full  hover:bg-gray-100 transition"
@@ -190,7 +199,10 @@ function StaffPlatform() {
                         <button
                           onClick={() =>
                             navigate("/taught_ai_academy", {
-                              state: { title: tool.title },
+                              state: {
+                                title: tool.title,
+                                model_name: tool.model_name,
+                              },
                             })
                           }
                           className="bg-white text-gray-900 px-6 py-2.5 text-sm font-semibold rounded-full  hover:bg-gray-100 transition"
