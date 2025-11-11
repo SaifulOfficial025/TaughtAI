@@ -79,7 +79,16 @@ function ChatDetail() {
         messages: [],
       };
 
-  const handleSendMessage = async (e) => {
+  const handleSendMessage = (e) => {
+    e.preventDefault();
+    if (message.trim()) {
+      // In a real app, this would send the message to the AI
+      console.log("Sending message:", message);
+      setMessage("");
+    }
+  };
+
+  const handleSendMessageAsync = async (e) => {
     e.preventDefault();
     const text = (message || "").trim();
     if (!text) return;
@@ -94,10 +103,8 @@ function ChatDetail() {
       );
 
       if (continueConversation.fulfilled.match(resultAction)) {
-        // replace messages in the UI from redux state
         setMessage("");
       } else {
-        // payload contains error message from rejectWithValue in thunk
         console.error(
           "Failed to continue conversation:",
           resultAction.payload || resultAction.error
@@ -115,7 +122,9 @@ function ChatDetail() {
         <div>
           <div className="px-4 sm:px-6 py-6 sm:py-8 mt-8">
             <button
-              onClick={() => navigate("/chats", { state: { model_name } })}
+              onClick={() =>
+                navigate("/taught_ai_primary", { state: { model_name } })
+              }
               className="flex items-center gap-3 text-white font-semibold bg-gradient-to-r from-gray-700 to-gray-800 hover:from-gray-600 hover:to-gray-700 rounded-xl px-4 py-3 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105 border border-gray-600 mb-4"
             >
               <FaArrowLeft className="w-4 h-4" />
@@ -360,7 +369,7 @@ function ChatDetail() {
         {/* Message input (sticky) */}
         <div className="border-t border-gray-200 bg-white/70 backdrop-blur-sm flex-shrink-0 relative z-10">
           <div className="p-4 sm:p-6">
-            <form onSubmit={handleSendMessage} className="flex gap-3">
+            <form onSubmit={handleSendMessageAsync} className="flex gap-3">
               <div className="flex-1 relative">
                 <div className="absolute inset-0 bg-gradient-to-r from-gray-400/20 to-black/20 rounded-full blur-sm"></div>
                 <input

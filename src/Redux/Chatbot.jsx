@@ -24,13 +24,23 @@ export const getAllChats = createAsyncThunk(
       });
 
       if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        // try to read response text for a better error message
+        let text = "";
+        try {
+          text = await response.text();
+        } catch (e) {
+          /* ignore */
+        }
+        throw new Error(
+          `HTTP ${response.status}: ${text || response.statusText}`
+        );
       }
 
       const data = await response.json();
       return { model_name, chats: data.Data || [] };
     } catch (error) {
-      return rejectWithValue(error.message);
+      // surface the full error message for easier debugging in the browser
+      return rejectWithValue(error.message || String(error));
     }
   }
 );
@@ -38,7 +48,7 @@ export const getAllChats = createAsyncThunk(
 // Async thunk for getting chat history
 export const getChatHistory = createAsyncThunk(
   "chatbot/getChatHistory",
-  async ({ chat_id, user_message = "Hi" }, { rejectWithValue }) => {
+  async ({ chat_id, user_message = "Hi", model_name }, { rejectWithValue }) => {
     try {
       const token = getAuthToken();
       const response = await fetch(`${BASE_URL}/chatbot/get_chat_history/`, {
@@ -50,17 +60,27 @@ export const getChatHistory = createAsyncThunk(
         body: JSON.stringify({
           chat_id: String(chat_id),
           user_message,
+          model_name,
         }),
       });
 
       if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        // read response body where possible to include helpful server message
+        let text = "";
+        try {
+          text = await response.text();
+        } catch (e) {
+          /* ignore */
+        }
+        throw new Error(
+          `HTTP ${response.status}: ${text || response.statusText}`
+        );
       }
 
       const data = await response.json();
       return data;
     } catch (error) {
-      return rejectWithValue(error.message);
+      return rejectWithValue(error.message || String(error));
     }
   }
 );
@@ -85,13 +105,60 @@ export const createChat = createAsyncThunk(
       });
 
       if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        let text = "";
+        try {
+          text = await response.text();
+        } catch (e) {
+          /* ignore */
+        }
+        throw new Error(
+          `HTTP ${response.status}: ${text || response.statusText}`
+        );
       }
 
       const data = await response.json();
       return data;
     } catch (error) {
-      return rejectWithValue(error.message);
+      return rejectWithValue(error.message || String(error));
+    }
+  }
+);
+
+// Async thunk for continuing a conversation (sending a single user message)
+export const continueConversation = createAsyncThunk(
+  "chatbot/continueConversation",
+  async ({ chat_id, user_message = "", model_name }, { rejectWithValue }) => {
+    try {
+      const token = getAuthToken();
+      const response = await fetch(`${BASE_URL}/chatbot/conversation/`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          chat_id: String(chat_id),
+          user_message,
+          model_name,
+        }),
+      });
+
+      if (!response.ok) {
+        let text = "";
+        try {
+          text = await response.text();
+        } catch (e) {
+          /* ignore */
+        }
+        throw new Error(
+          `HTTP ${response.status}: ${text || response.statusText}`
+        );
+      }
+
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      return rejectWithValue(error.message || String(error));
     }
   }
 );
@@ -196,6 +263,48 @@ const chatbotSlice = createSlice({
       .addCase(createChat.rejected, (state, action) => {
         state.createChatLoading = false;
         state.createChatError = action.payload;
+      });
+
+    // continueConversation cases
+    builder
+      .addCase(continueConversation.pending, (state, action) => {
+        const { chat_id } = action.meta.arg;
+        state.chatHistoryLoading[chat_id] = true;
+        state.chatHistoryError[chat_id] = null;
+      })
+      .addCase(continueConversation.fulfilled, (state, action) => {
+        const chatData = action.payload;
+        const chatId = chatData.chat_id;
+        // Replace the chat history for this chat with the returned payload
+        state.chatHistoryLoading[chatId] = false;
+        state.chatHistory[chatId] = chatData;
+        state.chatHistoryError[chatId] = null;
+
+        // Update chat list entry if we have it (update title/timestamp and move to top)
+        const model_name = action.meta.arg.model_name;
+        if (model_name && state.chatLists[model_name]) {
+          const existingIndex = state.chatLists[model_name].findIndex(
+            (c) => String(c.id) === String(chatId)
+          );
+          const newEntry = {
+            id: chatData.chat_id,
+            title: chatData.title,
+            timestamp_parent: chatData.messages?.[chatData.messages.length - 1]
+              ? chatData.messages[chatData.messages.length - 1].timestamp_child
+              : null,
+            user: chatData.user_id,
+          };
+          // remove existing and unshift to front
+          if (existingIndex > -1) {
+            state.chatLists[model_name].splice(existingIndex, 1);
+          }
+          state.chatLists[model_name].unshift(newEntry);
+        }
+      })
+      .addCase(continueConversation.rejected, (state, action) => {
+        const { chat_id } = action.meta.arg;
+        state.chatHistoryLoading[chat_id] = false;
+        state.chatHistoryError[chat_id] = action.payload;
       });
   },
 });

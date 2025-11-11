@@ -332,11 +332,11 @@ function AcademyChat() {
 
               <div className="mt-8 w-full max-w-xl mx-auto text-left border border-gray-300/50 p-6 rounded-2xl bg-white/90 backdrop-blur-sm shadow-lg">
                 <p className="text-lg text-gray-600 mb-3">
-                  Please confirm you have read the Taught AI Academy Acceptable
-                  AI Use Policy and that you will not include any personal names
-                  or identifying data about students, families, or staff. Type{" "}
-                  <span className="font-semibold">yes</span> below and press
-                  Send to acknowledge and continue.
+                  Just checking— have you read the Taught AI Academy Acceptable
+                  AI Use Policy and confirm that you will not include any
+                  personal names or identifying data about students, families,
+                  or staff? Type <span className="font-semibold">yes</span>{" "}
+                  below and press Send to acknowledge and continue.
                 </p>
 
                 <div className="flex items-center gap-2">
@@ -368,7 +368,7 @@ function AcademyChat() {
                       } else {
                         setPolicyAccepted(false);
                         setPolicyMessage(
-                          'Please type "yes" (without quotes) to accept the policy.'
+                          "Sorry, I can’t continue until you confirm that you’ve read and agree to the Acceptable AI Use Policy, and will not input personal information."
                         );
                       }
                     }}

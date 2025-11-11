@@ -34,6 +34,7 @@ import AdminBlogDetails from "../Pages/Admin/BlogDetails";
 import EditBlog from "../Pages/Admin/EditBlog";
 import AdminLogin from "../Pages/Admin/SignIn";
 import AdminChangePassword from "../Pages/Admin/ChangePassword";
+import ChatDetailsforPrimary from "../Pages/Chats/ChatDetailPrimary";
 
 // simple guard: ensure access_token and role=admin exist in localStorage
 function requireAdmin(element) {
@@ -117,6 +118,10 @@ export const router = createBrowserRouter([
   {
     path: "/chats",
     element: <AcademyChat />,
+  },
+  {
+    path: "/primary_chats",
+    element: <ChatDetailsforPrimary />,
   },
   {
     path: "/chats/:chatId",
