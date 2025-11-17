@@ -26,6 +26,40 @@ function SignUp() {
   const dispatch = useDispatch();
   const { loading, error, successMessage } = useSelector((s) => s.auth || {});
 
+  // Helper to extract a friendly message from a thunk result action
+  const extractMessageFromResult = (resultAction) => {
+    if (!resultAction) return null;
+
+    // If fulfilled, payload should contain success information
+    if (resultAction?.meta?.requestStatus === "fulfilled") {
+      const p = resultAction.payload;
+      if (!p) return successMessage || "Registration successful";
+      return p.message || p.detail || p.non_field_errors || JSON.stringify(p);
+    }
+
+    // If rejected, the server response may be in payload (rejectWithValue)
+    if (resultAction?.meta?.requestStatus === "rejected") {
+      const payload = resultAction.payload;
+      if (payload) {
+        if (typeof payload === "string") return payload;
+        return (
+          payload.message ||
+          payload.detail ||
+          payload.non_field_errors ||
+          JSON.stringify(payload)
+        );
+      }
+
+      // Fallback to the toolkit error message
+      const err = resultAction.error?.message;
+      if (err && err !== "Rejected") return err;
+
+      return "Signup failed";
+    }
+
+    return null;
+  };
+
   return (
     <div className="min-h-screen w-full bg-white">
       <div className="grid grid-cols-1 lg:grid-cols-2 h-full p-4 sm:p-6 md:p-8 gap-6 items-stretch">
@@ -77,6 +111,7 @@ function SignUp() {
                   value={fullName}
                   onChange={(e) => setFullName(e.target.value)}
                   className="w-full h-11 rounded-md px-3 text-sm sm:text-sm md:text-base outline-none bg-white dark:bg-white text-black dark:text-black border border-gray-300"
+                  placeholder="Enter your full name"
                 />
               </div>
 
@@ -95,7 +130,7 @@ function SignUp() {
                     background: "#FFFFFF",
                     color: "#1C1C1C",
                   }}
-                  placeholder=""
+                  placeholder="Enter your email address"
                 />
               </div>
 
@@ -105,7 +140,7 @@ function SignUp() {
                   Phone Number
                 </label>
                 <input
-                  type="tel"
+                  type="phone"
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
                   className="w-full h-11 rounded-md px-3 text-sm sm:text-sm md:text-base outline-none"
@@ -114,7 +149,7 @@ function SignUp() {
                     background: "#FFFFFF",
                     color: "#1C1C1C",
                   }}
-                  placeholder=""
+                  placeholder="Enter your phone number"
                 />
               </div>
 
@@ -134,7 +169,7 @@ function SignUp() {
                       background: "#FFFFFF",
                       color: "#1C1C1C",
                     }}
-                    placeholder=""
+                    placeholder="Enter your strong password"
                   />
                   <button
                     type="button"
@@ -162,6 +197,7 @@ function SignUp() {
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
                     className="w-full h-11 rounded-md px-3 pr-10 text-sm sm:text-sm md:text-base outline-none bg-white dark:bg-white text-black dark:text-black border border-gray-300"
+                    placeholder="Re-enter your password"
                   />
                   <button
                     type="button"
@@ -205,7 +241,18 @@ function SignUp() {
                     };
 
                     const resultAction = await dispatch(signup(payload));
+                    // Extract a friendly message from the thunk result
+                    const friendly = extractMessageFromResult(resultAction);
+
                     if (resultAction?.meta?.requestStatus === "fulfilled") {
+                      try {
+                        window.alert(
+                          String(friendly || "Registration successful")
+                        );
+                      } catch (e) {
+                        console.log("Signup response:", friendly);
+                      }
+
                       // Store email for OTP verification
                       dispatch(setCurrentEmail(email));
                       // Navigate to OTP verification page
@@ -213,14 +260,21 @@ function SignUp() {
                       // Clear success in store
                       dispatch(clearSuccess());
                     } else {
-                      const errMsg =
-                        resultAction?.payload?.message ||
-                        resultAction?.error?.message ||
-                        "Signup failed";
-                      setLocalError(errMsg);
+                      try {
+                        window.alert(String(friendly || "Signup failed"));
+                      } catch (e) {
+                        console.error(friendly);
+                      }
+                      setLocalError(friendly || "Signup failed");
                     }
                   } catch (err) {
-                    setLocalError(err.message || "Signup failed");
+                    const em = err?.message || "Signup failed";
+                    try {
+                      window.alert(String(em));
+                    } catch (e) {
+                      console.error(em);
+                    }
+                    setLocalError(em);
                   }
                 }}
                 disabled={loading}

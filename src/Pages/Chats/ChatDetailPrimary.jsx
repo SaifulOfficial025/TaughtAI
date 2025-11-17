@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -14,6 +14,7 @@ import {
 import { FaEdit, FaArrowLeft } from "react-icons/fa";
 import { CgProfile } from "react-icons/cg";
 import { FaMicrophoneLines } from "react-icons/fa6";
+import { FaPaperclip } from "react-icons/fa";
 import Owner from "../../../public/chatlogo.svg";
 
 function ChatDetail() {
@@ -24,6 +25,8 @@ function ChatDetail() {
 
   const [message, setMessage] = useState("");
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [attachments, setAttachments] = useState([]);
+  const fileInputRef = useRef(null);
 
   // Determine model_name from navigation state (fallback)
   const model_name = location.state?.model_name || "Academy_Scheme_of_work";
@@ -58,6 +61,17 @@ function ChatDetail() {
       );
     }
   }, [dispatch, chatId]);
+
+  const handleFileChange = (e) => {
+    const files = Array.from(e.target.files || []);
+    if (files.length === 0) return;
+    setAttachments((prev) => [...prev, ...files]);
+    e.target.value = null;
+  };
+
+  const handleRemoveAttachment = (index) => {
+    setAttachments((prev) => prev.filter((_, i) => i !== index));
+  };
 
   // Transform API data to component format
   const currentChat = chatHistory
@@ -369,6 +383,28 @@ function ChatDetail() {
         {/* Message input (sticky) */}
         <div className="border-t border-gray-200 bg-white/70 backdrop-blur-sm flex-shrink-0 relative z-10">
           <div className="p-4 sm:p-6">
+            {/* Attachment preview (if any) */}
+            {attachments && attachments.length > 0 && (
+              <div className="mb-3 flex flex-wrap gap-2">
+                {attachments.map((f, idx) => (
+                  <div
+                    key={`${f.name}-${idx}`}
+                    className="flex items-center gap-2 bg-white/90 border border-gray-200 rounded-full px-3 py-2 text-sm shadow-sm"
+                  >
+                    <span className="truncate max-w-xs">{f.name}</span>
+                    <button
+                      onClick={() => handleRemoveAttachment(idx)}
+                      type="button"
+                      className="ml-2 w-6 h-6 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center text-gray-700"
+                      aria-label={`Remove ${f.name}`}
+                    >
+                      ✕
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
+
             <form onSubmit={handleSendMessageAsync} className="flex gap-3">
               <div className="flex-1 relative">
                 <div className="absolute inset-0 bg-gradient-to-r from-gray-400/20 to-black/20 rounded-full blur-sm"></div>
@@ -376,14 +412,38 @@ function ChatDetail() {
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
                   placeholder="Type your message..."
-                  className="relative w-full h-12 sm:h-14 rounded-full bg-white/90 border border-gray-200 px-6 pr-14 text-gray-700 placeholder-gray-500 shadow-lg outline-none font-medium text-base backdrop-blur-sm"
+                  className="relative w-full h-12 sm:h-14 rounded-full bg-white/90 border border-gray-200 px-6 pr-32 text-gray-700 placeholder-gray-500 shadow-lg outline-none font-medium text-base backdrop-blur-sm"
                 />
-                <button
-                  type="button"
-                  className="absolute right-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-gradient-to-r from-gray-600 to-gray-800 hover:from-gray-500 hover:to-gray-700 flex items-center justify-center text-white shadow-lg transition-all transform hover:scale-105"
-                >
-                  <FaMicrophoneLines className="w-4 h-4" />
-                </button>
+
+                {/* Hidden file input */}
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  multiple
+                  accept=".pdf,.doc,.docx,.pptx"
+                  onChange={handleFileChange}
+                  className="hidden"
+                />
+
+                <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() =>
+                      fileInputRef.current && fileInputRef.current.click()
+                    }
+                    className="w-9 h-9 rounded-full bg-white/90 border border-gray-200 flex items-center justify-center text-gray-700 shadow-sm hover:shadow-md transition-colors"
+                    title="Attach files"
+                  >
+                    <FaPaperclip className="w-4 h-4" />
+                  </button>
+
+                  <button
+                    type="button"
+                    className="w-9 h-9 rounded-full bg-gradient-to-r from-gray-600 to-gray-800 hover:from-gray-500 hover:to-gray-700 flex items-center justify-center text-white shadow-lg transition-all transform hover:scale-105"
+                  >
+                    <FaMicrophoneLines className="w-4 h-4" />
+                  </button>
+                </div>
               </div>
               <button
                 type="submit"

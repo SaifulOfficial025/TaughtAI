@@ -80,7 +80,7 @@ function BlogDetails() {
 
   if (detailLoading) {
     return (
-      <section>
+      <section className="-mt-5">
         <Header />
         <div className="px-6 md:px-12 lg:px-20 py-12">
           <div className="max-w-6xl mx-auto">
@@ -96,7 +96,7 @@ function BlogDetails() {
 
   if (!post) {
     return (
-      <section>
+      <section className="-mt-5">
         <Header />
         <div className="px-6 md:px-12 lg:px-20 py-12">
           <div className="max-w-6xl mx-auto">
@@ -123,7 +123,7 @@ function BlogDetails() {
   const renderedHtml = extractBodyHtml(post.html);
 
   return (
-    <section>
+    <section className="-mt-5">
       <Header />
       <div className="px-6 md:px-12 lg:px-20 py-12 font-playfair">
         <div className="max-w-6xl mx-auto bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
@@ -208,7 +208,7 @@ function BlogDetails() {
                   <img
                     src={post.image}
                     alt={post.title}
-                    className="w-full h-64 object-cover rounded-lg"
+                    className="w-full  object-cover rounded-lg"
                   />
                 </div>
               )}

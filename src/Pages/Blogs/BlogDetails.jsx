@@ -13,6 +13,7 @@ import {
   editComment,
   deleteComment,
   updateCommentLike,
+  reactBlog,
 } from "../../Redux/Blogs";
 import { FaHeart } from "react-icons/fa";
 import { IoSend } from "react-icons/io5";
@@ -126,6 +127,7 @@ function BlogDetails() {
   const post = POSTS.find((p) => p.id === postId) || POSTS[0];
   const [liked, setLiked] = useState({});
   const [comment, setComment] = useState("");
+  const [loveCount, setLoveCount] = useState(0);
   const navigate = useNavigate();
 
   // Ensure the page is scrolled to top when visiting a blog details route
@@ -148,6 +150,30 @@ function BlogDetails() {
   const dispatch = useDispatch();
   const { user, accessToken } = useSelector((s) => s.auth || {});
   const { detail, detailLoading } = useSelector((s) => s.blogs || {});
+
+  // initialize liked state and love count for this post from API detail when available
+  useEffect(() => {
+    if (!detail && !post) return;
+    const idKey =
+      (detail && (detail.id || postId)) || (post && post.id) || postId;
+    try {
+      const raw = detail?.user_love_react ?? null;
+      const pressed =
+        raw !== null && (String(raw) === "1" || Number(raw) === 1);
+      setLiked((s) => ({ ...s, [idKey]: accessToken ? pressed : false }));
+    } catch (e) {
+      // ignore
+    }
+
+    // set initial love/react count
+    try {
+      const initialCount =
+        (detail && (detail.love_react || 0)) || (post && post.love_react) || 0;
+      setLoveCount(Number(initialCount) || 0);
+    } catch (e) {
+      setLoveCount(0);
+    }
+  }, [detail, accessToken, post, postId]);
 
   // map api detail into the small `post` object shape used by the UI
   function mapDetailToPost(d) {
@@ -619,13 +645,127 @@ function BlogDetails() {
               </div>
 
               <div className="flex items-center gap-3 text-gray-400">
-                <RiShareForwardLine className="h-5 w-5" />
+                <div className="flex items-center gap-4">
+                  {/* <span className="cursor-pointer hover:text-gray-700">
+                    {loveCount || 0} loves
+                  </span> */}
+                </div>
+
+                {/* <div>
+                  {liked[postData.id] ? (
+                    <button
+                      onClick={() => {
+                        if (!accessToken) {
+                          alert("You must be logged in to react or comment.");
+                          return;
+                        }
+                        // optimistic UI update: mark as unliked and decrement count
+                        setLiked((s) => ({ ...s, [postData.id]: false }));
+                        setLoveCount((c) => Math.max(0, (c || 0) - 1));
+                        // dispatch API call to unreact; rollback UI if it fails
+                        dispatch(
+                          reactBlog({ blog_id: postData.id, react_status: 0 })
+                        )
+                          .unwrap()
+                          .catch(() => {
+                            // revert optimistic change
+                            setLiked((s) => ({ ...s, [postData.id]: true }));
+                            setLoveCount((c) => (c || 0) + 1);
+                          });
+                      }}
+                      aria-label="unlike"
+                      className="focus:outline-none"
+                    >
+                      <FaHeart className="h-5 w-5 text-red-500" />
+                    </button>
+                  ) : (
+                    <button
+                      onClick={() => {
+                        if (!accessToken) {
+                          alert("You must be logged in to react or comment.");
+                          return;
+                        }
+                        // optimistic UI update: mark as liked and increment count
+                        setLiked((s) => ({ ...s, [postData.id]: true }));
+                        setLoveCount((c) => Number(c || 0) + 1);
+                        // dispatch API call to react; rollback UI if it fails
+                        dispatch(
+                          reactBlog({ blog_id: postData.id, react_status: 1 })
+                        )
+                          .unwrap()
+                          .catch(() => {
+                            // revert optimistic change
+                            setLiked((s) => ({ ...s, [postData.id]: false }));
+                            setLoveCount((c) => Math.max(0, (c || 0) - 1));
+                          });
+                      }}
+                      aria-label="like"
+                      className="focus:outline-none"
+                    >
+                      <CiHeart className="h-5 w-5 text-gray-400 hover:text-red-400" />
+                    </button>
+                  )}
+                </div> */}
+
+                <button
+                  onClick={() => {
+                    try {
+                      const url = `${window.location.origin}/blogs/${postData.id}`;
+                      if (
+                        navigator.clipboard &&
+                        navigator.clipboard.writeText
+                      ) {
+                        navigator.clipboard
+                          .writeText(url)
+                          .then(() => alert("Post URL copied to clipboard"))
+                          .catch(() => {
+                            // fallback
+                            const ta = document.createElement("textarea");
+                            ta.value = url;
+                            document.body.appendChild(ta);
+                            ta.select();
+                            try {
+                              document.execCommand("copy");
+                              alert("Post URL copied to clipboard");
+                            } catch (e) {
+                              alert(
+                                "Unable to copy link. Please copy manually: " +
+                                  url
+                              );
+                            }
+                            document.body.removeChild(ta);
+                          });
+                      } else {
+                        const ta = document.createElement("textarea");
+                        ta.value = url;
+                        document.body.appendChild(ta);
+                        ta.select();
+                        try {
+                          document.execCommand("copy");
+                          alert("Post URL copied to clipboard");
+                        } catch (e) {
+                          alert(
+                            "Unable to copy link. Please copy manually: " + url
+                          );
+                        }
+                        document.body.removeChild(ta);
+                      }
+                    } catch (err) {
+                      console.error("Share failed", err);
+                      alert("Unable to copy link");
+                    }
+                  }}
+                  aria-label="share"
+                  className="p-1 rounded-md hover:bg-gray-100"
+                >
+                  <RiShareForwardLine className="h-5 w-5" />
+                </button>
               </div>
             </div>
 
             <div className="mt-6 mb-6 p-4 ">
               {postData.image && (
-                <div className="w-full h-56 overflow-hidden">
+                <div className="w-full overflow-hidden">
                   <img
                     src={postData.image}
                     alt={postData.title}

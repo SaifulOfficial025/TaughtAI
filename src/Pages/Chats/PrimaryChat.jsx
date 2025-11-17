@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllChats, createChat } from "../../Redux/Chatbot";
@@ -14,6 +14,8 @@ function PrimaryChat() {
 
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [message, setMessage] = useState("");
+  const [attachments, setAttachments] = useState([]);
+  const fileInputRef = useRef(null);
 
   // Policy confirmation state: user must type "yes" to enable the main chat input
   const [policyInput, setPolicyInput] = useState("");
@@ -384,6 +386,25 @@ function PrimaryChat() {
               <div className="relative bg-white/90 backdrop-blur-lg rounded-2xl p-2 shadow-2xl border border-gray-200">
                 <div className="flex items-center gap-3">
                   <input
+                    ref={fileInputRef}
+                    type="file"
+                    accept=".pdf,.doc,.docx,.pptx"
+                    multiple
+                    className="hidden"
+                    onChange={(e) => {
+                      const files = e.target.files
+                        ? Array.from(e.target.files)
+                        : [];
+                      if (!files.length) return;
+                      setAttachments((prev) => [...prev, ...files]);
+                      try {
+                        e.target.value = null;
+                      } catch (err) {}
+                    }}
+                    disabled={!policyAccepted}
+                  />
+
+                  <input
                     value={message}
                     onChange={(e) => setMessage(e.target.value)}
                     onKeyPress={handleKeyPress}
@@ -393,9 +414,36 @@ function PrimaryChat() {
                     }`}
                     disabled={!policyAccepted}
                   />
+
+                  <button
+                    type="button"
+                    onClick={() =>
+                      fileInputRef.current && fileInputRef.current.click()
+                    }
+                    disabled={!policyAccepted}
+                    className="p-3 sm:p-4 rounded-xl bg-gradient-to-r from-gray-600 to-gray-800 hover:from-gray-500 hover:to-gray-700 text-white shadow-lg hover:shadow-xl transition-all transform hover:scale-105"
+                    title="Upload (pdf, doc, pptx)"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      className="w-5 h-5"
+                      fill="none"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M21.44 11.05l-9.19 9.2a5 5 0 01-7.07-7.07l8.49-8.49a3.5 3.5 0 014.95 4.95l-7.07 7.07a2 2 0 01-2.83-2.83l6.36-6.36"
+                      />
+                    </svg>
+                  </button>
+
                   <button className="p-3 sm:p-4 rounded-xl bg-gradient-to-r from-gray-600 to-gray-800 hover:from-gray-500 hover:to-gray-700 text-white shadow-lg hover:shadow-xl transition-all transform hover:scale-105">
                     <FaMicrophoneLines className="w-5 h-5" />
                   </button>
+
                   <button
                     onClick={handleSendMessage}
                     disabled={
@@ -410,10 +458,47 @@ function PrimaryChat() {
                     {createLoading ? "Sending..." : "Send"}
                   </button>
                 </div>
+
+                {attachments && attachments.length > 0 && (
+                  <div className="mt-2 flex flex-col gap-2">
+                    {attachments.map((f, idx) => (
+                      <div
+                        key={`${f.name}-${idx}`}
+                        className="flex items-center justify-between text-sm text-gray-600 bg-white/60 rounded-md px-3 py-1 max-w-full"
+                      >
+                        <div className="truncate mr-3">{f.name}</div>
+                        <button
+                          type="button"
+                          onClick={() =>
+                            setAttachments((prev) =>
+                              prev.filter((_, i) => i !== idx)
+                            )
+                          }
+                          className="ml-2 text-gray-500 hover:text-gray-700"
+                          aria-label={`Remove ${f.name}`}
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="w-4 h-4"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth="2"
+                              d="M6 18L18 6M6 6l12 12"
+                            />
+                          </svg>
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
             </div>
-
-            {/* Quick action buttons */}
+            {/* Quick action buttons
             <div className="flex flex-wrap justify-center gap-3 mt-6">
               <button className="px-4 py-2 bg-white/70 backdrop-blur-sm rounded-full text-sm font-medium text-gray-700 hover:bg-white/90 transition-all border border-gray-200 shadow-lg">
                 📝 Create Lesson Plan
@@ -424,7 +509,7 @@ function PrimaryChat() {
               <button className="px-4 py-2 bg-white/70 backdrop-blur-sm rounded-full text-sm font-medium text-gray-700 hover:bg-white/90 transition-all border border-gray-200 shadow-lg">
                 🎯 Differentiation Help
               </button>
-            </div>
+            </div> */}
           </div>
         </div>
       </main>
