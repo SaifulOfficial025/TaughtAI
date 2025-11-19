@@ -14,7 +14,7 @@ function SignIn() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const ALLOWED_EMAIL = "afridi.cse5.bu@gmail.com";
+  const ALLOWED_EMAIL = "ben@taughtai.co.uk";
 
   return (
     <div className="min-h-screen w-full">
