@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import {
   getChatHistory,
   continueConversation,
@@ -27,9 +29,12 @@ function ChatDetail() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [attachments, setAttachments] = useState([]);
   const fileInputRef = useRef(null);
+  const [localMessages, setLocalMessages] = useState([]);
+  const messagesContainerRef = useRef(null);
+  const messagesEndRef = useRef(null);
 
   // Determine model_name from navigation state (fallback)
-  const model_name = location.state?.model_name || "Academy_Scheme_of_work";
+  const model_name = location.state?.model_name || "Academy_sow";
 
   // Chat list for sidebar (other chats)
   const chatList = useSelector((state) => selectChatList(state, model_name));
@@ -60,12 +65,13 @@ function ChatDetail() {
         getChatHistory({ chat_id: chatId, user_message: "Hi", model_name })
       );
     }
-  }, [dispatch, chatId]);
+  }, [dispatch, chatId, model_name]);
 
   const handleFileChange = (e) => {
     const files = Array.from(e.target.files || []);
     if (files.length === 0) return;
     setAttachments((prev) => [...prev, ...files]);
+    // reset so the same file can be picked again if needed
     e.target.value = null;
   };
 
@@ -73,39 +79,69 @@ function ChatDetail() {
     setAttachments((prev) => prev.filter((_, i) => i !== index));
   };
 
-  // Transform API data to component format
-  const currentChat = chatHistory
-    ? {
-        title: chatHistory.title || "Chat",
-        messages:
-          chatHistory.messages?.map((msg) => ({
-            id: msg.id,
-            type: msg.role === "User" ? "user" : "ai",
-            content: msg.message,
-            timestamp: new Date(msg.timestamp_child).toLocaleTimeString([], {
-              hour: "2-digit",
-              minute: "2-digit",
-            }),
-          })) || [],
-      }
-    : {
-        title: historyLoading ? "Loading..." : "Chat not found",
-        messages: [],
-      };
+  // Transform API data to component format and keep a local message buffer
+  const chatTitle =
+    chatHistory?.title || (historyLoading ? "Loading..." : "Chat not found");
 
-  const handleSendMessage = (e) => {
-    e.preventDefault();
-    if (message.trim()) {
-      // In a real app, this would send the message to the AI
-      console.log("Sending message:", message);
-      setMessage("");
+  // Sync server messages into localMessages whenever chatHistory updates
+  useEffect(() => {
+    const serverMsgs = chatHistory?.messages || [];
+    if (serverMsgs && serverMsgs.length > 0) {
+      const mapped = serverMsgs.map((msg) => {
+        const role = (msg.role || "").toString().toLowerCase();
+        return {
+          id: msg.id,
+          type: role === "user" ? "user" : "ai",
+          content: msg.message,
+          timestamp: new Date(msg.timestamp_child).toLocaleTimeString([], {
+            hour: "2-digit",
+            minute: "2-digit",
+          }),
+        };
+      });
+      setLocalMessages(mapped);
+    } else if (!historyLoading) {
+      // If there are no server messages and we're not loading, clear local buffer
+      setLocalMessages([]);
     }
-  };
+  }, [chatHistory, historyLoading]);
 
-  const handleSendMessageAsync = async (e) => {
+  // Auto-scroll to bottom whenever localMessages change (new message appended)
+  useEffect(() => {
+    if (messagesEndRef.current) {
+      try {
+        messagesEndRef.current.scrollIntoView({
+          behavior: "smooth",
+          block: "end",
+        });
+      } catch (e) {
+        // fallback: set container scrollTop
+        if (messagesContainerRef.current) {
+          messagesContainerRef.current.scrollTop =
+            messagesContainerRef.current.scrollHeight;
+        }
+      }
+    }
+  }, [localMessages, historyLoading]);
+
+  const handleSendMessage = async (e) => {
     e.preventDefault();
     const text = (message || "").trim();
     if (!text) return;
+
+    // Optimistically append user's message to local buffer so UI feels immediate
+    const tempId = `local-${Date.now()}`;
+    const userMsg = {
+      id: tempId,
+      type: "user",
+      content: text,
+      timestamp: new Date().toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit",
+      }),
+    };
+    setLocalMessages((prev) => [...prev, userMsg]);
+    setMessage("");
 
     try {
       const resultAction = await dispatch(
@@ -117,7 +153,25 @@ function ChatDetail() {
       );
 
       if (continueConversation.fulfilled.match(resultAction)) {
-        setMessage("");
+        // If the thunk returned updated messages in payload, sync them.
+        const payload = resultAction.payload || {};
+        const returnedMessages =
+          payload.messages || payload.chat?.messages || null;
+        if (returnedMessages && Array.isArray(returnedMessages)) {
+          const mapped = returnedMessages.map((msg) => {
+            const role = (msg.role || "").toString().toLowerCase();
+            return {
+              id: msg.id,
+              type: role === "user" ? "user" : "ai",
+              content: msg.message,
+              timestamp: new Date(msg.timestamp_child).toLocaleTimeString([], {
+                hour: "2-digit",
+                minute: "2-digit",
+              }),
+            };
+          });
+          setLocalMessages(mapped);
+        }
       } else {
         console.error(
           "Failed to continue conversation:",
@@ -136,9 +190,7 @@ function ChatDetail() {
         <div>
           <div className="px-4 sm:px-6 py-6 sm:py-8 mt-8">
             <button
-              onClick={() =>
-                navigate("/taught_ai_primary", { state: { model_name } })
-              }
+              onClick={() => navigate("/chats", { state: { model_name } })}
               className="flex items-center gap-3 text-white font-semibold bg-gradient-to-r from-gray-700 to-gray-800 hover:from-gray-600 hover:to-gray-700 rounded-xl px-4 py-3 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105 border border-gray-600 mb-4"
             >
               <FaArrowLeft className="w-4 h-4" />
@@ -326,7 +378,7 @@ function ChatDetail() {
             </div>
             <div>
               <h1 className="text-lg sm:text-xl font-bold bg-gradient-to-r from-gray-700 via-black to-gray-600 bg-clip-text text-transparent">
-                {currentChat.title}
+                {chatTitle}
               </h1>
               <div className="text-sm text-gray-600 flex items-center gap-1">
                 By Ben Duggan{" "}
@@ -340,39 +392,118 @@ function ChatDetail() {
         </div>
 
         {/* Messages */}
-        <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-4 relative z-10">
-          {historyLoading ? (
+        <div
+          ref={messagesContainerRef}
+          className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-4 relative z-10"
+        >
+          {localMessages.length === 0 && historyLoading ? (
             <div className="flex justify-center items-center h-32">
               <div className="text-gray-500">Loading chat history...</div>
             </div>
-          ) : currentChat.messages.length > 0 ? (
-            currentChat.messages.map((msg) => (
-              <div
-                key={msg.id}
-                className={`flex ${
-                  msg.type === "user" ? "justify-end" : "justify-start"
-                }`}
-              >
+          ) : localMessages.length > 0 ? (
+            <>
+              {localMessages.map((msg) => (
                 <div
-                  className={`max-w-3xl rounded-2xl p-4 sm:p-5 shadow-lg ${
-                    msg.type === "user"
-                      ? "bg-gradient-to-r from-gray-800 to-black text-white border border-gray-700"
-                      : "bg-white/80 text-gray-800 border border-gray-200 backdrop-blur-sm"
+                  key={msg.id}
+                  className={`flex ${
+                    msg.type === "user" ? "justify-end" : "justify-start"
                   }`}
                 >
-                  <div className="whitespace-pre-wrap text-sm sm:text-base leading-relaxed">
-                    {msg.content}
-                  </div>
                   <div
-                    className={`text-xs mt-3 ${
-                      msg.type === "user" ? "text-gray-300" : "text-gray-500"
-                    } font-medium`}
+                    className={`max-w-3xl rounded-2xl p-4 sm:p-5 shadow-lg ${
+                      msg.type === "user"
+                        ? "bg-blue-100 text-gray-800 border border-blue-200"
+                        : "bg-white/80 text-gray-800 border border-gray-200 backdrop-blur-sm"
+                    }`}
                   >
-                    {msg.timestamp}
+                    <div className="markdown-content text-sm sm:text-base leading-relaxed">
+                      {msg.type === "user" ? (
+                        <div className="whitespace-pre-wrap">{msg.content}</div>
+                      ) : (
+                        <ReactMarkdown
+                          remarkPlugins={[remarkGfm]}
+                          components={{
+                            table: ({ node, ...props }) => (
+                              <div className="overflow-x-auto my-4">
+                                <table
+                                  className="min-w-full border-collapse border border-gray-300"
+                                  {...props}
+                                />
+                              </div>
+                            ),
+                            thead: ({ node, ...props }) => (
+                              <thead className="bg-gray-100" {...props} />
+                            ),
+                            th: ({ node, ...props }) => (
+                              <th
+                                className="border border-gray-300 px-4 py-2 text-left font-semibold text-gray-700"
+                                {...props}
+                              />
+                            ),
+                            td: ({ node, ...props }) => (
+                              <td
+                                className="border border-gray-300 px-4 py-2"
+                                {...props}
+                              />
+                            ),
+                            tr: ({ node, ...props }) => (
+                              <tr className="hover:bg-gray-50" {...props} />
+                            ),
+                            strong: ({ node, ...props }) => (
+                              <strong
+                                className="font-bold text-gray-900"
+                                {...props}
+                              />
+                            ),
+                            p: ({ node, ...props }) => (
+                              <p className="mb-2" {...props} />
+                            ),
+                            ul: ({ node, ...props }) => (
+                              <ul
+                                className="list-disc list-inside mb-2"
+                                {...props}
+                              />
+                            ),
+                            ol: ({ node, ...props }) => (
+                              <ol
+                                className="list-decimal list-inside mb-2"
+                                {...props}
+                              />
+                            ),
+                            li: ({ node, ...props }) => (
+                              <li className="mb-1" {...props} />
+                            ),
+                            code: ({ node, inline, ...props }) =>
+                              inline ? (
+                                <code
+                                  className="bg-gray-100 px-1.5 py-0.5 rounded text-sm font-mono"
+                                  {...props}
+                                />
+                              ) : (
+                                <code
+                                  className="block bg-gray-100 p-3 rounded-lg text-sm font-mono overflow-x-auto my-2"
+                                  {...props}
+                                />
+                              ),
+                          }}
+                        >
+                          {msg.content}
+                        </ReactMarkdown>
+                      )}
+                    </div>
+                    <div
+                      className={`text-xs mt-3 ${
+                        msg.type === "user" ? "text-gray-600" : "text-gray-500"
+                      } font-medium`}
+                    >
+                      {msg.timestamp}
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))
+              ))}
+              {/* sentinel element to scroll into view */}
+              <div ref={messagesEndRef} />
+            </>
           ) : (
             <div className="flex justify-center items-center h-32">
               <div className="text-gray-500">No messages in this chat yet.</div>
@@ -405,7 +536,7 @@ function ChatDetail() {
               </div>
             )}
 
-            <form onSubmit={handleSendMessageAsync} className="flex gap-3">
+            <form onSubmit={handleSendMessage} className="flex gap-3">
               <div className="flex-1 relative">
                 <div className="absolute inset-0 bg-gradient-to-r from-gray-400/20 to-black/20 rounded-full blur-sm"></div>
                 <input

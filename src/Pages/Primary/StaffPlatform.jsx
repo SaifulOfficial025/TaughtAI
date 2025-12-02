@@ -7,7 +7,7 @@ import Footer from "../../Shared/Footer";
 const tools = [
   {
     title: "Scheme of work GPT",
-    model_name: "Primary_Scheme_of_work",
+    model_name: "primary_sow",
     short:
       "Designs inclusive, Ofsted-aligned schemes of work—structured by week, with clear objectives, assessment points, and delivery strategies.",
     bullets: [
@@ -18,7 +18,7 @@ const tools = [
   },
   {
     title: "Lesson Generator",
-    model_name: "Lesson_Generator",
+    model_name: "primary_lesson",
     short:
       "Generates fully structured, Ofsted-aligned lesson plans tailored to your subject, pupil needs, and curriculum goals.",
     bullets: [
@@ -29,7 +29,7 @@ const tools = [
   },
   {
     title: "Resource Generator",
-    model_name: "Primary_Resource_Generator",
+    model_name: "primary_resource",
     short:
       "Creates engaging, curriculum-linked worksheets, activities, and tasks tailored to your class’s needs, interests, and learning levels.",
     bullets: [
@@ -40,7 +40,7 @@ const tools = [
   },
   {
     title: "Behaviour and Classroom Strategies",
-    model_name: "Primary_Behaviour_and_Classroom_Strategies",
+    model_name: "primary_behaviour",
     short:
       "Helps staff draft professional, trauma-informed emails and structure supportive conversations with parents and external professionals—aligned with safeguarding, SEND, and inclusion policies.",
     bullets: [
@@ -52,7 +52,7 @@ const tools = [
   },
   {
     title: "Strategic Leadership Assistant",
-    model_name: "Strategic_Leadership_Assistant",
+    model_name: "primary_Communication",
     short:
       "Provides instant access to researched strategies for behaviour, learning needs, and classroom challenges—tailored to your school context.",
     bullets: [
@@ -63,7 +63,7 @@ const tools = [
   },
   {
     title: "Heads and SLT Assistant",
-    model_name: "Primary_Heads_and_SLT_Assistant",
+    model_name: "primary_head",
     short:
       "Supports senior leaders by generating evidence-informed summaries, policies, improvement actions, and inspection prep—aligned with school values, Ofsted expectations, and national guidance.",
     bullets: [

@@ -33,7 +33,7 @@ function AcademyChat() {
   const [policyMessage, setPolicyMessage] = useState("");
 
   // Get model_name from navigation state
-  const model_name = location.state?.model_name || "Academy_Scheme_of_work";
+  const model_name = location.state?.model_name || "Academy_sow";
 
   // Redux selectors
   const chats = useSelector((state) => selectChatList(state, model_name));
