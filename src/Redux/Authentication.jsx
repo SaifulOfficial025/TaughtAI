@@ -197,7 +197,7 @@ export const updateProfile = createAsyncThunk(
       console.debug("updateProfile: headers:", headers);
 
       const res = await fetch(`${BASE_URL}/authenticationAPP/update_profile/`, {
-        method: "PATCH",
+        method: "PUT",
         headers,
         body: formData,
       });
@@ -207,16 +207,15 @@ export const updateProfile = createAsyncThunk(
         return rejectWithValue(data || { message: "Profile update failed" });
       }
 
-      // If API returns updated profile_data, persist it; otherwise merge using payload
-      const updatedProfile = data.profile_data
-        ? data.profile_data
-        : {
-            ...(JSON.parse(localStorage.getItem("profile_data")) || {}),
-            full_name: payload.full_name || undefined,
-            first_name: payload.first_name || undefined,
-            last_name: payload.last_name || undefined,
-            phone_number: payload.phone_number || undefined,
-          };
+      // API returns: { message, email, first_name, last_name, full_name, phone_number, image }
+      const updatedProfile = {
+        email: data.email,
+        first_name: data.first_name,
+        last_name: data.last_name,
+        full_name: data.full_name,
+        phone_number: data.phone_number,
+        image: data.image,
+      };
 
       localStorage.setItem("profile_data", JSON.stringify(updatedProfile));
 
@@ -263,10 +262,20 @@ export const getProfileData = createAsyncThunk(
         return rejectWithValue(data || { message: "Failed to fetch profile" });
       }
 
-      // persist profile_data
-      localStorage.setItem("profile_data", JSON.stringify(data));
+      // API returns: { email, full_name, first_name, last_name, phone_number, image }
+      const profileData = {
+        email: data.email,
+        full_name: data.full_name,
+        first_name: data.first_name,
+        last_name: data.last_name,
+        phone_number: data.phone_number,
+        image: data.image,
+      };
 
-      return data;
+      // persist profile_data
+      localStorage.setItem("profile_data", JSON.stringify(profileData));
+
+      return profileData;
     } catch (err) {
       return rejectWithValue({ message: err.message || "Network error" });
     }

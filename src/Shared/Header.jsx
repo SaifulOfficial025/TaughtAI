@@ -104,13 +104,21 @@ function Header() {
               <div className="relative" ref={dropdownRef}>
                 <button
                   onClick={() => setUserDropdownOpen(!userDropdownOpen)}
-                  className="flex items-center gap-2 px-4 py-2 rounded-full bg-gray-100 hover:bg-gray-200 transition-colors"
+                  className="flex items-center gap-3 px-4 py-2 rounded-full bg-gray-100 hover:bg-gray-200 transition-colors"
                 >
-                  <div className="w-8 h-8 bg-gray-800 text-white rounded-full flex items-center justify-center text-sm font-semibold">
-                    {user.full_name
-                      ? user.full_name.charAt(0).toUpperCase()
-                      : user.email?.charAt(0).toUpperCase() || "U"}
-                  </div>
+                  {user.image ? (
+                    <img
+                      src={user.image}
+                      alt={user.full_name || user.email}
+                      className="w-8 h-8 rounded-full object-cover"
+                    />
+                  ) : (
+                    <div className="w-8 h-8 bg-gray-800 text-white rounded-full flex items-center justify-center text-sm font-semibold">
+                      {user.full_name
+                        ? user.full_name.charAt(0).toUpperCase()
+                        : user.email?.charAt(0).toUpperCase() || "U"}
+                    </div>
+                  )}
                   <span className="text-sm font-medium">
                     {user.full_name || user.email}
                   </span>

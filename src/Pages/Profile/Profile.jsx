@@ -4,6 +4,8 @@ import Header from "../../Shared/Header";
 import Footer from "../../Shared/Footer";
 import { FaEdit } from "react-icons/fa";
 import { useSelector, useDispatch } from "react-redux";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import {
   updateProfile,
   clearSuccess,
@@ -93,7 +95,9 @@ function Profile() {
 
       const resultAction = await dispatch(updateProfile(payload));
       if (resultAction?.meta?.requestStatus === "fulfilled") {
-        alert(resultAction.payload?.message || "Profile updated");
+        toast.success(
+          resultAction.payload?.message || "Profile updated successfully"
+        );
         dispatch(clearSuccess());
         setEditing(false);
         // cleanup local image preview
@@ -108,6 +112,7 @@ function Profile() {
           resultAction?.error?.message ||
           "Update failed";
         setLocalError(errMsg);
+        toast.error(errMsg);
       }
     } catch (err) {
       setLocalError(err.message || "Update failed");
@@ -191,6 +196,7 @@ function Profile() {
 
   return (
     <section>
+      <ToastContainer position="top-right" autoClose={3000} />
       <Header />
       <div className="min-h-screen bg-white px-8 py-10">
         <div className="max-w-6xl mx-auto">

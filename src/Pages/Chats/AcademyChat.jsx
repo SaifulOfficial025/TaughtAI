@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -9,6 +9,7 @@ import {
   selectCreateChatLoading,
 } from "../../Redux/Chatbot";
 import Owner from "../../../public/chatlogo.svg";
+import { AuthContext } from "../../Context/AuthContext.jsx";
 import { FaEdit } from "react-icons/fa";
 import { CgProfile } from "react-icons/cg";
 import { FaMicrophoneLines } from "react-icons/fa6";
@@ -17,6 +18,52 @@ function AcademyChat() {
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useDispatch();
+  // Defensive: AuthContext may be undefined if the provider is not mounted.
+  // Use a safe fallback so the UI doesn't crash in development or tests.
+  const _authCtx = useContext(AuthContext) || {};
+  const user = _authCtx.user || null;
+
+  // Resolve a display name by checking several possible storage locations.
+  const resolveFullName = () => {
+    if (user && user.full_name && user.full_name.trim()) return user.full_name;
+
+    const safeParse = (s) => {
+      try {
+        return JSON.parse(s || "null");
+      } catch (e) {
+        return null;
+      }
+    };
+
+    const pd =
+      safeParse(localStorage.getItem("profile_data")) ||
+      safeParse(sessionStorage.getItem("profile_data"));
+    if (pd) {
+      if (pd.full_name && pd.full_name.trim()) return pd.full_name;
+      if (pd.user && pd.user.full_name && pd.user.full_name.trim())
+        return pd.user.full_name;
+    }
+
+    const storedUser =
+      safeParse(localStorage.getItem("user")) ||
+      safeParse(sessionStorage.getItem("user"));
+    if (storedUser) {
+      if (storedUser.full_name && storedUser.full_name.trim())
+        return storedUser.full_name;
+      if (storedUser.first_name || storedUser.last_name) {
+        return `${storedUser.first_name || ""} ${
+          storedUser.last_name || ""
+        }`.trim();
+      }
+    }
+
+    if (user && user.username) return user.username;
+
+    return null;
+  };
+
+  const displayFullName = resolveFullName();
+  const displayInitial = (displayFullName && displayFullName.charAt(0)) || "B";
 
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [message, setMessage] = useState("");
@@ -158,10 +205,12 @@ function AcademyChat() {
         <div className="px-4 sm:px-6 py-6 border-t border-gray-600/30">
           <div className="flex items-center gap-3 bg-white/10 rounded-xl p-3 backdrop-blur-sm border border-gray-600/30">
             <div className="w-12 h-12 rounded-full bg-gradient-to-r from-gray-600 to-black flex items-center justify-center text-white font-bold text-lg shadow-lg">
-              B
+              {displayInitial}
             </div>
             <div>
-              <div className="text-white font-semibold">Ben Duggan</div>
+              <div className="text-white font-semibold">
+                {displayFullName || "Ben Duggan"}
+              </div>
               <div className="text-gray-300 text-xs flex items-center gap-1">
                 <span className="w-2 h-2 bg-white rounded-full"></span>
                 Educator Pro
@@ -233,11 +282,11 @@ function AcademyChat() {
             <div className="px-4 py-4 border-t border-gray-600/30">
               <div className="flex items-center gap-3 bg-white/10 rounded-lg p-3 border border-gray-600/30">
                 <div className="w-10 h-10 rounded-full bg-gradient-to-r from-gray-600 to-black flex items-center justify-center text-white font-bold">
-                  B
+                  {displayInitial}
                 </div>
                 <div>
                   <div className="text-white font-semibold text-sm">
-                    Ben Duggan
+                    {displayFullName || "Ben Duggan"}
                   </div>
                   <div className="text-gray-300 text-xs">Educator Pro</div>
                 </div>
@@ -304,7 +353,9 @@ function AcademyChat() {
                 🎓 Taught AI Academy {location.state?.title}
               </h1>
               <div className="flex items-center justify-center gap-2 text-gray-700 mb-3">
-                <span className="font-semibold">By Ben Duggan</span>
+                <span className="font-semibold">
+                  By {displayFullName || "Ben Duggan"}
+                </span>
                 <CgProfile className="w-5 h-5" />
                 <span className="px-2 py-1 bg-gray-100 text-gray-700 rounded-full text-sm font-medium border border-gray-200">
                   Verified Educator

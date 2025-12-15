@@ -127,20 +127,33 @@ export const createChat = createAsyncThunk(
 // Async thunk for continuing a conversation (sending a single user message)
 export const continueConversation = createAsyncThunk(
   "chatbot/continueConversation",
-  async ({ chat_id, user_message = "", model_name }, { rejectWithValue }) => {
+  async (
+    { chat_id, user_message = "", model_name, uploaded_files = [] },
+    { rejectWithValue }
+  ) => {
     try {
       const token = getAuthToken();
+
+      // Create FormData for multipart/form-data submission
+      const formData = new FormData();
+      formData.append("chat_id", String(chat_id));
+      formData.append("user_message", user_message);
+      formData.append("model_name", model_name);
+
+      // Append multiple files if provided
+      if (uploaded_files && uploaded_files.length > 0) {
+        uploaded_files.forEach((file) => {
+          formData.append("uploaded_file", file);
+        });
+      }
+
       const response = await fetch(`${BASE_URL}/chatbot/conversation/`, {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
+          // Don't set Content-Type - browser will set it with boundary for FormData
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({
-          chat_id: String(chat_id),
-          user_message,
-          model_name,
-        }),
+        body: formData,
       });
 
       if (!response.ok) {

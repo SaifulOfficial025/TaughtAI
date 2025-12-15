@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
 import SignupBackground from "../../../public/authenticationbg.svg";
 import Logo from "../../../public/logowhite.svg";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { login, clearError, clearSuccess } from "../../Redux/Authentication";
 function SignIn() {
@@ -12,6 +12,7 @@ function SignIn() {
   const [localError, setLocalError] = useState(null);
 
   const navigate = useNavigate();
+  const location = useLocation();
   const dispatch = useDispatch();
   const { loading, error, successMessage } = useSelector((s) => s.auth || {});
 
@@ -32,8 +33,9 @@ function SignIn() {
 
       const resultAction = await dispatch(login(payload));
       if (resultAction?.meta?.requestStatus === "fulfilled") {
-        // Navigate to dashboard or home page after successful login
-        navigate("/");
+        // After successful login, return to the original page, if provided
+        const from = location.state?.from || "/";
+        navigate(from);
         dispatch(clearSuccess());
       } else {
         const errMsg =

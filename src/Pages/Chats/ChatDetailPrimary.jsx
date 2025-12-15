@@ -149,6 +149,7 @@ function ChatDetail() {
           chat_id: chatId,
           user_message: text,
           model_name,
+          uploaded_files: attachments,
         })
       );
 
@@ -172,6 +173,8 @@ function ChatDetail() {
           });
           setLocalMessages(mapped);
         }
+        // Clear attachments after successful send
+        setAttachments([]);
       } else {
         console.error(
           "Failed to continue conversation:",

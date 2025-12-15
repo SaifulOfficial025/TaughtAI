@@ -1,4 +1,4 @@
-import { createBrowserRouter, Navigate } from "react-router-dom";
+import { createBrowserRouter, Navigate, useLocation } from "react-router-dom";
 import Home from "../Pages/Home/Home";
 import About from "../Pages/About/RootPage";
 import Service from "../Pages/Services/Rootpage";
@@ -36,30 +36,68 @@ import AdminLogin from "../Pages/Admin/SignIn";
 import AdminChangePassword from "../Pages/Admin/ChangePassword";
 import ChatDetailsforPrimary from "../Pages/Chats/ChatDetailPrimary";
 
-// simple guard: ensure access_token and role=admin exist in localStorage
-function requireAdmin(element) {
+// Protected Route Component - checks auth at render time
+function ProtectedRoute({ children }) {
+  const location = useLocation();
+
+  const token =
+    localStorage.getItem("access_token") ||
+    localStorage.getItem("accessToken") ||
+    sessionStorage.getItem("access_token") ||
+    sessionStorage.getItem("accessToken");
+
   try {
-    const token =
-      localStorage.getItem("access_token") ||
-      localStorage.getItem("accessToken");
-    const role = localStorage.getItem("role");
-    // Debugging: log guard checks so we can see when a route check occurs
-    // (remove or silence this in production)
+    // eslint-disable-next-line no-console
+    console.debug(
+      "ProtectedRoute check -> token:",
+      token ? "exists" : "missing"
+    );
+  } catch (e) {}
+
+  if (!token) {
     try {
       // eslint-disable-next-line no-console
-      console.debug("requireAdmin check -> token:", token, "role:", role);
+      console.debug("ProtectedRoute -> redirecting to /signin");
     } catch (e) {}
-    if (!token || role !== "admin") {
-      try {
-        // eslint-disable-next-line no-console
-        console.debug("requireAdmin -> redirecting to /admin/login");
-      } catch (e) {}
-      return <Navigate to="/admin/login" replace />;
-    }
-    return element;
-  } catch (e) {
+    return (
+      <Navigate
+        to="/signin"
+        replace
+        state={{ from: location.pathname + location.search }}
+      />
+    );
+  }
+
+  return children;
+}
+
+// Admin Route Component
+function AdminRoute({ children }) {
+  const location = useLocation();
+
+  const token =
+    localStorage.getItem("access_token") || localStorage.getItem("accessToken");
+  const role = localStorage.getItem("role");
+
+  try {
+    // eslint-disable-next-line no-console
+    console.debug(
+      "AdminRoute check -> token:",
+      token ? "exists" : "missing",
+      "role:",
+      role
+    );
+  } catch (e) {}
+
+  if (!token || role !== "admin") {
+    try {
+      // eslint-disable-next-line no-console
+      console.debug("AdminRoute -> redirecting to /admin/login");
+    } catch (e) {}
     return <Navigate to="/admin/login" replace />;
   }
+
+  return children;
 }
 
 export const router = createBrowserRouter([
@@ -113,7 +151,11 @@ export const router = createBrowserRouter([
   },
   {
     path: "/taught_ai_academy",
-    element: <AcademyChat />,
+    element: (
+      <ProtectedRoute>
+        <AcademyChat />
+      </ProtectedRoute>
+    ),
   },
   {
     path: "/chats",
@@ -129,7 +171,11 @@ export const router = createBrowserRouter([
   },
   {
     path: "/taught_ai_primary",
-    element: <PrimaryChat />,
+    element: (
+      <ProtectedRoute>
+        <PrimaryChat />
+      </ProtectedRoute>
+    ),
   },
   {
     path: "/profile",
@@ -173,19 +219,35 @@ export const router = createBrowserRouter([
   },
   {
     path: "/admin/bloglist",
-    element: requireAdmin(<BlogList />),
+    element: (
+      <AdminRoute>
+        <BlogList />
+      </AdminRoute>
+    ),
   },
   {
     path: "/admin/blogdetails/:id",
-    element: requireAdmin(<AdminBlogDetails />),
+    element: (
+      <AdminRoute>
+        <AdminBlogDetails />
+      </AdminRoute>
+    ),
   },
   {
     path: "/admin/addnewblog",
-    element: requireAdmin(<AddNewBlog />),
+    element: (
+      <AdminRoute>
+        <AddNewBlog />
+      </AdminRoute>
+    ),
   },
   {
     path: "/admin/editblog/:id",
-    element: requireAdmin(<EditBlog />),
+    element: (
+      <AdminRoute>
+        <EditBlog />
+      </AdminRoute>
+    ),
   },
   {
     path: "/admin/login",
@@ -193,6 +255,10 @@ export const router = createBrowserRouter([
   },
   {
     path: "/admin/changepassword",
-    element: requireAdmin(<AdminChangePassword />),
+    element: (
+      <AdminRoute>
+        <AdminChangePassword />
+      </AdminRoute>
+    ),
   },
 ]);
