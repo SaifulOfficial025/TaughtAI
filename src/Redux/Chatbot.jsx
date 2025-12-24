@@ -88,20 +88,33 @@ export const getChatHistory = createAsyncThunk(
 // Async thunk for creating a new chat
 export const createChat = createAsyncThunk(
   "chatbot/createChat",
-  async ({ model_name, first_message, role = "User" }, { rejectWithValue }) => {
+  async (
+    { model_name, first_message, role = "User", uploaded_files = [] },
+    { rejectWithValue }
+  ) => {
     try {
       const token = getAuthToken();
+
+      // Create FormData for multipart/form-data submission
+      const formData = new FormData();
+      formData.append("model_name", model_name);
+      formData.append("first_message", first_message);
+      formData.append("role", role);
+
+      // Append multiple files if provided
+      if (uploaded_files && uploaded_files.length > 0) {
+        uploaded_files.forEach((file) => {
+          formData.append("file", file);
+        });
+      }
+
       const response = await fetch(`${BASE_URL}/chatbot/create_chat/`, {
         method: "PATCH",
         headers: {
-          "Content-Type": "application/json",
+          // Don't set Content-Type - browser will set it with boundary for FormData
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({
-          model_name,
-          first_message,
-          role,
-        }),
+        body: formData,
       });
 
       if (!response.ok) {
@@ -143,7 +156,7 @@ export const continueConversation = createAsyncThunk(
       // Append multiple files if provided
       if (uploaded_files && uploaded_files.length > 0) {
         uploaded_files.forEach((file) => {
-          formData.append("uploaded_file", file);
+          formData.append("file", file);
         });
       }
 

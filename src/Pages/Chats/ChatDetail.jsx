@@ -3,6 +3,7 @@ import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import { BASE_URL } from "../../Redux/config";
 import {
   getChatHistory,
   continueConversation,
@@ -93,6 +94,7 @@ function ChatDetail() {
           id: msg.id,
           type: role === "user" ? "user" : "ai",
           content: msg.message,
+          files: msg.files || [],
           timestamp: new Date(msg.timestamp_child).toLocaleTimeString([], {
             hour: "2-digit",
             minute: "2-digit",
@@ -165,6 +167,7 @@ function ChatDetail() {
               id: msg.id,
               type: role === "user" ? "user" : "ai",
               content: msg.message,
+              files: msg.files || [],
               timestamp: new Date(msg.timestamp_child).toLocaleTimeString([], {
                 hour: "2-digit",
                 minute: "2-digit",
@@ -189,8 +192,8 @@ function ChatDetail() {
   return (
     <div className="min-h-screen flex bg-gradient-to-br from-gray-50 via-white to-gray-100">
       {/* Sidebar (desktop) */}
-      <aside className="hidden md:flex w-72 sm:w-80 md:w-96 bg-gradient-to-b from-gray-900 via-black to-gray-800 border-r border-gray-700/30 flex-col justify-between shadow-2xl backdrop-blur-lg">
-        <div>
+      <aside className="hidden md:flex w-72 sm:w-80 md:w-96 bg-gradient-to-b from-gray-900 via-black to-gray-800 border-r border-gray-700/30 flex-col justify-between shadow-2xl backdrop-blur-lg h-screen overflow-hidden">
+        <div className="flex-1 overflow-y-auto">
           <div className="px-4 sm:px-6 py-6 sm:py-8 mt-8">
             <button
               onClick={() => navigate("/chats", { state: { model_name } })}
@@ -300,7 +303,7 @@ function ChatDetail() {
             onClick={() => setSidebarOpen(false)}
           />
           <div className="relative w-72 bg-gradient-to-b from-gray-900 via-black to-gray-800 flex flex-col justify-between shadow-2xl backdrop-blur-lg">
-            <div>
+            <div className="flex-1 overflow-y-auto">
               <div className="px-4 py-4 mt-6 flex items-center justify-between border-b border-gray-600/30">
                 <div className="bg-gradient-to-r from-gray-800 to-black rounded-lg p-3 border border-gray-600">
                   <h3 className="text-white font-bold text-sm">
@@ -351,7 +354,7 @@ function ChatDetail() {
         </div>
 
         {/* Chat header */}
-        <div className="border-b border-gray-200 p-4 sm:p-6 flex-shrink-0 bg-white/70 backdrop-blur-sm relative z-10">
+        <div className="border-b border-gray-200 p-4 sm:p-6 flex-shrink-0 bg-gray-50 backdrop-blur-sm relative z-10">
           <div className="flex items-center gap-3">
             <button
               onClick={() => setSidebarOpen(true)}
@@ -373,22 +376,22 @@ function ChatDetail() {
             </button>
             <div className="relative">
               <div className="absolute inset-0 bg-gradient-to-r from-gray-400 to-black rounded-full blur-sm opacity-30"></div>
-              <img
+              {/* <img
                 src={Owner}
                 alt="AI"
                 className="relative w-8 h-8 sm:w-10 sm:h-10 rounded-full shadow-xl border-2 border-white/70"
-              />
+              /> */}
             </div>
             <div>
               <h1 className="text-lg sm:text-xl font-bold bg-gradient-to-r from-gray-700 via-black to-gray-600 bg-clip-text text-transparent">
                 {chatTitle}
               </h1>
               <div className="text-sm text-gray-600 flex items-center gap-1">
-                By Ben Duggan{" "}
-                <CgProfile className="inline w-4 h-4 text-gray-600" />
-                <span className="px-2 py-1 bg-gray-100 text-gray-700 rounded-full text-xs font-medium border border-gray-200 ml-2">
+                {/* By Ben Duggan{" "}
+                <CgProfile className="inline w-4 h-4 text-gray-600" /> */}
+                {/* <span className="px-2 py-1 bg-gray-100 text-gray-700 rounded-full text-xs font-medium border border-gray-200 ml-2">
                   Verified Educator
-                </span>
+                </span> */}
               </div>
             </div>
           </div>
@@ -494,6 +497,123 @@ function ChatDetail() {
                         </ReactMarkdown>
                       )}
                     </div>
+                    {/* Display attached files */}
+                    {msg.files && msg.files.length > 0 && (
+                      <div className="mt-3 space-y-2">
+                        {msg.files.map((file, idx) => {
+                          const fileName = file.file.split("/").pop();
+                          const fileExt = fileName
+                            .split(".")
+                            .pop()
+                            .toLowerCase();
+                          const isImage = [
+                            "jpg",
+                            "jpeg",
+                            "png",
+                            "gif",
+                            "webp",
+                          ].includes(fileExt);
+                          const isPdf = fileExt === "pdf";
+                          const isDoc = ["doc", "docx"].includes(fileExt);
+
+                          return (
+                            <div
+                              key={`${file.id}-${idx}`}
+                              className={`flex items-center gap-3 p-3 rounded-lg border ${
+                                msg.type === "user"
+                                  ? "bg-white border-blue-300"
+                                  : "bg-gray-50 border-gray-300"
+                              }`}
+                            >
+                              <div className="flex-shrink-0">
+                                {isImage ? (
+                                  <svg
+                                    className="w-8 h-8 text-blue-500"
+                                    fill="currentColor"
+                                    viewBox="0 0 20 20"
+                                  >
+                                    <path
+                                      fillRule="evenodd"
+                                      d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z"
+                                      clipRule="evenodd"
+                                    />
+                                  </svg>
+                                ) : isPdf ? (
+                                  <svg
+                                    className="w-8 h-8 text-red-500"
+                                    fill="currentColor"
+                                    viewBox="0 0 20 20"
+                                  >
+                                    <path
+                                      fillRule="evenodd"
+                                      d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z"
+                                      clipRule="evenodd"
+                                    />
+                                  </svg>
+                                ) : isDoc ? (
+                                  <svg
+                                    className="w-8 h-8 text-blue-600"
+                                    fill="currentColor"
+                                    viewBox="0 0 20 20"
+                                  >
+                                    <path
+                                      fillRule="evenodd"
+                                      d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z"
+                                      clipRule="evenodd"
+                                    />
+                                  </svg>
+                                ) : (
+                                  <svg
+                                    className="w-8 h-8 text-gray-500"
+                                    fill="currentColor"
+                                    viewBox="0 0 20 20"
+                                  >
+                                    <path
+                                      fillRule="evenodd"
+                                      d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z"
+                                      clipRule="evenodd"
+                                    />
+                                  </svg>
+                                )}
+                              </div>
+                              <div className="flex-1 min-w-0">
+                                <a
+                                  href={`${BASE_URL}${file.file}`}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="text-sm font-medium text-gray-700 hover:text-blue-600 hover:underline truncate block"
+                                >
+                                  {fileName}
+                                </a>
+                                <p className="text-xs text-gray-500">
+                                  {new Date(file.uploaded_at).toLocaleString()}
+                                </p>
+                              </div>
+                              <a
+                                href={`${BASE_URL}${file.file}`}
+                                download
+                                className="flex-shrink-0 p-2 text-gray-500 hover:text-blue-600 hover:bg-gray-100 rounded-lg transition-colors"
+                                title="Download"
+                              >
+                                <svg
+                                  className="w-5 h-5"
+                                  fill="none"
+                                  stroke="currentColor"
+                                  viewBox="0 0 24 24"
+                                >
+                                  <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth={2}
+                                    d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
+                                  />
+                                </svg>
+                              </a>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    )}
                     <div
                       className={`text-xs mt-3 ${
                         msg.type === "user" ? "text-gray-600" : "text-gray-500"

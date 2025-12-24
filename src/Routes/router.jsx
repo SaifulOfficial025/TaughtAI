@@ -162,7 +162,7 @@ export const router = createBrowserRouter([
     element: <AcademyChat />,
   },
   {
-    path: "/primary_chats",
+    path: "/primary_chats/:chatId",
     element: <ChatDetailsforPrimary />,
   },
   {

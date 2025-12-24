@@ -116,6 +116,7 @@ function AcademyChat() {
           model_name,
           first_message: message.trim(),
           role: "User",
+          uploaded_files: attachments,
         })
       ).unwrap();
 
@@ -130,6 +131,7 @@ function AcademyChat() {
       }
 
       setMessage("");
+      setAttachments([]);
     } catch (error) {
       console.error("Failed to create chat:", error);
       // You could show an error message to the user here
@@ -144,8 +146,8 @@ function AcademyChat() {
   return (
     <div className="min-h-screen flex bg-gradient-to-br from-gray-50 via-white to-gray-100">
       {/* Sidebar (desktop) */}
-      <aside className="hidden md:flex w-72 sm:w-80 md:w-96 bg-gradient-to-b from-gray-900 via-black to-gray-800 border-r border-gray-700/30 flex-col justify-between shadow-2xl backdrop-blur-lg">
-        <div>
+      <aside className="hidden md:flex w-72 sm:w-80 md:w-96 bg-gradient-to-b from-gray-900 via-black to-gray-800 border-r border-gray-700/30 flex-col justify-between shadow-2xl backdrop-blur-lg h-screen overflow-hidden">
+        <div className="flex-1 overflow-y-auto">
           <div className="px-4 sm:px-6 py-6 sm:py-8 mt-8">
             <div className="bg-gradient-to-r from-gray-800 to-black rounded-xl p-4 mb-6 shadow-lg border border-gray-600">
               <h3 className="text-white font-bold text-lg mb-1">
@@ -228,7 +230,7 @@ function AcademyChat() {
             onClick={() => setSidebarOpen(false)}
           />
           <div className="relative w-72 bg-gradient-to-b from-gray-900 via-black to-gray-800 flex flex-col justify-between shadow-2xl backdrop-blur-lg">
-            <div>
+            <div className="flex-1 overflow-y-auto">
               <div className="px-4 py-6 flex items-center justify-between border-b border-gray-600/30">
                 <div className="bg-gradient-to-r from-gray-800 to-black rounded-lg p-3 border border-gray-600">
                   <h3 className="text-white font-bold text-sm">

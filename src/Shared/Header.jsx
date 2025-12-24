@@ -3,6 +3,7 @@ import { Link, NavLink, useNavigate, useLocation } from "react-router-dom";
 import logo from "../../public/logoblack.svg";
 import { useSelector, useDispatch } from "react-redux";
 import { logout } from "../Redux/Authentication";
+import { BASE_URL } from "../Redux/config";
 
 function Header() {
   const [open, setOpen] = useState(false);
@@ -13,6 +14,15 @@ function Header() {
   const dispatch = useDispatch();
   const { user } = useSelector((s) => s.auth || {});
   const location = useLocation();
+
+  // Debug: Log user data
+  useEffect(() => {
+    if (user) {
+      console.log("User data:", user);
+      console.log("Image path:", user.image);
+      console.log("Full image URL:", `${BASE_URL}${user.image}`);
+    }
+  }, [user]);
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -108,7 +118,7 @@ function Header() {
                 >
                   {user.image ? (
                     <img
-                      src={user.image}
+                      src={`${BASE_URL}${user.image}`}
                       alt={user.full_name || user.email}
                       className="w-8 h-8 rounded-full object-cover"
                     />

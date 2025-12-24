@@ -1,5 +1,6 @@
 import React from "react";
 import backgroundImage from "../../../public/herobg.svg";
+import { Link } from "react-router-dom";
 /**
  * Hero component
  * - Accepts an optional `backgroundImage` prop (string URL). If not provided, background is empty and user can add later.
@@ -31,12 +32,11 @@ function Hero() {
             maintaining educational excellence and regulatory compliance.
           </p> */}
 
-          <a
-            href="#"
-            className="inline-block mt-8 bg-[#e8e6e6] text-gray-900 px-5 sm:px-6 py-2.5 sm:py-3 rounded-full shadow-sm hover:opacity-95 text-base sm:text-lg font-playfair"
-          >
-            Get Started
-          </a>
+          <Link to="/tryourplatform">
+            <p className="inline-block mt-8 bg-[#e8e6e6] text-gray-900 px-5 sm:px-6 py-2.5 sm:py-3 rounded-full shadow-sm hover:opacity-95 text-base sm:text-lg font-playfair">
+              Get Started
+            </p>
+          </Link>
         </div>
       </div>
     </section>
