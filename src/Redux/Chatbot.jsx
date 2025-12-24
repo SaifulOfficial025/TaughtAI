@@ -104,7 +104,7 @@ export const createChat = createAsyncThunk(
       // Append multiple files if provided
       if (uploaded_files && uploaded_files.length > 0) {
         uploaded_files.forEach((file) => {
-          formData.append("file", file);
+          formData.append("files", file);
         });
       }
 
@@ -156,7 +156,7 @@ export const continueConversation = createAsyncThunk(
       // Append multiple files if provided
       if (uploaded_files && uploaded_files.length > 0) {
         uploaded_files.forEach((file) => {
-          formData.append("file", file);
+          formData.append("files", file);
         });
       }
 
