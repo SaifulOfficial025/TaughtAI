@@ -497,123 +497,127 @@ function ChatDetail() {
                         </ReactMarkdown>
                       )}
                     </div>
-                    {/* Display attached files */}
-                    {msg.files && msg.files.length > 0 && (
-                      <div className="mt-3 space-y-2">
-                        {msg.files.map((file, idx) => {
-                          const fileName = file.file.split("/").pop();
-                          const fileExt = fileName
-                            .split(".")
-                            .pop()
-                            .toLowerCase();
-                          const isImage = [
-                            "jpg",
-                            "jpeg",
-                            "png",
-                            "gif",
-                            "webp",
-                          ].includes(fileExt);
-                          const isPdf = fileExt === "pdf";
-                          const isDoc = ["doc", "docx"].includes(fileExt);
+                    {/* Display attached files (only for user messages) */}
+                    {msg.type === "user" &&
+                      msg.files &&
+                      msg.files.length > 0 && (
+                        <div className="mt-3 space-y-2">
+                          {msg.files.map((file, idx) => {
+                            const fileName = file.file.split("/").pop();
+                            const fileExt = fileName
+                              .split(".")
+                              .pop()
+                              .toLowerCase();
+                            const isImage = [
+                              "jpg",
+                              "jpeg",
+                              "png",
+                              "gif",
+                              "webp",
+                            ].includes(fileExt);
+                            const isPdf = fileExt === "pdf";
+                            const isDoc = ["doc", "docx"].includes(fileExt);
 
-                          return (
-                            <div
-                              key={`${file.id}-${idx}`}
-                              className={`flex items-center gap-3 p-3 rounded-lg border ${
-                                msg.type === "user"
-                                  ? "bg-white border-blue-300"
-                                  : "bg-gray-50 border-gray-300"
-                              }`}
-                            >
-                              <div className="flex-shrink-0">
-                                {isImage ? (
-                                  <svg
-                                    className="w-8 h-8 text-blue-500"
-                                    fill="currentColor"
-                                    viewBox="0 0 20 20"
+                            return (
+                              <div
+                                key={`${file.id}-${idx}`}
+                                className={`flex items-center gap-3 p-3 rounded-lg border ${
+                                  msg.type === "user"
+                                    ? "bg-white border-blue-300"
+                                    : "bg-gray-50 border-gray-300"
+                                }`}
+                              >
+                                <div className="flex-shrink-0">
+                                  {isImage ? (
+                                    <svg
+                                      className="w-8 h-8 text-blue-500"
+                                      fill="currentColor"
+                                      viewBox="0 0 20 20"
+                                    >
+                                      <path
+                                        fillRule="evenodd"
+                                        d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z"
+                                        clipRule="evenodd"
+                                      />
+                                    </svg>
+                                  ) : isPdf ? (
+                                    <svg
+                                      className="w-8 h-8 text-red-500"
+                                      fill="currentColor"
+                                      viewBox="0 0 20 20"
+                                    >
+                                      <path
+                                        fillRule="evenodd"
+                                        d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z"
+                                        clipRule="evenodd"
+                                      />
+                                    </svg>
+                                  ) : isDoc ? (
+                                    <svg
+                                      className="w-8 h-8 text-blue-600"
+                                      fill="currentColor"
+                                      viewBox="0 0 20 20"
+                                    >
+                                      <path
+                                        fillRule="evenodd"
+                                        d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z"
+                                        clipRule="evenodd"
+                                      />
+                                    </svg>
+                                  ) : (
+                                    <svg
+                                      className="w-8 h-8 text-gray-500"
+                                      fill="currentColor"
+                                      viewBox="0 0 20 20"
+                                    >
+                                      <path
+                                        fillRule="evenodd"
+                                        d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z"
+                                        clipRule="evenodd"
+                                      />
+                                    </svg>
+                                  )}
+                                </div>
+                                <div className="flex-1 min-w-0">
+                                  <a
+                                    href={`${BASE_URL}${file.file}`}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="text-sm font-medium text-gray-700 hover:text-blue-600 hover:underline truncate block"
                                   >
-                                    <path
-                                      fillRule="evenodd"
-                                      d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z"
-                                      clipRule="evenodd"
-                                    />
-                                  </svg>
-                                ) : isPdf ? (
-                                  <svg
-                                    className="w-8 h-8 text-red-500"
-                                    fill="currentColor"
-                                    viewBox="0 0 20 20"
-                                  >
-                                    <path
-                                      fillRule="evenodd"
-                                      d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z"
-                                      clipRule="evenodd"
-                                    />
-                                  </svg>
-                                ) : isDoc ? (
-                                  <svg
-                                    className="w-8 h-8 text-blue-600"
-                                    fill="currentColor"
-                                    viewBox="0 0 20 20"
-                                  >
-                                    <path
-                                      fillRule="evenodd"
-                                      d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z"
-                                      clipRule="evenodd"
-                                    />
-                                  </svg>
-                                ) : (
-                                  <svg
-                                    className="w-8 h-8 text-gray-500"
-                                    fill="currentColor"
-                                    viewBox="0 0 20 20"
-                                  >
-                                    <path
-                                      fillRule="evenodd"
-                                      d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z"
-                                      clipRule="evenodd"
-                                    />
-                                  </svg>
-                                )}
-                              </div>
-                              <div className="flex-1 min-w-0">
+                                    {fileName}
+                                  </a>
+                                  <p className="text-xs text-gray-500">
+                                    {new Date(
+                                      file.uploaded_at
+                                    ).toLocaleString()}
+                                  </p>
+                                </div>
                                 <a
                                   href={`${BASE_URL}${file.file}`}
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                  className="text-sm font-medium text-gray-700 hover:text-blue-600 hover:underline truncate block"
+                                  download
+                                  className="flex-shrink-0 p-2 text-gray-500 hover:text-blue-600 hover:bg-gray-100 rounded-lg transition-colors"
+                                  title="Download"
                                 >
-                                  {fileName}
+                                  <svg
+                                    className="w-5 h-5"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                  >
+                                    <path
+                                      strokeLinecap="round"
+                                      strokeLinejoin="round"
+                                      strokeWidth={2}
+                                      d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
+                                    />
+                                  </svg>
                                 </a>
-                                <p className="text-xs text-gray-500">
-                                  {new Date(file.uploaded_at).toLocaleString()}
-                                </p>
                               </div>
-                              <a
-                                href={`${BASE_URL}${file.file}`}
-                                download
-                                className="flex-shrink-0 p-2 text-gray-500 hover:text-blue-600 hover:bg-gray-100 rounded-lg transition-colors"
-                                title="Download"
-                              >
-                                <svg
-                                  className="w-5 h-5"
-                                  fill="none"
-                                  stroke="currentColor"
-                                  viewBox="0 0 24 24"
-                                >
-                                  <path
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    strokeWidth={2}
-                                    d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
-                                  />
-                                </svg>
-                              </a>
-                            </div>
-                          );
-                        })}
-                      </div>
-                    )}
+                            );
+                          })}
+                        </div>
+                      )}
                     <div
                       className={`text-xs mt-3 ${
                         msg.type === "user" ? "text-gray-600" : "text-gray-500"
