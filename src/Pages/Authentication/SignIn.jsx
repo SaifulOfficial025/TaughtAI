@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Eye, EyeOff } from "lucide-react";
 import SignupBackground from "../../../public/authenticationbg.svg";
 import Logo from "../../../public/logowhite.svg";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { login, clearError, clearSuccess } from "../../Redux/Authentication";
+import { googleAuth, initiateGoogleAuthPopup } from "../../Redux/GoogleAuth";
 function SignIn() {
   const [showPwd, setShowPwd] = useState(false);
   const [email, setEmail] = useState("");
@@ -15,6 +16,26 @@ function SignIn() {
   const location = useLocation();
   const dispatch = useDispatch();
   const { loading, error, successMessage } = useSelector((s) => s.auth || {});
+
+  const handleGoogleSignIn = () => {
+    initiateGoogleAuthPopup(async (idToken) => {
+      if (idToken) {
+        try {
+          const resultAction = await dispatch(googleAuth(idToken));
+          if (resultAction?.meta?.requestStatus === "fulfilled") {
+            const from = location.state?.from || "/";
+            navigate(from);
+          } else {
+            const errMsg =
+              resultAction?.payload?.message || "Google authentication failed";
+            alert(errMsg);
+          }
+        } catch (err) {
+          alert("Google authentication failed. Please try again.");
+        }
+      }
+    });
+  };
 
   const handleLogin = async () => {
     setLocalError(null);
@@ -178,6 +199,8 @@ function SignIn() {
 
               {/* Social buttons */}
               <button
+                onClick={handleGoogleSignIn}
+                type="button"
                 className="w-full h-11 rounded-md flex items-center justify-center gap-2 border"
                 style={{
                   background: "#F3F6FB",
@@ -189,7 +212,7 @@ function SignIn() {
                 <span className="text-sm">Sign in with Google</span>
               </button>
 
-              <button
+              {/* <button
                 className="w-full h-11 rounded-md flex items-center justify-center gap-2 border"
                 style={{
                   background: "#F3F6FB",
@@ -199,7 +222,7 @@ function SignIn() {
               >
                 <AppleIcon />
                 <span className="text-sm">Sign in with Apple</span>
-              </button>
+              </button> */}
 
               {/* Footer */}
               <p className="text-[16px] text-center mt-1 text-[#6B7280]">

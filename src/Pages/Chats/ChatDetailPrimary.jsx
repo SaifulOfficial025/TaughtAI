@@ -695,12 +695,12 @@ function ChatDetail() {
                     <FaPaperclip className="w-4 h-4" />
                   </button>
 
-                  <button
+                  {/* <button
                     type="button"
                     className="w-9 h-9 rounded-full bg-gradient-to-r from-gray-600 to-gray-800 hover:from-gray-500 hover:to-gray-700 flex items-center justify-center text-white shadow-lg transition-all transform hover:scale-105"
                   >
                     <FaMicrophoneLines className="w-4 h-4" />
-                  </button>
+                  </button> */}
                 </div>
               </div>
               <button

@@ -3,6 +3,7 @@ import Owner from "../../../public/owner.jpg";
 import Header from "../../Shared/Header";
 import Footer from "../../Shared/Footer";
 import { FaEdit } from "react-icons/fa";
+import DummyProfile from "../../../public/dummyprofile.png";
 import { useSelector, useDispatch } from "react-redux";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -206,7 +207,7 @@ function Profile() {
               <div className="">
                 <div className="w-44 h-44 rounded-full overflow-hidden shadow-md">
                   <img
-                    src={previewUrl || user?.image || Owner}
+                    src={previewUrl || user?.image || DummyProfile}
                     alt="owner"
                     className="w-full h-full object-cover"
                   />

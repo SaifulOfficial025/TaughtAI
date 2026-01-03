@@ -3,6 +3,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 // import centralized base url from config
 import { BASE_URL } from "./config";
+import { googleAuth } from "./GoogleAuth";
 
 // Async thunk for signup
 export const signup = createAsyncThunk(
@@ -310,6 +311,8 @@ const authSlice = createSlice({
       localStorage.removeItem("refresh_token");
       localStorage.removeItem("access_token");
       localStorage.removeItem("profile_data");
+      localStorage.removeItem("user_email");
+      localStorage.removeItem("is_new_user");
 
       // Clear state
       state.user = null;
@@ -318,6 +321,12 @@ const authSlice = createSlice({
       state.currentEmail = null;
       state.error = null;
       state.successMessage = null;
+    },
+    setUserFromGoogle(state, action) {
+      // Used to sync user state from Google auth
+      state.user = action.payload.profile_data || null;
+      state.accessToken = action.payload.access_token || null;
+      state.refreshToken = action.payload.refresh_token || null;
     },
   },
   extraReducers: (builder) => {
@@ -473,11 +482,38 @@ const authSlice = createSlice({
           action.error?.message ||
           "Password reset failed";
       });
+    // Google auth cases
+    builder
+      .addCase(googleAuth.fulfilled, (state, action) => {
+        state.loading = false;
+        state.successMessage =
+          action.payload?.message || "Google authentication successful";
+        state.error = null;
+        state.user = action.payload?.profile_data || null;
+        state.accessToken = action.payload?.access_token || null;
+        state.refreshToken = action.payload?.refresh_token || null;
+      })
+      .addCase(googleAuth.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(googleAuth.rejected, (state, action) => {
+        state.loading = false;
+        state.error =
+          action.payload?.message ||
+          action.error?.message ||
+          "Google authentication failed";
+      });
   },
 });
 
-export const { clearError, clearSuccess, setCurrentEmail, logout } =
-  authSlice.actions;
+export const {
+  clearError,
+  clearSuccess,
+  setCurrentEmail,
+  logout,
+  setUserFromGoogle,
+} = authSlice.actions;
 
 // export the reducer so it can be combined into a root store
 export const authReducer = authSlice.reducer;

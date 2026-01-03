@@ -443,9 +443,9 @@ function PrimaryChat() {
                     </svg>
                   </button>
 
-                  <button className="p-3 sm:p-4 rounded-xl bg-gradient-to-r from-gray-600 to-gray-800 hover:from-gray-500 hover:to-gray-700 text-white shadow-lg hover:shadow-xl transition-all transform hover:scale-105">
+                  {/* <button className="p-3 sm:p-4 rounded-xl bg-gradient-to-r from-gray-600 to-gray-800 hover:from-gray-500 hover:to-gray-700 text-white shadow-lg hover:shadow-xl transition-all transform hover:scale-105">
                     <FaMicrophoneLines className="w-5 h-5" />
-                  </button>
+                  </button> */}
 
                   <button
                     onClick={handleSendMessage}

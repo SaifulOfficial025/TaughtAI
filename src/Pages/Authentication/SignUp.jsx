@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Eye, EyeOff } from "lucide-react";
 import SignupBackground from "../../../public/authenticationbg.svg";
 import Logo from "../../../public/logowhite.svg";
@@ -11,6 +11,7 @@ import {
   clearSuccess,
   setCurrentEmail,
 } from "../../Redux/Authentication";
+import { googleAuth, initiateGoogleAuthPopup } from "../../Redux/GoogleAuth";
 
 function SignUp() {
   const [showPwd, setShowPwd] = useState(false);
@@ -25,6 +26,25 @@ function SignUp() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { loading, error, successMessage } = useSelector((s) => s.auth || {});
+
+  const handleGoogleSignUp = () => {
+    initiateGoogleAuthPopup(async (idToken) => {
+      if (idToken) {
+        try {
+          const resultAction = await dispatch(googleAuth(idToken));
+          if (resultAction?.meta?.requestStatus === "fulfilled") {
+            navigate("/");
+          } else {
+            const errMsg =
+              resultAction?.payload?.message || "Google authentication failed";
+            alert(errMsg);
+          }
+        } catch (err) {
+          alert("Google authentication failed. Please try again.");
+        }
+      }
+    });
+  };
 
   // Helper to extract a friendly message from a thunk result action
   const extractMessageFromResult = (resultAction) => {
@@ -306,6 +326,8 @@ function SignUp() {
 
               {/* Social buttons */}
               <button
+                onClick={handleGoogleSignUp}
+                type="button"
                 className="w-full h-11 rounded-md flex items-center justify-center gap-2 border"
                 style={{
                   background: "#F3F6FB",
@@ -317,7 +339,7 @@ function SignUp() {
                 <span className="text-sm">Sign in with Google</span>
               </button>
 
-              <button
+              {/* <button
                 className="w-full h-11 rounded-md flex items-center justify-center gap-2 border"
                 style={{
                   background: "#F3F6FB",
@@ -327,7 +349,7 @@ function SignUp() {
               >
                 <AppleIcon />
                 <span className="text-sm">Sign in with Apple</span>
-              </button>
+              </button> */}
 
               {/* Footer */}
               <p className="text-[16px] text-center mt-1 text-[#6B7280]">

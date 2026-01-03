@@ -12,6 +12,7 @@ import SignUp from "../Pages/Authentication/SignUp";
 import ForgetPasswordEmail from "../Pages/Authentication/ForgetPasswordEmail";
 import VerifyEmail from "../Pages/Authentication/VerifyEmail";
 import NewPassword from "../Pages/Authentication/NewPassword";
+import GoogleCallback from "../Pages/Authentication/GoogleCallback";
 
 import AcademyChat from "../Pages/Chats/AcademyChat";
 import ChatDetail from "../Pages/Chats/ChatDetail";
@@ -136,6 +137,10 @@ export const router = createBrowserRouter([
   {
     path: "/signup",
     element: <SignUp />,
+  },
+  {
+    path: "/auth/google/callback",
+    element: <GoogleCallback />,
   },
   {
     path: "/forgot_password_email",
