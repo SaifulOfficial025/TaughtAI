@@ -109,7 +109,7 @@ export const createChat = createAsyncThunk(
       }
 
       const response = await fetch(`${BASE_URL}/chatbot/create_chat/`, {
-        method: "PATCH",
+        method: "POST",
         headers: {
           // Don't set Content-Type - browser will set it with boundary for FormData
           Authorization: `Bearer ${token}`,
